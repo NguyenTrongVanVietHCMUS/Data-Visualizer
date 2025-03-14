@@ -7,20 +7,20 @@ void Node::DrawTextNode(const Font &fontValue, const Color &color, const bool &i
     snprintf(text, sizeof(text), "%d", value);
     Vector2 textSize = MeasureTextEx(GetFontDefault(), text, 20, 1);
     Color curColor = (ColorIsEqual(BLACK, color) ? (isLightMode ? BLACK : WHITE) : color);
-    DrawTextEx(fontValue, text, (Vector2){position.x - textSize.x / 2, position.y - textSize.y / 2}, 20, 1, curColor);
+    DrawTextEx(fontValue, text, Vector2{position.x - textSize.x / 2, position.y - textSize.y / 2}, 20, 1, curColor);
 }
 
 void Node::DrawHollowNode(const Texture2D &textureNode, const Color &color, const bool &isLightMode)
 {
     Color curColor = (ColorIsEqual(BLACK, color) ? (isLightMode ? BLACK : WHITE) : color);
     std::cerr << position.x << ' ' << position.y << ' ' << radius << '\n';
-    DrawTextureEx(textureNode, (Vector2){position.x - radius, position.y - radius}, 0, 1, curColor);
+    DrawTextureEx(textureNode, Vector2{position.x - radius, position.y - radius}, 0, 1, curColor);
 }
 
 void Node::DrawSolidNode(const Texture2D &textureNode, const Color &color, const bool &isLightMode)
 {
     Color curColor = (ColorIsEqual(BLACK, color) ? (isLightMode ? BLACK : WHITE) : color);
-    DrawTextureEx(textureNode, (Vector2){position.x - radius, position.y - radius}, 0, 1, curColor);
+    DrawTextureEx(textureNode, Vector2{position.x - radius, position.y - radius}, 0, 1, curColor);
 }
 
 bool Node::DrawInsertNodeAnimation(const Texture2D &textureNode, const Font &fontValue, const Color &color, const bool &isLightMode, float &curAnimation, const float &speed)

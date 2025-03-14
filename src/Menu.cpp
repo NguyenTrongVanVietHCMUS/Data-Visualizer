@@ -5,25 +5,25 @@
 void Menu::Init() 
 {   
     buttons = new Button[8];
-    buttons[0] = {(Vector2){250, 250}, 300, 180, (char *)"One"};
-    buttons[1] = {(Vector2){650, 250}, 300, 180, (char *)"Two"};
-    buttons[2] = {(Vector2){1050, 250}, 300, 180, (char *)"Three"};
-    buttons[3] = {(Vector2){250, 500}, 300, 180, (char *)"Four"};
-    buttons[4] = {(Vector2){650, 500}, 300, 180, (char *)"Five"};   
-    buttons[5] = {(Vector2){1050, 500}, 300, 180, (char *)"Six"};
-    buttons[6] = {(Vector2){1532, 12}, 48, 48, (char *)"Seven"};
-    buttons[7] = {(Vector2){20, 12}, 48, 48, (char *)"Eight"};
+    buttons[0] = {Vector2{250, 250}, 300, 180, (char *)"One"};
+    buttons[1] = {Vector2{650, 250}, 300, 180, (char *)"Two"};
+    buttons[2] = {Vector2{1050, 250}, 300, 180, (char *)"Three"};
+    buttons[3] = {Vector2{250, 500}, 300, 180, (char *)"Four"};
+    buttons[4] = {Vector2{650, 500}, 300, 180, (char *)"Five"};   
+    buttons[5] = {Vector2{1050, 500}, 300, 180, (char *)"Six"};
+    buttons[6] = {Vector2{1532, 12}, 48, 48, (char *)"Seven"};
+    buttons[7] = {Vector2{20, 12}, 48, 48, (char *)"Eight"};
 
     dataStructure = 0;
 
     isLightMode = 1;
 
-    logo = LoadTexture("Textures/Logo.png");
-    homeIcon = LoadTexture("Textures/HomeIcon.png");
-    toDarkMode = LoadTexture("Textures/ToDarkMode.png");
-    toLightMode = LoadTexture("Textures/ToLightMode.png");
+    logo = LoadTexture("../Textures/Logo.png");
+    homeIcon = LoadTexture("../Textures/HomeIcon.png");
+    toDarkMode = LoadTexture("../Textures/ToDarkMode.png");
+    toLightMode = LoadTexture("../Textures/ToLightMode.png");
 
-    currentFont = LoadFont("Font/RobotoBold.ttf");
+    currentFont = LoadFont("../Font/RobotoBold.ttf");
     SetTextureFilter(currentFont.texture, TEXTURE_FILTER_POINT);
 
     myList.Init();
@@ -39,7 +39,7 @@ void Menu::DrawMenu()
     DrawGradient(isLightMode);
     DrawTexture(logo, 574, 50, WHITE);
     for (int i = 0; i < 6; i++) {
-        DrawRectangleRounded((Rectangle){buttons[i].position.x, buttons[i].position.y, buttons[i].width, buttons[i].height}, 0.3, 10, buttons[i].CheckMouseInRectangle() ? DARKBLUE : SKYBLUE);
+        DrawRectangleRounded(Rectangle{buttons[i].position.x, buttons[i].position.y, buttons[i].width, buttons[i].height}, 0.3, 10, buttons[i].CheckMouseInRectangle() ? DARKBLUE : SKYBLUE);
         DrawText(buttons[i].text, buttons[i].position.x + 50, buttons[i].position.y + 75, 28, DARKGRAY);
     }
 }
@@ -132,5 +132,5 @@ void Menu::DrawGradient(bool isLightMode)
 }
 
 Color Menu::GetColorBackground() {
-    return isLightMode ? (Color){130, 160, 230, 255} : (Color){0, 5, 10, 255};
+    return isLightMode ? Color{130, 160, 230, 255} : Color{0, 5, 10, 255};
 }

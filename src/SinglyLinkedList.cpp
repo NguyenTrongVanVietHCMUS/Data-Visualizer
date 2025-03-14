@@ -17,31 +17,31 @@ void SinglyLinkedList::Init()
     toolBarButtons.resize(6);
     toolBarButtons[0] = 
     {
-        {(Vector2){0, 570}, 15, 183, (char *)"Open_Close"}
+        {Vector2{0, 570}, 15, 183, (char *)"Open_Close"}
     };
     toolBarButtons[1] = 
     {
-        {(Vector2){17, 570}, 160, 35, (char *)"Create"},
-        {(Vector2){179, 570}, 80, 35, (char *)"Empty"},
-        {(Vector2){261, 570}, 80, 35, (char *)"Random"},
-        {(Vector2){343, 570}, 80, 35, (char *)"File"},
-        {(Vector2){425, 570}, 80, 35, (char *)"Enter"},
+        {Vector2{17, 570}, 160, 35, (char *)"Create"},
+        {Vector2{179, 570}, 80, 35, (char *)"Empty"},
+        {Vector2{261, 570}, 80, 35, (char *)"Random"},
+        {Vector2{343, 570}, 80, 35, (char *)"File"},
+        {Vector2{425, 570}, 80, 35, (char *)"Enter"},
     };
     toolBarButtons[2] = 
     {
-        {(Vector2){17, 607}, 160, 35, (char *)"Insert"}
+        {Vector2{17, 607}, 160, 35, (char *)"Insert"}
     };
     toolBarButtons[3] = 
     {
-        {(Vector2){17, 644}, 160, 35, (char *)"Delete"}
+        {Vector2{17, 644}, 160, 35, (char *)"Delete"}
     };
     toolBarButtons[4] = 
     {
-        {(Vector2){17, 681}, 160, 35, (char *)"Update"}
+        {Vector2{17, 681}, 160, 35, (char *)"Update"}
     };
     toolBarButtons[5] = 
     {
-        {(Vector2){17, 718}, 160, 35, (char *)"Search"}
+        {Vector2{17, 718}, 160, 35, (char *)"Search"}
     };
     flagToolBarButtons.resize(6);
     for (int i = 0; i < 6; ++i) {
@@ -50,8 +50,8 @@ void SinglyLinkedList::Init()
 
     // enterList.Init();
     enterList.oldWidth = 80;
-    enterList.textBox = {(Vector2){425 + 80 + 2, 570}, 80, 35};
-    enterList.confirm = {(Vector2){425 + 80 + 2, 570 + 35 + 2}, 80, 35, (char *)"Confirm"};
+    enterList.textBox = {Vector2{425 + 80 + 2, 570}, 80, 35};
+    enterList.confirm = {Vector2{425 + 80 + 2, 570 + 35 + 2}, 80, 35, (char *)"Confirm"};
 
     nodes.clear();
     values.clear();
@@ -68,7 +68,7 @@ std::vector<Node> SinglyLinkedList::BuildNodeFromValue(const std::vector<int> &v
     std::vector<Node> nodes;
     for (const int &value: values) 
     {
-        nodes.push_back({(Vector2){x, y}, 24, value});
+        nodes.push_back({Vector2{x, y}, 24, value});
         x += 100.0f;
     }
     return nodes;
@@ -326,7 +326,7 @@ std::vector<std::vector<std::vector<NewAnimation>>> SinglyLinkedList::InsertAnim
         if (nodes.empty() == true)
         {
             animations.push_back({{}});
-            Node newNode = Node((Vector2){100.0f, 180.0f}, 24, val);
+            Node newNode = Node(Vector2{100.0f, 180.0f}, 24, val);
             animations.back().back().push_back(NewAnimation(2, 0, GREEN, {newNode}));
         } 
         else
@@ -338,7 +338,7 @@ std::vector<std::vector<std::vector<NewAnimation>>> SinglyLinkedList::InsertAnim
                 animation.curAnimation = 1;
             }
 
-            Node newNode = Node((Vector2){nodes.back().position.x + 100.0f, nodes.back().position.y}, 24, val);
+            Node newNode = Node(Vector2{nodes.back().position.x + 100.0f, nodes.back().position.y}, 24, val);
             animations.back().back().push_back(NewAnimation(2, 0, GREEN, {newNode}));
             animations.back().back().push_back(NewAnimation(5, 0, ORANGE, {nodes.back(), newNode}));
 
@@ -372,7 +372,7 @@ std::vector<std::vector<std::vector<NewAnimation>>> SinglyLinkedList::InsertAnim
             {
                 animations.back()[0].erase(animations.back()[0].begin() + int(nodes.size()) + pos - 1);
             }
-            Node newNode((Vector2){nodes[pos].position.x, nodes[pos].position.y + 100.0f}, 24, val);
+            Node newNode(Vector2{nodes[pos].position.x, nodes[pos].position.y + 100.0f}, 24, val);
             animations.back().back().push_back(NewAnimation(2, 0, GREEN, {newNode}));
             animations.back().back().push_back(NewAnimation(5, 0, ORANGE, {newNode, nodes[pos]}));
             if (pos > 0)
@@ -408,7 +408,7 @@ std::vector<std::vector<std::vector<NewAnimation>>> SinglyLinkedList::InsertAnim
                 animations.back()[pos + 1].pop_back();            
             }
     
-            Node newNode((Vector2){nodes[pos].position.x, nodes[pos].position.y + 100.0f}, 24, val);
+            Node newNode(Vector2{nodes[pos].position.x, nodes[pos].position.y + 100.0f}, 24, val);
             Node lastNode = nodes.back();
             lastNode.position.x += 100.f;
     
@@ -563,10 +563,10 @@ void SinglyLinkedList::Delete(int val)
 void SinglyLinkedList::DrawToolBar()
 {
     toolBarButtons[0][0].DrawButton(0.3, 0.1, LIME, true); 
-    DrawTextureEx(flagToolBarButtons[0][0] == false ? toolBarRightArrow : toolBarLeftArrow, (Vector2){2.5, 570 + 183.0 / 2 - 16.0 / 2}, 0, 1, WHITE);
+    DrawTextureEx(flagToolBarButtons[0][0] == false ? toolBarRightArrow : toolBarLeftArrow, Vector2{2.5, 570 + 183.0 / 2 - 16.0 / 2}, 0, 1, WHITE);
     if (flagToolBarButtons[1][3] == true) 
     {
-        DrawTextureEx(dropFile, (Vector2){float(GetScreenWidth() / 2.0 - 354.25), float(GetScreenHeight() / 2.0 - 200)}, 0, 0.5, Fade(LIME, 0.8));
+        DrawTextureEx(dropFile, Vector2{float(GetScreenWidth() / 2.0 - 354.25), float(GetScreenHeight() / 2.0 - 200)}, 0, 0.5, Fade(LIME, 0.8));
     }
     if (flagToolBarButtons[0][0] == true) 
     {
@@ -576,8 +576,8 @@ void SinglyLinkedList::DrawToolBar()
         }
         if (flagToolBarButtons[2][0] == true) // Insert
         {
-            Button v = {(Vector2){17 + 160 + 2, 607 + 35 + 2}, 40, 35, (char *)"v ="};
-            Button i = {(Vector2){17 + 160 + 2, 607}, 40, 35, (char *)"i ="};
+            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2}, 40, 35, (char *)"v ="};
+            Button i = {Vector2{17 + 160 + 2, 607}, 40, 35, (char *)"i ="};
             i.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
             v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
             insertI.DrawTextBox();
@@ -585,14 +585,14 @@ void SinglyLinkedList::DrawToolBar()
         }
         if (flagToolBarButtons[3][0] == true) // Delete
         {
-            Button v = {(Vector2){17 + 160 + 2, 607 + 35 + 2}, 40, 35, (char *)"v ="};
+            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2}, 40, 35, (char *)"v ="};
             v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
             insertV.DrawTextBox();
         }
         if (flagToolBarButtons[4][0] == true) // Update
         {
-            Button v = {(Vector2){17 + 160 + 2, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 40, 35, (char *)"v ="};
-            Button i = {(Vector2){17 + 160 + 2, 607 + 35 + 2 + 35 + 2}, 40, 35, (char *)"i ="};
+            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 40, 35, (char *)"v ="};
+            Button i = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2}, 40, 35, (char *)"i ="};
             i.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
             v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
             insertI.DrawTextBox();
@@ -600,7 +600,7 @@ void SinglyLinkedList::DrawToolBar()
         }
         if (flagToolBarButtons[5][0] == true) // Search
         {
-            Button v = {(Vector2){17 + 160 + 2, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 40, 35, (char *)"v ="};
+            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 40, 35, (char *)"v ="};
             v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
             insertV.DrawTextBox();
         }
@@ -643,34 +643,34 @@ void SinglyLinkedList::HandleToolBar()
                     if (i == 2 && j == 0)
                     {
                         insertI.oldWidth = 60;
-                        insertI.textBox = {(Vector2){17 + 160 + 2 + 35, 607}, 60, 35};
-                        insertI.confirm = {(Vector2){17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
+                        insertI.textBox = {Vector2{17 + 160 + 2 + 35, 607}, 60, 35};
+                        insertI.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
 
                         insertV.oldWidth = 60;
-                        insertV.textBox = {(Vector2){17 + 160 + 2 + 35, 607 + 35 + 2}, 60, 35};
-                        insertV.confirm = {(Vector2){17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
+                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2}, 60, 35};
+                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
                     }
                     if (i == 3 && j == 0)
                     {
                         insertV.oldWidth = 60;
-                        insertV.textBox = {(Vector2){17 + 160 + 2 + 35, 607 + 35 + 2}, 60, 35};
-                        insertV.confirm = {(Vector2){17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
+                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2}, 60, 35};
+                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
                     }
                     if (i == 4 && j == 0)
                     {
                         insertI.oldWidth = 60;
-                        insertI.textBox = {(Vector2){17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2}, 60, 35};
-                        insertI.confirm = {(Vector2){17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
+                        insertI.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2}, 60, 35};
+                        insertI.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
 
                         insertV.oldWidth = 60;
-                        insertV.textBox = {(Vector2){17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35};
-                        insertV.confirm = {(Vector2){17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
+                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35};
+                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
                     }
                     if (i == 5 && j == 0)
                     {
                         insertV.oldWidth = 60;
-                        insertV.textBox = {(Vector2){17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35};
-                        insertV.confirm = {(Vector2){17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
+                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35};
+                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
                     }
                 }
             }

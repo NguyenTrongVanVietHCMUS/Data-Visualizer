@@ -58,7 +58,7 @@ bool NewAnimation::DrawMoveNodeAnimation(const Texture2D &textureNode, const Fon
         flag = true;
     }
 
-    Vector2 newPosition = (Vector2)  {   
+    Vector2 newPosition = Vector2  {   
         nodes[0].position.x + (nodes[1].position.x - nodes[0].position.x) * curAnimation,
         nodes[0].position.y + (nodes[1].position.y - nodes[0].position.y) * curAnimation
     };
@@ -147,11 +147,11 @@ bool NewAnimation::DrawMoveEdgeAnimation(const Texture2D &arrowEdge, const Color
     Color curColor = (ColorIsEqual(color, BLACK) ? (isLightMode ? BLACK : WHITE) : color);
 
     float radius = nodes[0].radius;
-    Vector2 startPos = (Vector2)  {   
+    Vector2 startPos = Vector2  {   
                                     nodes[0].position.x + (nodes[1].position.x - nodes[0].position.x) * curAnimation,
                                     nodes[0].position.y + (nodes[1].position.y - nodes[0].position.y) * curAnimation
                                 };
-    Vector2 endPos = (Vector2)  {   
+    Vector2 endPos = Vector2  {   
                                     nodes[2].position.x + (nodes[3].position.x - nodes[2].position.x) * curAnimation,
                                     nodes[2].position.y + (nodes[3].position.y - nodes[2].position.y) * curAnimation
                                 };

@@ -16,7 +16,7 @@ void TextBox::DrawTextBox()
     }
     textBox.DrawButton(0.3, 0.8, LIME, true);
     confirm.DrawButtonAndText(0.3, 0.8, LIME, true, font, 20, RAYWHITE);
-    DrawTextEx(font, value.c_str(), (Vector2){textBox.position.x + 10, textBox.position.y + 8}, 20, 1, PINK);
+    DrawTextEx(font, value.c_str(), Vector2{textBox.position.x + 10, textBox.position.y + 8}, 20, 1, PINK);
 
 
 }

@@ -24,7 +24,7 @@ void Button::DrawText(Font font, int fontSize, Color textColor)
 
 void Button::DrawButton(float rounded, float fade, Color color, bool useFade)
 {
-    DrawRectangleRounded((Rectangle){position.x, position.y, width, height}, rounded, 0, Fade(color, !useFade || CheckMouseInRectangle() ? 1.0f : 0.8f));
+    DrawRectangleRounded(Rectangle{position.x, position.y, width, height}, rounded, 0, Fade(color, !useFade || CheckMouseInRectangle() ? 1.0f : 0.8f));
 }
 
 void Button::DrawButtonAndText(float rounded, float fade, Color color, bool useFade, Font font, int fontSize, Color textColor)
