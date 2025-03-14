@@ -1,8 +1,8 @@
-if(NOT EXISTS "V:/Data-Visualizer/build/install_manifest.txt")
-  message(FATAL_ERROR "Cannot find install manifest: V:/Data-Visualizer/build/install_manifest.txt")
+if(NOT EXISTS "C:/Users/chanh/OneDrive/Desktop/Project/CS163/Data-Visualizer/build/install_manifest.txt")
+  message(FATAL_ERROR "Cannot find install manifest: C:/Users/chanh/OneDrive/Desktop/Project/CS163/Data-Visualizer/build/install_manifest.txt")
 endif()
 
-file(READ "V:/Data-Visualizer/build/install_manifest.txt" files)
+file(READ "C:/Users/chanh/OneDrive/Desktop/Project/CS163/Data-Visualizer/build/install_manifest.txt" files)
 string(REGEX REPLACE "\n" ";" files "${files}")
 foreach(file ${files})
   message(STATUS "Uninstalling $ENV{DESTDIR}${file}")

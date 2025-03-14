@@ -6,7 +6,7 @@ std::vector<int> StringToVector(std::string listChar);
 class SinglyLinkedList : public DataStructure 
 {
     public:
-        Font fontRoboto = LoadFont("Fonts/Roboto_Condensed-SemiBold.ttf");
+        Font fontRoboto = LoadFont("../Fonts/Roboto_Condensed-SemiBold.ttf");
         TextBox enterList;
         TextBox insertI;
         TextBox insertV;

@@ -1,6 +1,6 @@
-^V:\DATA-VISUALIZER\BUILD\CMAKEFILES\52B18A60B5C69CB243C0233EAEAF7B77\GENERATE.STAMP.RULE
+^C:\USERS\CHANH\ONEDRIVE\DESKTOP\PROJECT\CS163\DATA-VISUALIZER\BUILD\CMAKEFILES\2AEE052676DA99C854C9108D5CE91CAF\GENERATE.STAMP.RULE
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SV:/Data-Visualizer -BV:/Data-Visualizer/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file V:/Data-Visualizer/build/Data_Structure_Visualization.sln
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/chanh/OneDrive/Desktop/Project/CS163/Data-Visualizer -BC:/Users/chanh/OneDrive/Desktop/Project/CS163/Data-Visualizer/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/chanh/OneDrive/Desktop/Project/CS163/Data-Visualizer/build/Data_Structure_Visualization.sln
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone

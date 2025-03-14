@@ -1,4 +1,4 @@
-# Install script for directory: V:/Data-Visualizer/include/raylib/src
+# Install script for directory: C:/Users/chanh/OneDrive/Desktop/Project/CS163/Data-Visualizer/include/raylib/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,45 +34,45 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("V:/Data-Visualizer/build/include/raylib/raylib/external/glfw/cmake_install.cmake")
+  include("C:/Users/chanh/OneDrive/Desktop/Project/CS163/Data-Visualizer/build/include/raylib/raylib/external/glfw/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   if(CMAKE_INSTALL_CONFIG_NAME MATCHES "^([Dd][Ee][Bb][Uu][Gg])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "V:/Data-Visualizer/build/include/raylib/raylib/Debug/raylib.lib")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "C:/Users/chanh/OneDrive/Desktop/Project/CS163/Data-Visualizer/build/include/raylib/raylib/Debug/raylib.lib")
   elseif(CMAKE_INSTALL_CONFIG_NAME MATCHES "^([Rr][Ee][Ll][Ee][Aa][Ss][Ee])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "V:/Data-Visualizer/build/include/raylib/raylib/Release/raylib.lib")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "C:/Users/chanh/OneDrive/Desktop/Project/CS163/Data-Visualizer/build/include/raylib/raylib/Release/raylib.lib")
   elseif(CMAKE_INSTALL_CONFIG_NAME MATCHES "^([Mm][Ii][Nn][Ss][Ii][Zz][Ee][Rr][Ee][Ll])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "V:/Data-Visualizer/build/include/raylib/raylib/MinSizeRel/raylib.lib")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "C:/Users/chanh/OneDrive/Desktop/Project/CS163/Data-Visualizer/build/include/raylib/raylib/MinSizeRel/raylib.lib")
   elseif(CMAKE_INSTALL_CONFIG_NAME MATCHES "^([Rr][Ee][Ll][Ww][Ii][Tt][Hh][Dd][Ee][Bb][Ii][Nn][Ff][Oo])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "V:/Data-Visualizer/build/include/raylib/raylib/RelWithDebInfo/raylib.lib")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "C:/Users/chanh/OneDrive/Desktop/Project/CS163/Data-Visualizer/build/include/raylib/raylib/RelWithDebInfo/raylib.lib")
   endif()
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE FILE FILES
-    "V:/Data-Visualizer/include/raylib/src/raylib.h"
-    "V:/Data-Visualizer/include/raylib/src/rcamera.h"
-    "V:/Data-Visualizer/include/raylib/src/rlgl.h"
-    "V:/Data-Visualizer/include/raylib/src/raymath.h"
+    "C:/Users/chanh/OneDrive/Desktop/Project/CS163/Data-Visualizer/include/raylib/src/raylib.h"
+    "C:/Users/chanh/OneDrive/Desktop/Project/CS163/Data-Visualizer/include/raylib/src/rcamera.h"
+    "C:/Users/chanh/OneDrive/Desktop/Project/CS163/Data-Visualizer/include/raylib/src/rlgl.h"
+    "C:/Users/chanh/OneDrive/Desktop/Project/CS163/Data-Visualizer/include/raylib/src/raymath.h"
     )
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "V:/Data-Visualizer/build/include/raylib/raylib/raylib.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "C:/Users/chanh/OneDrive/Desktop/Project/CS163/Data-Visualizer/build/include/raylib/raylib/raylib.pc")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/raylib" TYPE FILE FILES "V:/Data-Visualizer/build/include/raylib/raylib/raylib-config-version.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/raylib" TYPE FILE FILES "C:/Users/chanh/OneDrive/Desktop/Project/CS163/Data-Visualizer/build/include/raylib/raylib/raylib-config-version.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/raylib" TYPE FILE FILES "V:/Data-Visualizer/include/raylib/src/../cmake/raylib-config.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/raylib" TYPE FILE FILES "C:/Users/chanh/OneDrive/Desktop/Project/CS163/Data-Visualizer/include/raylib/src/../cmake/raylib-config.cmake")
 endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
 if(CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "V:/Data-Visualizer/build/include/raylib/raylib/install_local_manifest.txt"
+  file(WRITE "C:/Users/chanh/OneDrive/Desktop/Project/CS163/Data-Visualizer/build/include/raylib/raylib/install_local_manifest.txt"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()

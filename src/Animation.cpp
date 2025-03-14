@@ -15,7 +15,7 @@ bool Animation::drawAnimationNode(bool isLightMode, float speed)
                                  float(tmpNode.position.y + (firstNodeEnd.position.y - tmpNode.position.y) * curAnimation)};
     if (flag == true) 
     {
-        // tmpNode.DrawChosenNode();
+        tmpNode.DrawChosenNode();
     }
     else 
     {
@@ -78,7 +78,7 @@ bool Animation::DrawAnimation(bool isLightMode, float speed)
     {
         if (useAnimation == false)
         {
-            // firstNodeEnd.DrawNormalNode(isLightMode);
+            firstNodeEnd.DrawNormalNode(isLightMode);
             return true;
         }
         else
