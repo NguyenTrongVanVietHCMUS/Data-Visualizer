@@ -36,5 +36,5 @@ class NewAnimation
         NewAnimation(int _type = 0, float _curAnimation = 0, Color _color = BLACK, std::vector<Node> _nodes = {}) : 
             type(_type), curAnimation(_curAnimation), color(_color), nodes(_nodes) {}
         void Init(int _type, const std::vector<Node> &_nodes);
-        bool DrawAnimation(const Texture2D &hollowCircle, const Texture2D &solidCircle, const Texture2D &arrowEdge, const Font &fontNumber, const bool &isLightMode, const float &speed);
+        bool DrawAnimation(const Texture2D &hollowCircle, const Texture2D &solidCircle, const Texture2D &arrowEdge, const Font &fontNumber, const Font &fontText, const bool &isLightMode, const float &speed);
 };

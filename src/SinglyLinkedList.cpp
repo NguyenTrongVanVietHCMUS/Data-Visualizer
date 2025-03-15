@@ -394,7 +394,7 @@ std::vector<std::vector<std::vector<NewAnimation>>> SinglyLinkedList::InsertAnim
             }
             for (int i = int(nodes.size()) - 1; i >= pos; --i)
             {
-                animations.back()[0].erase(animations.back()[0].begin() + i);
+                // animations.back()[0].erase(animations.back()[0].begin() + i);
             }
     
             animations.back().back().pop_back();
@@ -795,7 +795,7 @@ void SinglyLinkedList::Draw()
                 bool done = true;
                 for (NewAnimation &animation: group) 
                 {   
-                    done &= animation.DrawAnimation(hollowCircle, solidCircle, arrowEdge, GetFontDefault(), isLightMode, speed);
+                    done &= animation.DrawAnimation(hollowCircle, solidCircle, arrowEdge, GetFontDefault(), GetFontDefault(), isLightMode, speed);
                 }
                 if (done == false)
                 {

@@ -180,7 +180,7 @@ void NewAnimation::Init(int _type, const std::vector<Node> &_nodes)
     nodes = _nodes;
 }
 
-bool NewAnimation::DrawAnimation(const Texture2D &hollowCircle, const Texture2D &solidCircle, const Texture2D &arrowEdge, const Font &fontNumber, const bool &isLightMode, const float &speed)
+bool NewAnimation::DrawAnimation(const Texture2D &hollowCircle, const Texture2D &solidCircle, const Texture2D &arrowEdge, const Font &fontNumber, const Font &fontText, const bool &isLightMode, const float &speed)
 {
     if (type == 0)
     {

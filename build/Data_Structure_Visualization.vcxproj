@@ -332,6 +332,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Data-Visualizer\src\Button.cpp" />
     <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Data-Visualizer\src\Node.cpp" />
     <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Data-Visualizer\src\TextBox.cpp" />
+    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Data-Visualizer\src\SetOfAnimation.cpp" />
+    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Data-Visualizer\src\Presentation.cpp" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

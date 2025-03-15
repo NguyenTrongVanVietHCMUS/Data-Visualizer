@@ -13,7 +13,6 @@ void Node::DrawTextNode(const Font &fontValue, const Color &color, const bool &i
 void Node::DrawHollowNode(const Texture2D &textureNode, const Color &color, const bool &isLightMode)
 {
     Color curColor = (ColorIsEqual(BLACK, color) ? (isLightMode ? BLACK : WHITE) : color);
-    std::cerr << position.x << ' ' << position.y << ' ' << radius << '\n';
     DrawTextureEx(textureNode, Vector2{position.x - radius, position.y - radius}, 0, 1, curColor);
 }
 
