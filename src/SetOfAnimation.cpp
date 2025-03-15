@@ -1,22 +1,20 @@
 #include "SetOfAnimation.h"
+#include "iostream"
 
 bool SetOfAnimation::DrawSetOfAnimation(const Texture2D &hollowCircle, const Texture2D &solidCircle, const Texture2D &arrowEdge, const Font &fontNumber, const Font &fontText, const bool &isLightMode, const float &speed)
 {
-    for (int i = 0; i <= std::min(currentSet, int(setOfAnimation.size()) - 1); ++i)
+    for (std::vector<NewAnimation> &curSet: setOfAnimation)
     {
         bool doneSet = true;
-        for (NewAnimation &animation: setOfAnimation[i])
+        for (NewAnimation &animation: curSet)
         {
-            if (animation.DrawAnimation(hollowCircle, solidCircle, arrowEdge, fontNumber, fontText, isLightMode, speed) == false)
-            {
-                doneSet = false;
-            }
-        }       
-        if (doneSet == false) {
+            doneSet &= animation.DrawAnimation(hollowCircle, solidCircle, arrowEdge, fontNumber, fontText, isLightMode, speed);
+        }
+        if (doneSet == false)
+        {
             return false;
         }
     }
-    currentSet = std::min(currentSet + 1, int(setOfAnimation.size()) - 1);
     return true;
 }
 
@@ -37,10 +35,6 @@ void SetOfAnimation::EraseAnimation(int positionSet, NewAnimation animation)
             setOfAnimation[positionSet].erase(setOfAnimation[positionSet].begin() + j);
         }
     }
-    if (setOfAnimation[positionSet].empty() == true)
-    {
-        setOfAnimation.erase(setOfAnimation.begin() + positionSet);
-    }
 }
 
 void SetOfAnimation::CreateNewSet()
@@ -48,14 +42,60 @@ void SetOfAnimation::CreateNewSet()
     setOfAnimation.push_back({});
 }
 
-void SetOfAnimation::SetCurAnimation(float curAnimation)
+void SetOfAnimation::SetType(int positionSet, int type)
 {
-    for (std::vector<NewAnimation> &curSet: setOfAnimation)
+    if (positionSet == -1)
     {
-        for (NewAnimation &animation: curSet)
+        positionSet = int(setOfAnimation.size()) - 1;
+        if (positionSet < 0) 
         {
-            animation.curAnimation = curAnimation;
+            return;
         }
+    }
+    for (NewAnimation &animation: setOfAnimation[positionSet])
+    {
+        animation.type = type;
+    }
+}
+
+NewAnimation SetOfAnimation::GetAnimation(int positionSet, int i)
+{
+    if (positionSet == -1)
+    {
+        positionSet = int(setOfAnimation.size()) - 1;
+        if (positionSet < 0) 
+        {
+            return NewAnimation();
+        }
+    }
+    if (i == -1) 
+    {
+        i = int(setOfAnimation[positionSet].size()) - 1;
+        if (i < 0)
+        {
+            return NewAnimation();
+        }
+    }
+    if (i >= int(setOfAnimation.size()))
+    {
+        return NewAnimation();
+    }
+    return setOfAnimation[positionSet][i];
+}
+
+void SetOfAnimation::SetCurAnimation(int positionSet, float curAnimation)
+{
+    if (positionSet == -1)
+    {
+        positionSet = int(setOfAnimation.size()) - 1;
+        if (positionSet < 0) 
+        {
+            return;
+        }
+    }
+    for (NewAnimation &animation: setOfAnimation[positionSet])
+    {
+        animation.curAnimation = curAnimation;
     }
 }
 
@@ -64,6 +104,10 @@ void SetOfAnimation::InsertAnimationToSet(int positionSet, NewAnimation animatio
     if (positionSet == -1)
     {
         positionSet = int(setOfAnimation.size()) - 1;
+        if (positionSet < 0) 
+        {
+            return;
+        }
     }
     if (positionSet < int(setOfAnimation.size()))
     {

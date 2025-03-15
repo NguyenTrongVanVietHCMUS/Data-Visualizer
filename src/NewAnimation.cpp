@@ -1,5 +1,6 @@
 #include "NewAnimation.h"
 #include "math.h"
+#include "iostream"
 
 void NewAnimation::DrawNormalEdge(const Texture &arrowEdge, const bool &isLightMode)
 {

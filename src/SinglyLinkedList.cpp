@@ -74,70 +74,54 @@ std::vector<Node> SinglyLinkedList::BuildNodeFromValue(const std::vector<int> &v
     return nodes;
 }
 
-std::vector<std::vector<std::vector<NewAnimation>>> SinglyLinkedList::CreateAnimation(const std::vector<Node> &nodes)
+Presentation SinglyLinkedList::CreateAnimation(const std::vector<Node> &nodes)
 {
-    std::vector<std::vector<std::vector<NewAnimation>>> animations;
-
+    Presentation create;
     { // Insert all nodes
-        animations.push_back({});
-        animations.back().push_back({});
-        for (Node curNode: nodes) animations.back().back().push_back(NewAnimation(2, 0, GREEN, {curNode}));
+        create.CreateNewPresentation();
+        create.CreateNewSet(-1);
+        for (Node curNode: nodes) 
+        {
+            create.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {curNode}));
+        }
     }
-
     { // Insert all edges
-        animations.push_back(animations.back());
-        for (NewAnimation &animation: animations.back().back()) animation.curAnimation = 1;
-    
-        animations.back().push_back({});
-        for (int i = 1; i < int(nodes.size()); ++i) animations.back().back().push_back(NewAnimation(5, 0, GREEN, {nodes[i - 1], nodes[i]}));
+        create.CopySetToLast(-1);
+        create.SetCurAnimation(-1, -1, 1);
+        create.CreateNewSet(-1);
+        for (int i = 1; i < int(nodes.size()); ++i) 
+        {
+            create.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, GREEN, {nodes[i - 1], nodes[i]}));
+        }
     }
-
     { // Remove animations
-        animations.push_back({animations.back()});
-        for (NewAnimation &animation: animations.back()[0]) 
+        create.CreateNewPresentation();
+        create.CreateNewSet(-1);
+        for (Node curNode: nodes) 
         {
-            animation.type = 3;
-            animation.curAnimation = 0;
+            create.InsertAnimationToSet(-1, -1, NewAnimation(0, 0, BLACK, {curNode}));
         }
-        for (NewAnimation &animation: animations.back()[1]) 
+        for (int i = 1; i < int(nodes.size()); ++i) 
         {
-            animation.type = 6;
-            animation.curAnimation = 0;
+            create.InsertAnimationToSet(-1, -1, NewAnimation(4, 0, BLACK, {nodes[i - 1], nodes[i]}));
         }
-        animations.back().push_back(animations.back()[0]);
-        for (NewAnimation &animation: animations.back().back())
+        for (Node curNode: nodes) 
         {
-            animation.type = 0;
-            animation.curAnimation = 0;
-            animation.color = BLACK;
+            create.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, GREEN, {curNode}));
         }
-        animations.back().push_back(animations.back()[1]);
-        for (NewAnimation &animation: animations.back().back())
+        for (int i = 1; i < int(nodes.size()); ++i) 
         {
-            animation.type = 4;
-            animation.curAnimation = 0;
-            animation.color = BLACK;
+            create.InsertAnimationToSet(-1, -1, NewAnimation(6, 0, GREEN, {nodes[i - 1], nodes[i]}));
         }
-        for (int i = 0; i < 2; ++i) 
-        {
-            std::swap(animations.back()[i], animations.back()[i + 2]);
-        }
-        for (NewAnimation animation: animations.back()[3])
-        {
-            animations.back()[2].push_back(animation);
-        }
-        animations.back().pop_back();
     }
-
-    return animations;
+    return create;
 }
 
 void SinglyLinkedList::BuildCreateAnimation()
 {
     nodes = BuildNodeFromValue(values);
-    posAnimation = 0;
-    animations.clear();
-    animations = CreateAnimation(nodes);
+    myPresentation.currentPresentation = 0;
+    myPresentation = CreateAnimation(nodes);
 }
 
 int SinglyLinkedList::FindPosition(int value)
@@ -156,8 +140,7 @@ void SinglyLinkedList::ClearAllData()
 {
     nodes.clear();
     values.clear();
-    posAnimation = 0;
-    animations.clear();
+    myPresentation.Clear();
 }
 
 void SinglyLinkedList::RandomNewData()
@@ -208,225 +191,201 @@ void SinglyLinkedList::InputDataFromFile()
     BuildCreateAnimation();
 }
 
-std::vector<std::vector<NewAnimation>> SinglyLinkedList::BasicStructure(const std::vector<Node> &nodes)
+SetOfAnimation SinglyLinkedList::BasicStructure(const std::vector<Node> &nodes)
 {
-    std::vector<std::vector<NewAnimation>> animations;
+    SetOfAnimation basicStructure;
     if (nodes.empty() == false) { 
-        // Insert all nodes and edges
-        animations.push_back({});
-        for (Node curNode: nodes) animations[0].push_back(NewAnimation(0, 0, BLACK, {curNode}));
-        for (int i = 1; i < int(nodes.size()); ++i) animations[0].push_back(NewAnimation(4, 0, BLACK, {nodes[i - 1], nodes[i]}));
+        basicStructure.CreateNewSet();
+        for (Node curNode: nodes) basicStructure.InsertAnimationToSet(-1, NewAnimation(0, 0, BLACK, {curNode}));
+        for (int i = 1; i < int(nodes.size()); ++i) basicStructure.InsertAnimationToSet(-1, NewAnimation(4, 0, BLACK, {nodes[i - 1], nodes[i]}));
     }
-    return animations;
+    return basicStructure;
 }
 
-std::vector<std::vector<std::vector<NewAnimation>>> SinglyLinkedList::SearchAnimation(int pos, Color color)
+Presentation SinglyLinkedList::SearchAnimation(int pos, Color color)
 {
-    std::vector<std::vector<std::vector<NewAnimation>>> animations;
-    animations.push_back({BasicStructure(nodes)});
+    Presentation search;
+    search.present = {BasicStructure(nodes)};
     {
         for (int i = 0; i < int(nodes.size()); ++i)
         {
-            animations.push_back(animations.back());
-            for (NewAnimation &animation: animations.back().back())
-            {
-                animation.curAnimation = 1;
-            }
+            search.CopySetToLast(-1);
+            search.SetCurAnimation(-1, 1);
             if (i > 0)
             {
-                animations.back().back().pop_back();
-                animations.back().push_back({   
-                                            NewAnimation(0, 0, ORANGE, {nodes[i - 1]}), // Draw hollow node
-                                            NewAnimation(3, 0, ORANGE, {nodes[i - 1]}), // Draw delete node
-                                            NewAnimation(5, 0, ORANGE, {nodes[i - 1], nodes[i]}), // Draw insert edge
-                                            });
-                animations.back().back().push_back(NewAnimation(2, 0, (i == pos ? color : ORANGE), {nodes[i]}));
+                search.EraseAnimation(-1, -1, NewAnimation(2, 0, (i - 1 == pos ? color : ORANGE), {nodes[i - 1]}));
+                search.CreateNewSet(-1);
+                search.InsertAnimationToSet(-1, -1, NewAnimation(0, 0, ORANGE, {nodes[i - 1]}));
+                search.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, ORANGE, {nodes[i - 1]}));
+                search.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {nodes[i - 1], nodes[i]}));
+                search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, (i == pos ? color : ORANGE), {nodes[i]}));
             }
             else 
             {
-                animations.back().push_back({NewAnimation(2, 0, (i == pos ? color : ORANGE), {nodes[i]})});
+                search.CreateNewSet(-1);
+                search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, (i == pos ? color : ORANGE), {nodes[i]}));
             }
             if (i == pos) 
             {
-                return animations;
+                return search;
             }
         }
     }
     if (nodes.empty() == false)
     {
-        animations.push_back(animations.back());
-        for (NewAnimation &animation: animations.back().back())
-        {
-            animation.curAnimation = 1;
-        }
-        animations.back().back().pop_back();
-        animations.back().push_back({
-                                    NewAnimation(0, 0, ORANGE, {nodes.back()}),
-                                    NewAnimation(3, 0, ORANGE, {nodes.back()})
-                                    });
+        search.CopySetToLast(-1);
+        search.SetCurAnimation(-1, 1);
+        search.EraseAnimation(-1, -1, NewAnimation(2, 0, ORANGE, {nodes.back()}));
+
+        search.CreateNewSet(-1);
+        search.InsertAnimationToSet(-1, -1, NewAnimation(0, 0, ORANGE, {nodes.back()}));
+        search.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, ORANGE, {nodes.back()}));
     }
-    return animations;
+    return search;
 }
 
 void SinglyLinkedList::Search(int val)
 {
     nodes = BuildNodeFromValue(values);
     int pos = FindPosition(val);
-    posAnimation = 0;
-    animations = SearchAnimation(pos, BLUE);
+    myPresentation = SearchAnimation(pos, BLUE);
 }
 
-std::vector<std::vector<std::vector<NewAnimation>>> SinglyLinkedList::UpdateAnimation(int pos, int val)
+Presentation SinglyLinkedList::UpdateAnimation(int pos, int val)
 {
-    std::vector<std::vector<std::vector<NewAnimation>>> animations;
-    animations = SearchAnimation(pos, BLUE);
+    Presentation update;
+    update = SearchAnimation(pos, BLUE);
 
-    animations.push_back(animations.back());
-    for (NewAnimation &animation: animations.back().back()) {
-        animation.curAnimation = 1;
-    }
-    animations.back()[0].erase(animations.back()[0].begin() + pos);
-    NewAnimation animation = animations.back().back().back();
-    animations.back().back().pop_back();
+    update.CopySetToLast(-1);
+    update.SetCurAnimation(-1, 1);
+    update.EraseAnimation(-1, 0, NewAnimation(0, 0, BLACK, {nodes[pos]}));
+    
+    NewAnimation animation = update.GetAnimation(-1, -1, -1);
+    update.EraseAnimation(-1, -1, animation);
 
     animation.type = 3;
     animation.color = BLUE;
     animation.curAnimation = 0;
-    animations.back().back().push_back(animation);
+    update.InsertAnimationToSet(-1, -1, animation);
 
-    animations.push_back(animations.back());
-    for (NewAnimation &animation: animations.back().back()) {
-        animation.curAnimation = 1;
-    }
+    update.CopySetToLast(-1);
+    update.SetCurAnimation(-1, 1);
+
     animation.type = 2;
     animation.color = GREEN;
     animation.curAnimation = 0;
     animation.nodes[0].value = val;
-    animations.back().back().push_back(animation);
+    update.InsertAnimationToSet(-1, -1, animation);
 
-    return animations;
+    return update;
 }
 
 void SinglyLinkedList::Update(int pos, int val)
 {
     if (pos >= int(nodes.size())) return;
     nodes = BuildNodeFromValue(values);
-    posAnimation = 0;
-    animations = UpdateAnimation(pos, val);
+    myPresentation.currentPresentation = 0;
+    myPresentation = UpdateAnimation(pos, val);
     values[pos] = val;
     nodes[pos].value = val;
 }
 
-std::vector<std::vector<std::vector<NewAnimation>>> SinglyLinkedList::InsertAnimation(int pos, int val)
+Presentation SinglyLinkedList::InsertAnimation(int pos, int val)
 {
-    std::vector<std::vector<std::vector<NewAnimation>>> animations;
+    Presentation insert;
  
     if (pos == int(nodes.size()))
     { 
         if (nodes.empty() == true)
         {
-            animations.push_back({{}});
-            Node newNode = Node(Vector2{100.0f, 180.0f}, 24, val);
-            animations.back().back().push_back(NewAnimation(2, 0, GREEN, {newNode}));
+            insert.CreateNewPresentation();
+            insert.CreateNewSet(-1);
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {Node(Vector2{100.0f, 180.0f}, 24, val)}));
         } 
         else
         {
-            animations = SearchAnimation(-1, BLUE);
-            animations.push_back(animations.back());
-            for (NewAnimation &animation: animations.back().back())
-            {
-                animation.curAnimation = 1;
-            }
-
-            Node newNode = Node(Vector2{nodes.back().position.x + 100.0f, nodes.back().position.y}, 24, val);
-            animations.back().back().push_back(NewAnimation(2, 0, GREEN, {newNode}));
-            animations.back().back().push_back(NewAnimation(5, 0, ORANGE, {nodes.back(), newNode}));
-
-            // animations.push_back(animations.back());
-            // animations.back().back().pop_back();
-            // animations.back().back().pop_back();
-            // animations.back().back().push_back(NewAnimation(0, 0, BLACK, {newNode}));
-            // animations.back().back().push_back(NewAnimation(3, 0, GREEN, {newNode}));
-            // animations.back().back().push_back(NewAnimation(4, 0, BLACK, {nodes.back(), newNode}));
-            // animations.back().back().push_back(NewAnimation(6, 0, ORANGE, {nodes.back(), newNode}));
+            insert = SearchAnimation(-1, BLUE);
+            insert.CopySetToLast(-1);
+            insert.SetCurAnimation(-1, 1);
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {Node(Vector2{nodes.back().position.x + 100.0f, nodes.back().position.y}, 24, val)}));
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {nodes.back(), Node(Vector2{nodes.back().position.x + 100.0f, nodes.back().position.y}, 24, val)}));
         }
     } 
     else
     {
-        animations = SearchAnimation(pos, BLUE);
+        insert = SearchAnimation(pos, BLUE);
         
         { // Move edge, Insert new node, Insert new Edge
-            animations.push_back({animations.back()});
-            for (NewAnimation &animation: animations.back().back())
-            {
-                animation.curAnimation = 1;
-            }
-            NewAnimation tmpAnimation = animations.back().back().back();
-            animations.back().back().pop_back();
+            insert.CopySetToLast(-1);
+            insert.SetCurAnimation(-1, 1);
+
+            NewAnimation tmpAnimation = insert.GetAnimation(-1, -1, -1);
+            insert.EraseAnimation(-1, -1, insert.GetAnimation(-1, -1, -1));
             if (pos > 0)
             {
-                animations.back().back().pop_back();
+                insert.EraseAnimation(-1, -1, insert.GetAnimation(-1, -1, -1));
             }
-            animations.back().back().push_back(tmpAnimation);
+            insert.InsertAnimationToSet(-1, -1, tmpAnimation);
             if (pos > 0) 
             {
-                animations.back()[0].erase(animations.back()[0].begin() + int(nodes.size()) + pos - 1);
+                insert.EraseAnimation(-1, 0, NewAnimation(4, 0, BLACK, {nodes[pos - 1], nodes[pos]}));
             }
             Node newNode(Vector2{nodes[pos].position.x, nodes[pos].position.y + 100.0f}, 24, val);
-            animations.back().back().push_back(NewAnimation(2, 0, GREEN, {newNode}));
-            animations.back().back().push_back(NewAnimation(5, 0, ORANGE, {newNode, nodes[pos]}));
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {newNode}));
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {newNode, nodes[pos]}));
             if (pos > 0)
             {
-                animations.back().back().push_back(NewAnimation(7, 0, ORANGE, {nodes[pos - 1], nodes[pos - 1], nodes[pos], newNode}));
+                insert.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, ORANGE, {nodes[pos - 1], nodes[pos - 1], nodes[pos], newNode}));
             }
+            
         }
     
         { // Move new node, nodes[pos], ... nodes.back()
-            animations.push_back({animations.back()});
-            for (NewAnimation &animation: animations.back().back())
-            {
-                animation.curAnimation = 1;
-            }
+            insert.CopySetToLast(-1);
+            insert.SetCurAnimation(-1, 1);
     
             for (int i = int(nodes.size()) - 2; i >= pos; --i)
             {
-                animations.back()[0].erase(animations.back()[0].begin() + int(nodes.size()) + i);
+                insert.EraseAnimation(-1, 0, NewAnimation(4, 0, BLACK, {nodes[i], nodes[i + 1]}));
             }
             for (int i = int(nodes.size()) - 1; i >= pos; --i)
             {
-                // animations.back()[0].erase(animations.back()[0].begin() + i);
+                insert.EraseAnimation(-1, 0, NewAnimation(0, 0, BLACK, {nodes[i]}));
             }
-    
-            animations.back().back().pop_back();
-            animations.back().back().pop_back();
-            if (pos > 0)
+            
             {
-                animations.back().back().pop_back();
+                Node newNode(Vector2{nodes[pos].position.x, nodes[pos].position.y + 100.0f}, 24, val);
+                if (pos > 0)
+                {
+                    insert.EraseAnimation(-1, -1, NewAnimation(7, 0, ORANGE, {nodes[pos - 1], nodes[pos - 1], nodes[pos], newNode}));
+                }
+                insert.EraseAnimation(-1, -1, NewAnimation(5, 0, ORANGE, {newNode, nodes[pos]}));
+                insert.EraseAnimation(-1, -1, NewAnimation(2, 0, GREEN, {newNode}));          
             }
             
             { // Delete BLUE node
-                animations.back()[pos + 1].pop_back();            
+                insert.EraseAnimation(-1, pos + 1, NewAnimation(2, 0, BLUE, {nodes[pos]}));    
             }
     
             Node newNode(Vector2{nodes[pos].position.x, nodes[pos].position.y + 100.0f}, 24, val);
             Node lastNode = nodes.back();
             lastNode.position.x += 100.f;
     
-            // Remember to remove nodes.back()
+        //     // Remember to remove nodes.back()
             nodes.push_back(lastNode);
-    
-            animations.back().push_back({});
-            animations.back().back().push_back(NewAnimation(8, 0, GREEN, {newNode, nodes[pos]}));
-            animations.back().back().push_back(NewAnimation(7, 0, ORANGE, {newNode, nodes[pos], nodes[pos], nodes[pos + 1]}));
+            
+            insert.CreateNewSet(-1);
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(8, 0, GREEN, {newNode, nodes[pos]}));
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, ORANGE, {newNode, nodes[pos], nodes[pos], nodes[pos + 1]}));
             if (pos > 0)
             {
-                animations.back().back().push_back(NewAnimation(7, 0, ORANGE, {nodes[pos - 1], nodes[pos - 1], newNode, nodes[pos]}));
+                insert.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, ORANGE, {nodes[pos - 1], nodes[pos - 1], newNode, nodes[pos]}));
             }
             for (int i = pos; i < int(nodes.size()) - 1; ++i)
             {
-                animations.back().back().push_back(NewAnimation(8, 0, (i == pos ? BLUE : BLACK), {nodes[i], nodes[i + 1]}));
+                insert.InsertAnimationToSet(-1, -1, NewAnimation(8, 0, (i == pos ? BLUE : BLACK), {nodes[i], nodes[i + 1]}));
                 if (i < int(nodes.size()) - 2) {
-                    animations.back().back().push_back(NewAnimation(7, 0, BLACK, {nodes[i], nodes[i + 1], nodes[i + 1], nodes[i + 2]}));
+                    insert.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, BLACK, {nodes[i], nodes[i + 1], nodes[i + 1], nodes[i + 2]}));
                 }
             }
     
@@ -434,130 +393,124 @@ std::vector<std::vector<std::vector<NewAnimation>>> SinglyLinkedList::InsertAnim
         }
     }
 
-    return animations;
+    return insert;
 }
 
 void SinglyLinkedList::Insert(int pos, int val)
 {
-    posAnimation = 0;
     nodes = BuildNodeFromValue(values);
     pos = std::min(pos, int(nodes.size()));
-    animations = InsertAnimation(pos, val);
+    myPresentation.currentPresentation = 0;
+    myPresentation = InsertAnimation(pos, val);
     values.insert(values.begin() + pos, val);
     nodes = BuildNodeFromValue(values);
 }
 
-std::vector<std::vector<std::vector<NewAnimation>>> SinglyLinkedList::DeleteAnimation(int pos)
-{
-    std::vector<std::vector<std::vector<NewAnimation>>> animations;
-    if (pos != -1)
-    {
-        animations = SearchAnimation(pos, RED);
-        animations.insert(animations.begin(), BasicStructure(nodes));
+// Presentation SinglyLinkedList::DeleteAnimation(int pos)
+// {
+//     Presentation _delete;
+//     if (pos != -1)
+//     {
+//         _delete = SearchAnimation(pos, RED);
+//         _delete.present.insert(_delete.present.begin(), BasicStructure(nodes));
 
-        animations.push_back(animations.back());
-        for (NewAnimation &animation: animations.back().back())
-        {
-            animation.curAnimation = 1;
-        }
+//         _delete.CopySetToLast(-1);
+//         _delete.SetCurAnimation(-1, 1);
         
-        NewAnimation animation = animations.back().back().back();
-        animations.back().back().pop_back();
-        if (pos > 0) 
-        {
-            animations.back().back().pop_back();
-        }
+//         NewAnimation animation = _delete.GetAnimation(-1, -1, -1);
+//         _delete.EraseAnimation(-1, -1, animation);
+//         if (pos > 0) 
+//         {
+//             _delete.EraseAnimation(-1, -1, _delete.GetAnimation(-1, -1, -1));
+//         }
         
-        std::vector<std::vector<NewAnimation>> tmpGroups = animations.back();
-        animation.type = 3;
-        animation.color = RED;
-        animation.curAnimation = 0;
-        animations.back().back().push_back(animation);
+//         SetOfAnimation tmpGroups = _delete.present.back();
+//         animation.type = 3;
+//         animation.color = RED;
+//         animation.curAnimation = 0;
+//         _delete.InsertAnimationToSet(-1, -1, animation);
 
     
-        if (pos < int(nodes.size()) - 1)
-        {   
-            NewAnimation deleteEdge = animations.back()[0][int(nodes.size()) + pos];
-            deleteEdge.type = 6;
-            deleteEdge.color = RED;
-            deleteEdge.curAnimation = 0;
-            animations.back().back().push_back(deleteEdge);
-            animations.back()[0].erase(animations.back()[0].begin() + int(nodes.size()) + pos);
-        }
-        if (pos > 0)
-        {
-            animations.back()[0].erase(animations.back()[0].begin() + int(nodes.size()) + pos - 1);
-        }
-        animations.back()[0].erase(animations.back()[0].begin() + pos);
+//         if (pos < int(nodes.size()) - 1)
+//         {   
+//             NewAnimation deleteEdge = _delete.GetAnimation(-1, 0, int(nodes.size()) + pos);
+//             deleteEdge.type = 6;
+//             deleteEdge.color = RED;
+//             deleteEdge.curAnimation = 0;
+//             _delete.InsertAnimationToSet(-1, -1, animation);
+//             _delete.EraseAnimation(-1, 0, _delete.GetAnimation(-1, 0, int(nodes.size()) + pos));
+//         }
+//         if (pos > 0)
+//         {
+//             _delete.EraseAnimation(-1, 0, _delete.GetAnimation(-1, 0, int(nodes.size()) + pos - 1));
+//         }
+//         _delete.EraseAnimation(-1, 0, _delete.GetAnimation(-1, 0, pos));
 
-        animations.push_back(animations.back());
-        for (NewAnimation &animation: animations.back().back())
-        {
-            animation.curAnimation = 1;
-        }
-        if (pos > 0 && pos < int(nodes.size()) - 1)
-        {
-            animations.back().back().push_back(NewAnimation(5, 0, ORANGE, {nodes[pos - 1], nodes[pos + 1]}));
-        }
+//         _delete.CopySetToLast(-1);
+//         _delete.SetCurAnimation(-1, 1);
+//         if (pos > 0 && pos < int(nodes.size()) - 1)
+//         {
+//             animations.back().back().push_back(NewAnimation(5, 0, ORANGE, {nodes[pos - 1], nodes[pos + 1]}));
+//         }
 
-        animations.push_back(tmpGroups);
-        if (pos > 0)
-        {
-            for (int i = int(nodes.size()) - 2; i >= pos; --i)
-            {
-                animations.back()[0].erase(animations.back()[0].begin() + int(nodes.size()) + i);
-            }
-            if (pos < int(nodes.size()) - 1)
-            {   
-                animations.back()[0].erase(animations.back()[0].begin() + int(nodes.size()) + pos);
-            }
-            if (pos > 0)
-            {
-                animations.back()[0].erase(animations.back()[0].begin() + int(nodes.size()) + pos - 1);
-            }
-            for (int i = int(nodes.size()) - 1; i >= pos; --i)
-            {
-                animations.back()[0].erase(animations.back()[0].begin() + i);
-            }
-        }
-        else 
-        {
-            animations.back().erase(animations.back().begin());
-        }
-        animations.back().push_back({});
-        if (pos > 0 && pos < int(nodes.size()) - 1)
-        {
-            animations.back().back().push_back(NewAnimation(7, 0, ORANGE, {nodes[pos - 1], nodes[pos - 1], nodes[pos + 1], nodes[pos]}));
-        }
-        for (int i = int(nodes.size()) - 1; i > pos; --i)
-        {
-            animations.back().back().push_back(NewAnimation(8, 0, BLACK, {nodes[i], nodes[i - 1]}));
-        }
-        for (int i = int(nodes.size()) - 2; i > pos; --i)
-        {
-            animations.back().back().push_back(NewAnimation(7, 0, BLACK, {nodes[i], nodes[i - 1], nodes[i + 1], nodes[i]}));
-        }
-    }
-    else 
-    {
-        animations = SearchAnimation(-1, RED);
-    }
+//         animations.push_back(tmpGroups);
+//         if (pos > 0)
+//         {
+//             for (int i = int(nodes.size()) - 2; i >= pos; --i)
+//             {
+//                 animations.back()[0].erase(animations.back()[0].begin() + int(nodes.size()) + i);
+//             }
+//             if (pos < int(nodes.size()) - 1)
+//             {   
+//                 animations.back()[0].erase(animations.back()[0].begin() + int(nodes.size()) + pos);
+//             }
+//             if (pos > 0)
+//             {
+//                 animations.back()[0].erase(animations.back()[0].begin() + int(nodes.size()) + pos - 1);
+//             }
+//             for (int i = int(nodes.size()) - 1; i >= pos; --i)
+//             {
+//                 animations.back()[0].erase(animations.back()[0].begin() + i);
+//             }
+//         }
+//         else 
+//         {
+//             animations.back().erase(animations.back().begin());
+//         }
+//         animations.back().push_back({});
+//         if (pos > 0 && pos < int(nodes.size()) - 1)
+//         {
+//             animations.back().back().push_back(NewAnimation(7, 0, ORANGE, {nodes[pos - 1], nodes[pos - 1], nodes[pos + 1], nodes[pos]}));
+//         }
+//         for (int i = int(nodes.size()) - 1; i > pos; --i)
+//         {
+//             animations.back().back().push_back(NewAnimation(8, 0, BLACK, {nodes[i], nodes[i - 1]}));
+//         }
+//         for (int i = int(nodes.size()) - 2; i > pos; --i)
+//         {
+//             animations.back().back().push_back(NewAnimation(7, 0, BLACK, {nodes[i], nodes[i - 1], nodes[i + 1], nodes[i]}));
+//         }
+//     }
+//     else 
+//     {
+//         animations = SearchAnimation(-1, RED);
+//     }
 
-    return animations;
-}
+//     return animations;
+// }
 
 void SinglyLinkedList::Delete(int val)
 {
-    nodes = BuildNodeFromValue(values);
-    int pos = FindPosition(val);
-    posAnimation = 0;
-    animations = DeleteAnimation(pos);
-    if (pos != -1)
-    {
-        values.erase(values.begin() + pos);
-        nodes.erase(nodes.begin() + pos);
-        nodes = BuildNodeFromValue(values);
-    }
+    // nodes = BuildNodeFromValue(values);
+    // int pos = FindPosition(val);
+    // posAnimation = 0;
+    // animations = DeleteAnimation(pos);
+    // if (pos != -1)
+    // {
+    //     values.erase(values.begin() + pos);
+    //     nodes.erase(nodes.begin() + pos);
+    //     nodes = BuildNodeFromValue(values);
+    // }
 }
 
 void SinglyLinkedList::DrawToolBar()
@@ -782,29 +735,7 @@ void SinglyLinkedList::HandleToolBar()
 
 void SinglyLinkedList::Draw() 
 {  
-    if (animations.empty() == false)
-    {
-        if (posAnimation == int(animations.size())) 
-        {
-            posAnimation = animations.size() - 1;
-        }
-        if (animations[posAnimation].empty() == false)
-        {
-            for (std::vector<NewAnimation> &group: animations[posAnimation])
-            {
-                bool done = true;
-                for (NewAnimation &animation: group) 
-                {   
-                    done &= animation.DrawAnimation(hollowCircle, solidCircle, arrowEdge, GetFontDefault(), GetFontDefault(), isLightMode, speed);
-                }
-                if (done == false)
-                {
-                    return;
-                }
-            }
-            ++posAnimation;
-        }
-    }
+    myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, GetFontDefault(), GetFontDefault(), isLightMode, speed);
 }
 
 std::vector<int> StringToVector(std::string listChar)
