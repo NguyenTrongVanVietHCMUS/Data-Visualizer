@@ -371,7 +371,7 @@ Presentation SinglyLinkedList::InsertAnimation(int pos, int val)
             Node lastNode = nodes.back();
             lastNode.position.x += 100.f;
     
-        //     // Remember to remove nodes.back()
+            // Remember to remove nodes.back()
             nodes.push_back(lastNode);
             
             insert.CreateNewSet(-1);
@@ -406,111 +406,114 @@ void SinglyLinkedList::Insert(int pos, int val)
     nodes = BuildNodeFromValue(values);
 }
 
-// Presentation SinglyLinkedList::DeleteAnimation(int pos)
-// {
-//     Presentation _delete;
-//     if (pos != -1)
-//     {
-//         _delete = SearchAnimation(pos, RED);
-//         _delete.present.insert(_delete.present.begin(), BasicStructure(nodes));
+Presentation SinglyLinkedList::DeleteAnimation(int pos)
+{
+    Presentation _delete;
+    std::cerr << pos << '\n';
+    if (pos != -1)
+    {
+        _delete = SearchAnimation(pos, RED);
 
-//         _delete.CopySetToLast(-1);
-//         _delete.SetCurAnimation(-1, 1);
+        _delete.CopySetToLast(-1);
+        _delete.SetCurAnimation(-1, 1);
         
-//         NewAnimation animation = _delete.GetAnimation(-1, -1, -1);
-//         _delete.EraseAnimation(-1, -1, animation);
-//         if (pos > 0) 
-//         {
-//             _delete.EraseAnimation(-1, -1, _delete.GetAnimation(-1, -1, -1));
-//         }
+        NewAnimation animation = _delete.GetAnimation(-1, -1, -1);
+        _delete.EraseAnimation(-1, -1, NewAnimation(2, 0, RED, {nodes[pos]}));
+        if (pos > 0) 
+        {
+            _delete.EraseAnimation(-1, -1, NewAnimation(5, 0, ORANGE, {nodes[pos - 1], nodes[pos]}));
+        }
         
-//         SetOfAnimation tmpGroups = _delete.present.back();
-//         animation.type = 3;
-//         animation.color = RED;
-//         animation.curAnimation = 0;
-//         _delete.InsertAnimationToSet(-1, -1, animation);
+        SetOfAnimation tmpGroups = _delete.present.back();
+        animation.type = 3;
+        animation.color = RED;
+        animation.curAnimation = 0;
+        _delete.InsertAnimationToSet(-1, -1, animation);
 
-    
-//         if (pos < int(nodes.size()) - 1)
-//         {   
-//             NewAnimation deleteEdge = _delete.GetAnimation(-1, 0, int(nodes.size()) + pos);
-//             deleteEdge.type = 6;
-//             deleteEdge.color = RED;
-//             deleteEdge.curAnimation = 0;
-//             _delete.InsertAnimationToSet(-1, -1, animation);
-//             _delete.EraseAnimation(-1, 0, _delete.GetAnimation(-1, 0, int(nodes.size()) + pos));
-//         }
-//         if (pos > 0)
-//         {
-//             _delete.EraseAnimation(-1, 0, _delete.GetAnimation(-1, 0, int(nodes.size()) + pos - 1));
-//         }
-//         _delete.EraseAnimation(-1, 0, _delete.GetAnimation(-1, 0, pos));
+        if (pos < int(nodes.size()) - 1)
+        {   
+            NewAnimation deleteEdge = _delete.GetAnimation(-1, 0, int(nodes.size()) + pos);
+            deleteEdge.type = 6;
+            deleteEdge.color = RED;
+            deleteEdge.curAnimation = 0;
+            _delete.InsertAnimationToSet(-1, -1, animation);
+            _delete.EraseAnimation(-1, 0, _delete.GetAnimation(-1, 0, int(nodes.size()) + pos));
+        }
+        if (pos > 0)
+        {
+            _delete.EraseAnimation(-1, 0, _delete.GetAnimation(-1, 0, int(nodes.size()) + pos - 1));
+        }
+        _delete.EraseAnimation(-1, 0, _delete.GetAnimation(-1, 0, pos));
 
-//         _delete.CopySetToLast(-1);
-//         _delete.SetCurAnimation(-1, 1);
-//         if (pos > 0 && pos < int(nodes.size()) - 1)
-//         {
-//             animations.back().back().push_back(NewAnimation(5, 0, ORANGE, {nodes[pos - 1], nodes[pos + 1]}));
-//         }
+        _delete.CopySetToLast(-1);
+        _delete.SetCurAnimation(-1, 1);
+        if (pos > 0 && pos < int(nodes.size()) - 1)
+        {
+            _delete.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {nodes[pos - 1], nodes[pos + 1]}));
+        }
 
-//         animations.push_back(tmpGroups);
-//         if (pos > 0)
-//         {
-//             for (int i = int(nodes.size()) - 2; i >= pos; --i)
-//             {
-//                 animations.back()[0].erase(animations.back()[0].begin() + int(nodes.size()) + i);
-//             }
-//             if (pos < int(nodes.size()) - 1)
-//             {   
-//                 animations.back()[0].erase(animations.back()[0].begin() + int(nodes.size()) + pos);
-//             }
-//             if (pos > 0)
-//             {
-//                 animations.back()[0].erase(animations.back()[0].begin() + int(nodes.size()) + pos - 1);
-//             }
-//             for (int i = int(nodes.size()) - 1; i >= pos; --i)
-//             {
-//                 animations.back()[0].erase(animations.back()[0].begin() + i);
-//             }
-//         }
-//         else 
-//         {
-//             animations.back().erase(animations.back().begin());
-//         }
-//         animations.back().push_back({});
-//         if (pos > 0 && pos < int(nodes.size()) - 1)
-//         {
-//             animations.back().back().push_back(NewAnimation(7, 0, ORANGE, {nodes[pos - 1], nodes[pos - 1], nodes[pos + 1], nodes[pos]}));
-//         }
-//         for (int i = int(nodes.size()) - 1; i > pos; --i)
-//         {
-//             animations.back().back().push_back(NewAnimation(8, 0, BLACK, {nodes[i], nodes[i - 1]}));
-//         }
-//         for (int i = int(nodes.size()) - 2; i > pos; --i)
-//         {
-//             animations.back().back().push_back(NewAnimation(7, 0, BLACK, {nodes[i], nodes[i - 1], nodes[i + 1], nodes[i]}));
-//         }
-//     }
-//     else 
-//     {
-//         animations = SearchAnimation(-1, RED);
-//     }
+        _delete.present.push_back(tmpGroups);
+        if (pos > 0)
+        {
+            for (int i = int(nodes.size()) - 2; i >= pos; --i)
+            {
+                _delete.EraseAnimation(-1, 0, NewAnimation(4, 0, BLACK, {nodes[i], nodes[i + 1]}));
+            }
+            if (pos < int(nodes.size()) - 1)
+            {   
+                _delete.EraseAnimation(-1, 0, NewAnimation(0, 0, BLACK, {nodes[pos]}));
+            }
+            if (pos > 0)
+            {
+                _delete.EraseAnimation(-1, 0, NewAnimation(4, 0, BLACK, {nodes[pos - 1], nodes[pos]}));
+            }
+            for (int i = int(nodes.size()) - 1; i >= pos; --i)
+            {
+                _delete.EraseAnimation(-1, 0, NewAnimation(0, 0, BLACK, {nodes[i]}));
+            }
+        }
+        else 
+        {
+            for (NewAnimation animation: _delete.present.back().setOfAnimation[0])
+            {
+                _delete.EraseAnimation(-1, 0, animation);
+            }
+        }
 
-//     return animations;
-// }
+        _delete.CreateNewSet(-1);
+        if (pos > 0 && pos < int(nodes.size()) - 1)
+        {
+            _delete.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, ORANGE, {nodes[pos - 1], nodes[pos - 1], nodes[pos + 1], nodes[pos]}));
+        }
+        for (int i = int(nodes.size()) - 1; i > pos; --i)
+        {
+            _delete.InsertAnimationToSet(-1, -1, NewAnimation(8, 0, BLACK, {nodes[i], nodes[i - 1]}));
+        }
+        for (int i = int(nodes.size()) - 2; i > pos; --i)
+        {
+            _delete.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, BLACK, {nodes[i], nodes[i - 1], nodes[i + 1], nodes[i]}));
+        }
+    }
+    else 
+    {
+        myPresentation = SearchAnimation(-1, RED);
+    }
+
+    return _delete;
+}
 
 void SinglyLinkedList::Delete(int val)
 {
-    // nodes = BuildNodeFromValue(values);
-    // int pos = FindPosition(val);
-    // posAnimation = 0;
-    // animations = DeleteAnimation(pos);
-    // if (pos != -1)
-    // {
-    //     values.erase(values.begin() + pos);
-    //     nodes.erase(nodes.begin() + pos);
-    //     nodes = BuildNodeFromValue(values);
-    // }
+    nodes = BuildNodeFromValue(values);
+    int pos = FindPosition(val);
+    myPresentation.currentPresentation = 0;
+    myPresentation = DeleteAnimation(pos);
+    if (pos != -1)
+    {
+        values.erase(values.begin() + pos);
+        nodes.erase(nodes.begin() + pos);
+        nodes = BuildNodeFromValue(values);
+    }
 }
 
 void SinglyLinkedList::DrawToolBar()

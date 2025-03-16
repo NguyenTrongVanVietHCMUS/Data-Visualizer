@@ -76,10 +76,6 @@ NewAnimation SetOfAnimation::GetAnimation(int positionSet, int i)
             return NewAnimation();
         }
     }
-    if (i >= int(setOfAnimation.size()))
-    {
-        return NewAnimation();
-    }
     return setOfAnimation[positionSet][i];
 }
 
