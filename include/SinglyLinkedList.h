@@ -22,12 +22,12 @@ class SinglyLinkedList : public DataStructure
         void Update(int pos, int val);
 
         std::vector<Node> BuildNodeFromValue(const std::vector<int> &values);
-        std::vector<std::vector<NewAnimation>> BasicStructure(const std::vector<Node> &nodes);
-        std::vector<std::vector<std::vector<NewAnimation>>> InsertAnimation(int pos, int val);
-        std::vector<std::vector<std::vector<NewAnimation>>> UpdateAnimation(int pos, int val);
-        std::vector<std::vector<std::vector<NewAnimation>>> DeleteAnimation(int val);
-        std::vector<std::vector<std::vector<NewAnimation>>> SearchAnimation(int val, Color color);
-        std::vector<std::vector<std::vector<NewAnimation>>> CreateAnimation(const std::vector<Node> &nodes);
+        SetOfAnimation BasicStructure(const std::vector<Node> &nodes);
+        Presentation InsertAnimation(int pos, int val);
+        Presentation UpdateAnimation(int pos, int val);
+        Presentation DeleteAnimation(int val);
+        Presentation SearchAnimation(int val, Color color);
+        Presentation CreateAnimation(const std::vector<Node> &nodes);
 
         void Run();
         void Init();

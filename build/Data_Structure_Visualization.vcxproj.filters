@@ -25,6 +25,12 @@
     <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Data-Visualizer\src\TextBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Data-Visualizer\src\SetOfAnimation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Data-Visualizer\src\Presentation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Data-Visualizer\CMakeLists.txt" />

@@ -5,6 +5,7 @@
 #include "Button.h"
 #include "TextBox.h"
 #include "NewAnimation.h"
+#include "Presentation.h"
 
 class DataStructure
 {
@@ -32,6 +33,8 @@ class DataStructure
         float speed;
         int posAnimation;
         std::vector<std::vector<std::vector<NewAnimation>>> animations;
+        Presentation myPresentation;
+        
 
         void DrawArrow(Vector2 position);
         void DrawToolBar();
