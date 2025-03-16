@@ -58,6 +58,22 @@ void SetOfAnimation::SetType(int positionSet, int type)
     }
 }
 
+void SetOfAnimation::SetStartAnimation(int positionSet, float c)
+{
+    if (positionSet == -1)
+    {
+        positionSet = int(setOfAnimation.size()) - 1;
+        if (positionSet < 0) 
+        {
+            return;
+        }
+    }
+    for (NewAnimation &animation: setOfAnimation[positionSet])
+    {
+        animation.startAnimation = c;
+    }
+}
+
 NewAnimation SetOfAnimation::GetAnimation(int positionSet, int i)
 {
     if (positionSet == -1)

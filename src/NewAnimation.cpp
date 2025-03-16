@@ -41,16 +41,19 @@ void NewAnimation::DrawSolidNode(const Texture2D &solidCircle, const Font &fontN
 
 bool NewAnimation::DrawInsertNodeAnimation(const Texture2D &textureNode, const Font &fontNumber, const bool &isLightMode, float &curAnimation, const float &speed)
 {
+    if (curAnimation < startAnimation) curAnimation = startAnimation;
     return nodes[0].DrawInsertNodeAnimation(textureNode, fontNumber, color, isLightMode, curAnimation, speed);
 }
 
 bool NewAnimation::DrawDeleteNodeAnimation(const Texture2D &textureNode, const Font &fontNumber, const bool &isLightMode, float &curAnimation, const float &speed)
 {
+    if (curAnimation < startAnimation) curAnimation = startAnimation;
     return nodes[0].DrawDeleteNodeAnimation(textureNode, fontNumber, color, isLightMode, curAnimation, speed);
 }
 
 bool NewAnimation::DrawMoveNodeAnimation(const Texture2D &textureNode, const Font &fontNumber, const bool &isLightMode, float &curAnimation, const float &speed)
 {
+    if (curAnimation < startAnimation) curAnimation = startAnimation;
     bool flag = false;
     curAnimation += speed;
     if (curAnimation >= 1) 
@@ -74,6 +77,7 @@ bool NewAnimation::DrawMoveNodeAnimation(const Texture2D &textureNode, const Fon
 bool NewAnimation::DrawInsertEdgeAnimation(const Texture &arrowEdge, const Color &color, const bool &isLightMode, float &curAnimation, const float &speed)
 {  
     Color curColor = (ColorIsEqual(color, BLACK) ? (isLightMode ? BLACK : WHITE) : color);
+    if (curAnimation < startAnimation) curAnimation = startAnimation;
     bool flag = false;
     curAnimation += speed;
     if (curAnimation >= 1) 
@@ -106,6 +110,7 @@ bool NewAnimation::DrawInsertEdgeAnimation(const Texture &arrowEdge, const Color
 
 bool NewAnimation::DrawDeleteEdgeAnimation(const Texture2D &arrowEdge, const Color &color, const bool &isLightMode, float &curAnimation, const float &speed)
 {
+    if (curAnimation < startAnimation) curAnimation = startAnimation;
     bool flag = false;
     curAnimation += speed;
     if (curAnimation >= 1) 
@@ -138,6 +143,7 @@ bool NewAnimation::DrawDeleteEdgeAnimation(const Texture2D &arrowEdge, const Col
 
 bool NewAnimation::DrawMoveEdgeAnimation(const Texture2D &arrowEdge, const Color &color, const bool &isLightMode, float &curAnimation, const float &speed)
 {
+    if (curAnimation < startAnimation) curAnimation = startAnimation;
     bool flag = false;
     curAnimation += speed;
     if (curAnimation >= 1) 

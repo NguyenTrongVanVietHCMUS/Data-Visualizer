@@ -87,7 +87,7 @@ Presentation SinglyLinkedList::CreateAnimation(const std::vector<Node> &nodes)
     }
     { // Insert all edges
         create.CopySetToLast(-1);
-        create.SetCurAnimation(-1, -1, 1);
+        create.SetStartAnimation(-1, -1, 1);
         create.CreateNewSet(-1);
         for (int i = 1; i < int(nodes.size()); ++i) 
         {
@@ -210,7 +210,7 @@ Presentation SinglyLinkedList::SearchAnimation(int pos, Color color)
         for (int i = 0; i < int(nodes.size()); ++i)
         {
             search.CopySetToLast(-1);
-            search.SetCurAnimation(-1, 1);
+            search.SetStartAnimation(-1, 1);
             if (i > 0)
             {
                 search.EraseAnimation(-1, -1, NewAnimation(2, 0, (i - 1 == pos ? color : ORANGE), {nodes[i - 1]}));
@@ -234,7 +234,7 @@ Presentation SinglyLinkedList::SearchAnimation(int pos, Color color)
     if (nodes.empty() == false)
     {
         search.CopySetToLast(-1);
-        search.SetCurAnimation(-1, 1);
+        search.SetStartAnimation(-1, 1);
         search.EraseAnimation(-1, -1, NewAnimation(2, 0, ORANGE, {nodes.back()}));
 
         search.CreateNewSet(-1);
@@ -257,7 +257,7 @@ Presentation SinglyLinkedList::UpdateAnimation(int pos, int val)
     update = SearchAnimation(pos, BLUE);
 
     update.CopySetToLast(-1);
-    update.SetCurAnimation(-1, 1);
+    update.SetStartAnimation(-1, 1);
     update.EraseAnimation(-1, 0, NewAnimation(0, 0, BLACK, {nodes[pos]}));
     
     NewAnimation animation = update.GetAnimation(-1, -1, -1);
@@ -269,7 +269,7 @@ Presentation SinglyLinkedList::UpdateAnimation(int pos, int val)
     update.InsertAnimationToSet(-1, -1, animation);
 
     update.CopySetToLast(-1);
-    update.SetCurAnimation(-1, 1);
+    update.SetStartAnimation(-1, 1);
 
     animation.type = 2;
     animation.color = GREEN;
@@ -306,7 +306,7 @@ Presentation SinglyLinkedList::InsertAnimation(int pos, int val)
         {
             insert = SearchAnimation(-1, BLUE);
             insert.CopySetToLast(-1);
-            insert.SetCurAnimation(-1, 1);
+            insert.SetStartAnimation(-1, 1);
             insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {Node(Vector2{nodes.back().position.x + 100.0f, nodes.back().position.y}, 24, val)}));
             insert.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {nodes.back(), Node(Vector2{nodes.back().position.x + 100.0f, nodes.back().position.y}, 24, val)}));
         }
@@ -317,7 +317,7 @@ Presentation SinglyLinkedList::InsertAnimation(int pos, int val)
         
         { // Move edge, Insert new node, Insert new Edge
             insert.CopySetToLast(-1);
-            insert.SetCurAnimation(-1, 1);
+            insert.SetStartAnimation(-1, 1);
 
             NewAnimation tmpAnimation = insert.GetAnimation(-1, -1, -1);
             insert.EraseAnimation(-1, -1, insert.GetAnimation(-1, -1, -1));
@@ -342,7 +342,7 @@ Presentation SinglyLinkedList::InsertAnimation(int pos, int val)
     
         { // Move new node, nodes[pos], ... nodes.back()
             insert.CopySetToLast(-1);
-            insert.SetCurAnimation(-1, 1);
+            insert.SetStartAnimation(-1, 1);
     
             for (int i = int(nodes.size()) - 2; i >= pos; --i)
             {
@@ -409,13 +409,12 @@ void SinglyLinkedList::Insert(int pos, int val)
 Presentation SinglyLinkedList::DeleteAnimation(int pos)
 {
     Presentation _delete;
-    std::cerr << pos << '\n';
     if (pos != -1)
     {
         _delete = SearchAnimation(pos, RED);
 
         _delete.CopySetToLast(-1);
-        _delete.SetCurAnimation(-1, 1);
+        _delete.SetStartAnimation(-1, 1);
         
         NewAnimation animation = _delete.GetAnimation(-1, -1, -1);
         _delete.EraseAnimation(-1, -1, NewAnimation(2, 0, RED, {nodes[pos]}));
@@ -446,7 +445,7 @@ Presentation SinglyLinkedList::DeleteAnimation(int pos)
         _delete.EraseAnimation(-1, 0, _delete.GetAnimation(-1, 0, pos));
 
         _delete.CopySetToLast(-1);
-        _delete.SetCurAnimation(-1, 1);
+        _delete.SetStartAnimation(-1, 1);
         if (pos > 0 && pos < int(nodes.size()) - 1)
         {
             _delete.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {nodes[pos - 1], nodes[pos + 1]}));
@@ -474,8 +473,9 @@ Presentation SinglyLinkedList::DeleteAnimation(int pos)
         }
         else 
         {
-            for (NewAnimation animation: _delete.present.back().setOfAnimation[0])
+            while (_delete.present.back().setOfAnimation[0].size())
             {
+                NewAnimation animation = _delete.present.back().setOfAnimation[0].back();
                 _delete.EraseAnimation(-1, 0, animation);
             }
         }

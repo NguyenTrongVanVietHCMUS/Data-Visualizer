@@ -19,6 +19,9 @@ class Presentation
         void SetType(int positionPresentation, int type);
         void SetType(int positionPresentation, int positionSet, int type);
 
+        void SetStartAnimation(int positionPresentation, float startAnimation);
+        void SetStartAnimation(int positionPresentation, int positionSet, float startAnimation);
+
         void SetCurAnimation(int positionPresentation, float curAnimation); 
         void SetCurAnimation(int positionPresentation, int positionSet, float curAnimation); 
 

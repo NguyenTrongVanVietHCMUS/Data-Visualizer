@@ -38,6 +38,35 @@ void Presentation::SetType(int positionPresentation, int positionSet, int type)
     present[positionPresentation].SetType(positionSet, type);
 }
 
+void Presentation::SetStartAnimation(int positionPresentation, float startAnimation)
+{
+    if (positionPresentation == -1) 
+    {
+        positionPresentation = int(present.size()) - 1;
+        if (positionPresentation < 0)
+        {
+            return;
+        }
+    }
+    for (int i = 0; i < int(present[positionPresentation].setOfAnimation.size()); ++i)
+    {
+        present[positionPresentation].SetCurAnimation(i, startAnimation);
+    }
+}
+
+void Presentation::SetStartAnimation(int positionPresentation, int positionSet, float startAnimation)
+{
+    if (positionPresentation == -1) 
+    {
+        positionPresentation = int(present.size()) - 1;
+        if (positionPresentation < 0)
+        {
+            return;
+        }
+    }
+    present[positionPresentation].SetStartAnimation(positionSet, startAnimation);
+}
+
 void Presentation::SetType(int positionPresentation, int type)
 {
     for (int i = 0; i < int(present[positionPresentation].setOfAnimation.size()); ++i)

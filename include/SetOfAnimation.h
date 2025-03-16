@@ -11,6 +11,7 @@ class SetOfAnimation
 
         void CreateNewSet();
         void SetType(int positionSet, int type);
+        void SetStartAnimation(int positionSet, float c);
         NewAnimation GetAnimation(int positionSet, int i);
         void SetCurAnimation(int positionSet, float curAnimation); 
         void EraseAnimation(int positionSet, NewAnimation animation); 

@@ -18,7 +18,7 @@ class NewAnimation
         // 7: Draw move edge animation
         // 8: Draw move node animation
 
-        float curAnimation;
+        float curAnimation, startAnimation = 0;
         std::vector<Node> nodes;
         
         void DrawHollowNode(const Texture2D &hollowCircle, const Font &font, const bool &isLightMode);
