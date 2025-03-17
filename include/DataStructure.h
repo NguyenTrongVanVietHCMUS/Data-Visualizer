@@ -27,7 +27,6 @@ class DataStructure
         // std::vector<Button> removeButtons;
 
         std::vector<Node> nodes;
-        std::vector<int> values;
         int isLightMode;
 
         float speed;

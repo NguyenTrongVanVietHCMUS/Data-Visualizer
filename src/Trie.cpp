@@ -54,24 +54,50 @@ void Trie::Init()
     enterList.confirm = {Vector2{425 + 80 + 2, 570 + 35 + 2}, 80, 35, (char *)"Confirm"};
 
     nodes.clear();
-    values.clear();
+    str.clear();
     isLightMode = 1;
 
     speed = 0.05;
     posAnimation = 0;
     animations.clear();
 }
+// Vector2 Trie::calcPosition(TrieNode *root) {
+//     Vector2 width = {0, 0};
+//     std::vector<Vector2> widthList;
+//     std::vector<TrieNode*> queue;
+//     for (auto &child : root->children) {
+//         queue.push_back(child.second);
+//         widthList.push_back(calcPosition(child.second));
+//     }
+//     if (queue.size() == 0) return width;
+//     int mid1, mid2;
+//     if (queue.size() % 2 == 0) {
+//         mid1 = queue.size() / 2 - 1;
+//         mid2 = queue.size() / 2;
+//         queue[mid1]->setTargetedPosition((Vector2){- (widthList[mid1].y + xOFFSET / 2), yOFFSET});
+//         queue[mid2]->setTargetedPosition((Vector2){widthList[mid2].x + xOFFSET / 2, yOFFSET});
+//         width.x = widthList[mid1].x + widthList[mid1].y + xOFFSET / 2;
+//         width.y = widthList[mid2].x + widthList[mid2].y + xOFFSET / 2;
+//     } else {
+//         mid1 = queue.size() / 2;
+//         mid2 = queue.size() / 2;
+//         queue[mid1]->setTargetedPosition((Vector2){0, yOFFSET});
+//         width = widthList[mid1];
+//     }
+//     for (int i = mid1 - 1; i >= 0; i--) {
+//         queue[i]->setTargetedPosition((Vector2){- (width.x + widthList[i].y + xOFFSET), yOFFSET});
+//         width.x += widthList[i].x + widthList[i].y + xOFFSET;
+//     }
+//     for (int i = mid2 + 1; i < queue.size(); i++) {
+//         queue[i]->setTargetedPosition((Vector2){width.y + widthList[i].x + xOFFSET, yOFFSET});
+//         width.y += widthList[i].x + widthList[i].y + xOFFSET;
+//     }
 
-std::vector<Node> Trie::BuildNodeFromValue(const std::vector<int> &values)
+//     return width;
+// }
+std::vector<Node> Trie::BuildNodeFromTrie()
 {
-    float x = 100.0f, y = 180.0f;
-    std::vector<Node> nodes;
-    for (const int &value: values) 
-    {
-        nodes.push_back({Vector2{x, y}, 24, value});
-        x += 100.0f;
-    }
-    return nodes;
+    
 }
 
 Presentation Trie::CreateAnimation(const std::vector<Node> &nodes)
@@ -119,16 +145,16 @@ Presentation Trie::CreateAnimation(const std::vector<Node> &nodes)
 
 void Trie::BuildCreateAnimation()
 {
-    nodes = BuildNodeFromValue(values);
+    nodes = BuildNodeFromValue(str);
     myPresentation.currentPresentation = 0;
     myPresentation = CreateAnimation(nodes);
 }
 
 int Trie::FindPosition(int value)
 {
-    for (int i = 0; i < int(values.size()); ++i)
+    for (int i = 0; i < int(str.size()); ++i)
     {
-        if (values[i] == value)
+        if (str[i] == value)
         {
             return i;
         }
@@ -139,22 +165,57 @@ int Trie::FindPosition(int value)
 void Trie::ClearAllData()
 {
     nodes.clear();
-    values.clear();
+    str.clear() ; 
     myPresentation.Clear();
 }
 
+void TrieAdd(std::string s)
+{
+    TrieNode *cur = root ; 
+    for(auto c:s)
+    {
+        bool found = 0 ; 
+        for(auto x : cur->children)
+        {   
+            if(x->c == c)
+            {
+                cur = x ; 
+                found = 1 ; 
+                break ; 
+            }
+        }
+        if(found==0)
+        {
+            cur->children.push_back(new TrieNode(c)) ;
+            sort(cur->children.begin(),cur->children.end(),[](){return a->c < b->c ; }) ;
+            for(auto x:cur->children)
+            {
+                if(x->c == c)
+                {
+                    cur = x ; 
+                    break ; 
+                }
+            }
+        }
+    }
+}
 void Trie::RandomNewData()
 {
     ClearAllData();
 
-    int n = GetRandomValue(1, 15);
+    int n = GetRandomValue(1, 5);
     for (int i = 1; i <= n; ++i)
     {
-        values.push_back(GetRandomValue(0, 999));
+        int len = GetRandomValue(3,6) ; 
+        std::string tmp = "" ;  
+        for(int j=0;j<len;j++)
+        {   
+            tmp+=char(GetRandomValue('A','Z')) ;
+        }
+        TrieAdd(tmp) ; 
     }
     BuildCreateAnimation();
 }
-
 void Trie::InputDataFromFile()
 {
     ClearAllData();
@@ -179,13 +240,13 @@ void Trie::InputDataFromFile()
         }
         if (curValue != -1)
         {
-            values.push_back(curValue);
+            str.push_back(curValue);
             curValue = -1;
         }
     }
     if (curValue != -1)
     {
-        values.push_back(curValue);
+        str.push_back(curValue);
     }
     fin.close();
     BuildCreateAnimation();
@@ -246,7 +307,7 @@ Presentation Trie::SearchAnimation(int pos, Color color)
 
 void Trie::Search(int val)
 {
-    nodes = BuildNodeFromValue(values);
+    nodes = BuildNodeFromValue(str);
     int pos = FindPosition(val);
     myPresentation = SearchAnimation(pos, BLUE);
 }
@@ -283,10 +344,10 @@ Presentation Trie::UpdateAnimation(int pos, int val)
 void Trie::Update(int pos, int val)
 {
     if (pos >= int(nodes.size())) return;
-    nodes = BuildNodeFromValue(values);
+    nodes = BuildNodeFromValue(str);
     myPresentation.currentPresentation = 0;
     myPresentation = UpdateAnimation(pos, val);
-    values[pos] = val;
+    str[pos] = val;
     nodes[pos].value = val;
 }
 
@@ -398,12 +459,12 @@ Presentation Trie::InsertAnimation(int pos, int val)
 
 void Trie::Insert(int pos, int val)
 {
-    nodes = BuildNodeFromValue(values);
+    nodes = BuildNodeFromValue(str);
     pos = std::min(pos, int(nodes.size()));
     myPresentation.currentPresentation = 0;
     myPresentation = InsertAnimation(pos, val);
-    values.insert(values.begin() + pos, val);
-    nodes = BuildNodeFromValue(values);
+    str.insert(str.begin() + pos, val);
+    nodes = BuildNodeFromValue(str);
 }
 
 Presentation Trie::DeleteAnimation(int pos)
@@ -504,15 +565,15 @@ Presentation Trie::DeleteAnimation(int pos)
 
 void Trie::Delete(int val)
 {
-    nodes = BuildNodeFromValue(values);
+    nodes = BuildNodeFromValue(str);
     int pos = FindPosition(val);
     myPresentation.currentPresentation = 0;
     myPresentation = DeleteAnimation(pos);
     if (pos != -1)
     {
-        values.erase(values.begin() + pos);
+        str.erase(str.begin() + pos);
         nodes.erase(nodes.begin() + pos);
-        nodes = BuildNodeFromValue(values);
+        nodes = BuildNodeFromValue(str);
     }
 }
 
@@ -660,8 +721,8 @@ void Trie::HandleToolBar()
             if (listChar.empty() == false)
             {
                 flagToolBarButtons[1][4] = false;
-                values = StringToVector(listChar);
-                nodes = BuildNodeFromValue(values);
+                str = StringToVector(listChar);
+                nodes = BuildNodeFromValue(str);
                 BuildCreateAnimation();
             }
             return;
@@ -740,25 +801,3 @@ void Trie::Draw()
 {  
     myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, GetFontDefault(), GetFontDefault(), isLightMode, speed);
 }
-
-std::vector<int> Trie::StringToVector(std::string listChar)
-{
-    std::vector<int> values;
-    int cur = -1;
-    for (int i = 0; i < int(listChar.size()); ++i) 
-    {
-        if (listChar[i] == ' ' || listChar[i] == ',')
-        {
-            if (cur > -1) values.push_back(cur);
-            cur = -1;
-            continue;
-        }
-        cur = cur == -1 ? (listChar[i] - '0') : 10 * cur + (listChar[i] - '0');
-    }
-    if (cur > -1)
-    {
-        values.push_back(cur);
-    }
-    return values;
-}
-                     

@@ -1,17 +1,28 @@
 #pragma once
 #include "DataStructure.h"
-
-
-
+#include <string.h>  
+#include <vector>.h
+class TrieNode
+{
+    public:
+        char c ; 
+        vector<TrieNode*>children ; 
+        TrieNode()
+        {
+            isEndOfWord = false ; 
+        }
+}
 class Trie : public DataStructure 
 {
     public:
-        std::vector<int> StringToVector(std::string listChar); 
         Font fontRoboto = LoadFont("../Fonts/Roboto_Condensed-SemiBold.ttf");
         TextBox enterList;
         TextBox insertI;
         TextBox insertV;
+        
+        TrieNode *root;
 
+        std::vector<std::string> str;
         int FindPosition(int value);        
         void ClearAllData();
         void RandomNewData();
@@ -22,7 +33,7 @@ class Trie : public DataStructure
         void Search(int val);
         void Update(int pos, int val);
 
-        std::vector<Node> BuildNodeFromValue(const std::vector<int> &values);
+        std::vector<Node> BuildNodeFromTrie();
         SetOfAnimation BasicStructure(const std::vector<Node> &nodes);
         Presentation InsertAnimation(int pos, int val);
         Presentation UpdateAnimation(int pos, int val);

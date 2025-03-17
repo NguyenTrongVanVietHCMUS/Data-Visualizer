@@ -11,7 +11,7 @@ class SinglyLinkedList : public DataStructure
         TextBox enterList;
         TextBox insertI;
         TextBox insertV;
-
+        std::vector<int>values ; 
         int FindPosition(int value);        
         void ClearAllData();
         void RandomNewData();
