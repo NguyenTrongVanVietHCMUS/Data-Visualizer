@@ -4,7 +4,7 @@
 #include "Button.h"
 #include "raylib.h"
 #include "SinglyLinkedList.h"
-
+#include "Trie.h"
 class Menu
 {
     private:
@@ -17,7 +17,7 @@ class Menu
         Font currentFont;
         
         SinglyLinkedList myList;
-        
+        Trie myTrie;
 
         Color GetColorBackground();
         void DrawGradient(const bool isLightMode);

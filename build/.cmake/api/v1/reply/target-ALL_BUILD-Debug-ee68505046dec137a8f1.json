@@ -5,7 +5,7 @@
 		"commands" : [],
 		"files" : 
 		[
-			"CMakeLists.txt"
+			"include/raylib/CMakeLists.txt"
 		],
 		"nodes" : 
 		[
@@ -17,29 +17,26 @@
 	"dependencies" : 
 	[
 		{
-			"id" : "raylib::@e4891b6c0c6e0340b882"
-		},
-		{
-			"id" : "Data_Structure_Visualization::@6890427a1f51a3e7e1df"
-		},
-		{
 			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
 		},
 		{
 			"id" : "glfw::@7c2bc65cfa90d9fbb0a8"
+		},
+		{
+			"id" : "raylib::@e4891b6c0c6e0340b882"
 		}
 	],
 	"folder" : 
 	{
 		"name" : "CMakePredefinedTargets"
 	},
-	"id" : "ALL_BUILD::@6890427a1f51a3e7e1df",
+	"id" : "ALL_BUILD::@9cdee897824e0cde5d86",
 	"isGeneratorProvided" : true,
 	"name" : "ALL_BUILD",
 	"paths" : 
 	{
-		"build" : ".",
-		"source" : "."
+		"build" : "include/raylib",
+		"source" : "include/raylib"
 	},
 	"sources" : [],
 	"type" : "UTILITY"

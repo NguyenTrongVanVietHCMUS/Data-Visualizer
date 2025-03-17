@@ -1,18 +1,18 @@
-#include "SinglyLinkedList.h"
+#include "Trie.h"
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <algorithm>
 #include <iostream>
 
-void SinglyLinkedList::Run() 
+void Trie::Run() 
 {
     HandleToolBar();
     DrawToolBar();
     Draw();
 }
 
-void SinglyLinkedList::Init()
+void Trie::Init()
 {
     toolBarButtons.resize(6);
     toolBarButtons[0] = 
@@ -62,7 +62,7 @@ void SinglyLinkedList::Init()
     animations.clear();
 }
 
-std::vector<Node> SinglyLinkedList::BuildNodeFromValue(const std::vector<int> &values)
+std::vector<Node> Trie::BuildNodeFromValue(const std::vector<int> &values)
 {
     float x = 100.0f, y = 180.0f;
     std::vector<Node> nodes;
@@ -74,7 +74,7 @@ std::vector<Node> SinglyLinkedList::BuildNodeFromValue(const std::vector<int> &v
     return nodes;
 }
 
-Presentation SinglyLinkedList::CreateAnimation(const std::vector<Node> &nodes)
+Presentation Trie::CreateAnimation(const std::vector<Node> &nodes)
 {
     Presentation create;
     { // Insert all nodes
@@ -117,14 +117,14 @@ Presentation SinglyLinkedList::CreateAnimation(const std::vector<Node> &nodes)
     return create;
 }
 
-void SinglyLinkedList::BuildCreateAnimation()
+void Trie::BuildCreateAnimation()
 {
     nodes = BuildNodeFromValue(values);
     myPresentation.currentPresentation = 0;
     myPresentation = CreateAnimation(nodes);
 }
 
-int SinglyLinkedList::FindPosition(int value)
+int Trie::FindPosition(int value)
 {
     for (int i = 0; i < int(values.size()); ++i)
     {
@@ -136,14 +136,14 @@ int SinglyLinkedList::FindPosition(int value)
     return -1;
 }
 
-void SinglyLinkedList::ClearAllData()
+void Trie::ClearAllData()
 {
     nodes.clear();
     values.clear();
     myPresentation.Clear();
 }
 
-void SinglyLinkedList::RandomNewData()
+void Trie::RandomNewData()
 {
     ClearAllData();
 
@@ -155,7 +155,7 @@ void SinglyLinkedList::RandomNewData()
     BuildCreateAnimation();
 }
 
-void SinglyLinkedList::InputDataFromFile()
+void Trie::InputDataFromFile()
 {
     ClearAllData();
 
@@ -191,7 +191,7 @@ void SinglyLinkedList::InputDataFromFile()
     BuildCreateAnimation();
 }
 
-SetOfAnimation SinglyLinkedList::BasicStructure(const std::vector<Node> &nodes)
+SetOfAnimation Trie::BasicStructure(const std::vector<Node> &nodes)
 {
     SetOfAnimation basicStructure;
     if (nodes.empty() == false) { 
@@ -202,7 +202,7 @@ SetOfAnimation SinglyLinkedList::BasicStructure(const std::vector<Node> &nodes)
     return basicStructure;
 }
 
-Presentation SinglyLinkedList::SearchAnimation(int pos, Color color)
+Presentation Trie::SearchAnimation(int pos, Color color)
 {
     Presentation search;
     search.present = {BasicStructure(nodes)};
@@ -244,14 +244,14 @@ Presentation SinglyLinkedList::SearchAnimation(int pos, Color color)
     return search;
 }
 
-void SinglyLinkedList::Search(int val)
+void Trie::Search(int val)
 {
     nodes = BuildNodeFromValue(values);
     int pos = FindPosition(val);
     myPresentation = SearchAnimation(pos, BLUE);
 }
 
-Presentation SinglyLinkedList::UpdateAnimation(int pos, int val)
+Presentation Trie::UpdateAnimation(int pos, int val)
 {
     Presentation update;
     update = SearchAnimation(pos, BLUE);
@@ -280,7 +280,7 @@ Presentation SinglyLinkedList::UpdateAnimation(int pos, int val)
     return update;
 }
 
-void SinglyLinkedList::Update(int pos, int val)
+void Trie::Update(int pos, int val)
 {
     if (pos >= int(nodes.size())) return;
     nodes = BuildNodeFromValue(values);
@@ -290,7 +290,7 @@ void SinglyLinkedList::Update(int pos, int val)
     nodes[pos].value = val;
 }
 
-Presentation SinglyLinkedList::InsertAnimation(int pos, int val)
+Presentation Trie::InsertAnimation(int pos, int val)
 {
     Presentation insert;
  
@@ -396,7 +396,7 @@ Presentation SinglyLinkedList::InsertAnimation(int pos, int val)
     return insert;
 }
 
-void SinglyLinkedList::Insert(int pos, int val)
+void Trie::Insert(int pos, int val)
 {
     nodes = BuildNodeFromValue(values);
     pos = std::min(pos, int(nodes.size()));
@@ -406,7 +406,7 @@ void SinglyLinkedList::Insert(int pos, int val)
     nodes = BuildNodeFromValue(values);
 }
 
-Presentation SinglyLinkedList::DeleteAnimation(int pos)
+Presentation Trie::DeleteAnimation(int pos)
 {
     Presentation _delete;
     if (pos != -1)
@@ -502,7 +502,7 @@ Presentation SinglyLinkedList::DeleteAnimation(int pos)
     return _delete;
 }
 
-void SinglyLinkedList::Delete(int val)
+void Trie::Delete(int val)
 {
     nodes = BuildNodeFromValue(values);
     int pos = FindPosition(val);
@@ -516,7 +516,7 @@ void SinglyLinkedList::Delete(int val)
     }
 }
 
-void SinglyLinkedList::DrawToolBar()
+void Trie::DrawToolBar()
 {
     toolBarButtons[0][0].DrawButton(0.3, 0.1, LIME, true); 
     DrawTextureEx(flagToolBarButtons[0][0] == false ? toolBarRightArrow : toolBarLeftArrow, Vector2{2.5, 570 + 183.0 / 2 - 16.0 / 2}, 0, 1, WHITE);
@@ -574,7 +574,7 @@ void SinglyLinkedList::DrawToolBar()
     }
 }
 
-void SinglyLinkedList::HandleToolBar()
+void Trie::HandleToolBar()
 {
     if (toolBarButtons[0][0].CheckMouseClickInRectangle()) // Open_Close Bar
     {
@@ -736,12 +736,12 @@ void SinglyLinkedList::HandleToolBar()
 
 
 
-void SinglyLinkedList::Draw() 
+void Trie::Draw() 
 {  
     myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, GetFontDefault(), GetFontDefault(), isLightMode, speed);
 }
 
-std::vector<int> SinglyLinkedList::StringToVector(std::string listChar)
+std::vector<int> Trie::StringToVector(std::string listChar)
 {
     std::vector<int> values;
     int cur = -1;

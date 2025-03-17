@@ -334,6 +334,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="V:\Data-Visualizer\src\TextBox.cpp" />
     <ClCompile Include="V:\Data-Visualizer\src\SetOfAnimation.cpp" />
     <ClCompile Include="V:\Data-Visualizer\src\Presentation.cpp" />
+    <ClCompile Include="V:\Data-Visualizer\src\Trie.cpp" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

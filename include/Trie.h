@@ -3,10 +3,10 @@
 
 
 
-class SinglyLinkedList : public DataStructure 
+class Trie : public DataStructure 
 {
     public:
-        std::vector<int> StringToVector(std::string listChar);
+        std::vector<int> StringToVector(std::string listChar); 
         Font fontRoboto = LoadFont("../Fonts/Roboto_Condensed-SemiBold.ttf");
         TextBox enterList;
         TextBox insertI;

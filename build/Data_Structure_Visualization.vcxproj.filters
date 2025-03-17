@@ -31,6 +31,9 @@
     <ClCompile Include="V:\Data-Visualizer\src\Presentation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="V:\Data-Visualizer\src\Trie.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="V:\Data-Visualizer\CMakeLists.txt" />
