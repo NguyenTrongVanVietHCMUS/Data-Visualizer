@@ -32,6 +32,7 @@ class Trie : public DataStructure
         std::vector<std::string> str ; 
         Vector2 calcPosition(TrieNode *root);
         int FindPosition(int value);        
+        void BuildNodeFromValue(std::vector<std::string>list);
         void ClearAllData();
         void RandomNewData();
         void InputDataFromFile();
@@ -45,7 +46,7 @@ class Trie : public DataStructure
         Presentation DeleteAnimation(std::string s );
         Presentation SearchAnimation(std::string s ,  Color color);
         Presentation CreateAnimation(TrieNode* root);
-
+        std::vector<std::string> StringToVector(std::string listChar);
         void Run();
         void Init();
         void Clear();

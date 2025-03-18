@@ -54,6 +54,7 @@ void Trie::Init()
     enterList.confirm = {Vector2{425 + 80 + 2, 570 + 35 + 2}, 80, 35, (char *)"Confirm"};
 
     nodes.clear();
+    root = new TrieNode({(float)GetScreenWidth() / 2, 50.0 }, '\0');
     isLightMode = 1;
 
     speed = 0.05;
@@ -107,10 +108,10 @@ Presentation Trie::CreateAnimation(TrieNode* root)
             if (!node) return;
             cur+=node->TargetedPosition ;
             // draw the node first 
-            create.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, cur));
+            create.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {Node(cur,24,node->c)}));
             for (auto& child : node->children) 
             {
-                AddNode_ref(child.second, AddNode_ref,node);
+                AddNode_ref(child, AddNode_ref,cur+child->TargetedPosition);
             }
         };
         AddNode(root, AddNode,{0,0});
@@ -122,31 +123,61 @@ Presentation Trie::CreateAnimation(TrieNode* root)
             cur+=node->TargetedPosition ;
             for (auto& child : node->children) 
             {
-                AddEdge_ref(child.second, AddEdge_ref,node);
-                create.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, GREEN, Node(cur,24,node->c),Node(cur+child.second->TargetedPosition,24,node->c)));
+                AddEdge_ref(child, AddEdge_ref,cur+child->TargetedPosition);
+                create.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, GREEN, {Node(cur,24,node->c),Node(cur+child->TargetedPosition,24,node->c)}));
             }
         };
-        AddEdge(root, AddEdge,{0,0});
+        AddEdge(root, AddEdge,{0,0}); 
     }
     { // Remove animations
         create.CreateNewPresentation();
         create.CreateNewSet(-1);
-        for (Node curNode: nodes) 
+        auto AddNode = [&](TrieNode* node, auto&& AddNode_ref,Vector2 cur) -> void 
         {
-            create.InsertAnimationToSet(-1, -1, NewAnimation(0, 0, BLACK, {curNode}));
-        }
-        for (int i = 1; i < int(nodes.size()); ++i) 
+            if (!node) return;
+            cur+=node->TargetedPosition ;
+            // draw the node first 
+            create.InsertAnimationToSet(-1, -1, NewAnimation(0, 0, GREEN, {Node(cur,24,node->c)}));
+            for (auto& child : node->children) 
+            {
+                AddNode_ref(child, AddNode_ref,cur+child->TargetedPosition);
+            }
+        };
+        AddNode(root, AddNode,{0,0});
+        auto AddEdge = [&](TrieNode* node, auto&& AddEdge_ref,Vector2 cur) -> void 
         {
-            create.InsertAnimationToSet(-1, -1, NewAnimation(4, 0, BLACK, {nodes[i - 1], nodes[i]}));
-        }
-        for (Node curNode: nodes) 
+            if (!node) return;
+            cur+=node->TargetedPosition ;
+            for (auto& child : node->children) 
+            {
+                AddEdge_ref(child, AddEdge_ref,cur+child->TargetedPosition);
+                create.InsertAnimationToSet(-1, -1, NewAnimation(4, 0, GREEN, {Node(cur,24,node->c),Node(cur+child->TargetedPosition,24,node->c)}));
+            }
+        };
+        AddEdge(root, AddEdge,{0,0});
+        auto DelNode = [&](TrieNode* node, auto&& DelNode_ref,Vector2 cur) -> void 
         {
-            create.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, GREEN, {curNode}));
-        }
-        for (int i = 1; i < int(nodes.size()); ++i) 
+            if (!node) return;
+            cur+=node->TargetedPosition ;
+            // draw the node first 
+            create.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, GREEN, {Node(cur,24,node->c)}));
+            for (auto& child : node->children) 
+            {
+                DelNode_ref(child, DelNode_ref,cur+child->TargetedPosition);
+            }
+        };
+        DelNode(root, DelNode,{0,0});
+        auto DelEdge = [&](TrieNode* node, auto&& DelEdge_ref,Vector2 cur) -> void 
         {
-            create.InsertAnimationToSet(-1, -1, NewAnimation(6, 0, GREEN, {nodes[i - 1], nodes[i]}));
-        }
+            if (!node) return;
+            cur+=node->TargetedPosition ;
+            for (auto& child : node->children) 
+            {
+                DelEdge_ref(child, DelEdge_ref,cur+child->TargetedPosition);
+                create.InsertAnimationToSet(-1, -1, NewAnimation(6, 0, GREEN, {Node(cur,24,node->c),Node(cur+child->TargetedPosition,24,node->c)}));
+            }
+        };
+        DelEdge(root, DelEdge,{0,0});
     }
     return create;
 }
@@ -159,11 +190,9 @@ void Trie::BuildCreateAnimation()
 
 void Trie::ClearAllData()
 {
-    nodes.clear();
-
+    root = new TrieNode({(float)GetScreenWidth() / 2, 50.0 }, '\0');
     myPresentation.Clear();
 }
-
 void Trie::Insert(std::string s)
 {
     TrieNode *cur = root ; 
@@ -194,11 +223,21 @@ void Trie::Insert(std::string s)
         }
     }
 }
+void Trie::BuildNodeFromValue(std::vector<std::string>list)
+{
+    str = list ;  
+    root = new TrieNode({(float)GetScreenWidth() / 2, 50.0 }, '\0');
+    for(auto s:str)
+    {
+        Insert(s) ; 
+    }
+}
 void Trie::RandomNewData()
 {
     ClearAllData();
 
     int n = GetRandomValue(1, 5);
+    std::vector<std::string> str ;
     for (int i = 1; i <= n; ++i)
     {
         int len = GetRandomValue(3,6) ; 
@@ -207,8 +246,9 @@ void Trie::RandomNewData()
         {   
             tmp+=char(GetRandomValue('A','Z')) ;
         }
-        Insert(tmp) ; 
+        str.push_back(tmp) ; 
     }
+    BuildNodeFromValue(str) ; 
     BuildCreateAnimation();
 }
 void Trie::InputDataFromFile()
@@ -289,7 +329,7 @@ Presentation Trie::DeleteAnimation(std::string s )
 
 void Trie::Delete(std::string s )
 {
-    
+
 }
 
 void Trie::DrawToolBar()
@@ -436,28 +476,27 @@ void Trie::HandleToolBar()
             if (listChar.empty() == false)
             {
                 flagToolBarButtons[1][4] = false;
-                str = StringToVector(listChar);
-                nodes = BuildNodeFromValue(str);
+                std::vector<std::string> str = StringToVector(listChar);
+                
+                BuildNodeFromValue(str);
                 BuildCreateAnimation();
             }
             return;
         }
         if (flagToolBarButtons[2][0] == true) // Insert
         {
-            std::string i = insertI.HandleTextBox();
             std::string v = insertV.HandleTextBox();
-            if (i.empty() == true) 
-            {
-                return;
-            }
+            // if (i.empty() == true) 
+            // {
+            //     return;
+            // }
             if (v.empty() == true) 
             {
                 return;
             }
             flagToolBarButtons[2][0] = false;
-            int iValue = StringToVector(i)[0];
-            int vValue = StringToVector(v)[0];
-            Insert(iValue, vValue);
+            std::string vValue = StringToVector(v)[0];
+            Insert(vValue);
     
             return;
         }
@@ -469,28 +508,9 @@ void Trie::HandleToolBar()
                 return;
             }
             flagToolBarButtons[3][0] = false;
-            int vValue = StringToVector(v)[0];
+            std::string vValue = StringToVector(v)[0];
 
             Delete(vValue);
-    
-            return;
-        }
-        if (flagToolBarButtons[4][0] == true) // Update
-        {
-            std::string i = insertI.HandleTextBox();
-            std::string v = insertV.HandleTextBox();
-            if (i.empty() == true) 
-            {
-                return;
-            }
-            if (v.empty() == true) 
-            {
-                return;
-            }
-            flagToolBarButtons[4][0] = false;
-            int iValue = StringToVector(i)[0];
-            int vValue = StringToVector(v)[0];
-            Update(iValue, vValue);
     
             return;
         }
@@ -502,7 +522,7 @@ void Trie::HandleToolBar()
                 return;
             }
             flagToolBarButtons[5][0] = false;
-            int vValue = StringToVector(v)[0];
+            std::string vValue = StringToVector(v)[0];
             Search(vValue);
     
             return;
@@ -510,6 +530,35 @@ void Trie::HandleToolBar()
     }
 }
 
+std::vector<std::string> Trie::StringToVector(std::string listChar)
+{
+    std::vector<std::string> res;
+    std::string curValue = "";
+    for (char &c: listChar)
+    {
+        bool flag = 0 ;  
+        if (('A' <= c && c <= 'Z'))
+        {
+            curValue+=c ; 
+            flag = 1 ; 
+        }
+        else if('a' <= c && c <= 'z')
+        {
+            curValue+=c-'a'+'A' ; 
+            flag = 1 ; 
+        }
+        if(!flag)
+        {
+            res.push_back(curValue);
+            curValue = "" ;  
+        }
+    }
+    if (curValue != "") ; 
+    {
+        res.push_back(curValue);
+    }
+    return res;
+}
 
 
 void Trie::Draw() 
