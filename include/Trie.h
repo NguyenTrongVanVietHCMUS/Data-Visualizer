@@ -1,17 +1,24 @@
 #pragma once
 #include "DataStructure.h"
 #include <string.h>  
-#include <vector>.h
+#include <vector>
 class TrieNode
 {
     public:
         char c ; 
-        vector<TrieNode*>children ; 
-        TrieNode()
+        std::vector<TrieNode*>children ; 
+        Vector2 CurrentPosition ;
+        Vector2 TargetedPosition ;
+        TrieNode(Vector2 CurrentPosition={ (float)GetScreenWidth() / 2, 50.0 } , char c=' '):CurrentPosition(CurrentPosition),c(c)
         {
-            isEndOfWord = false ; 
+            TargetedPosition = CurrentPosition ; 
         }
-}
+
+        void setTargetedPosition(Vector2 TargetedPosition)
+        {
+            this->TargetedPosition = TargetedPosition ; 
+        }
+};
 class Trie : public DataStructure 
 {
     public:
@@ -19,27 +26,25 @@ class Trie : public DataStructure
         TextBox enterList;
         TextBox insertI;
         TextBox insertV;
-        
+        float xOFFSET = 50;
+        float yOFFSET = 100; 
         TrieNode *root;
-
-        std::vector<std::string> str;
+        std::vector<std::string> str ; 
+        Vector2 calcPosition(TrieNode *root);
         int FindPosition(int value);        
         void ClearAllData();
         void RandomNewData();
         void InputDataFromFile();
         void BuildCreateAnimation();
-        void Insert(int pos, int val);
-        void Delete(int val);
-        void Search(int val);
-        void Update(int pos, int val);
+        void Insert(std::string s);
+        void Search(std::string s );
+        void Delete(std::string s );
 
-        std::vector<Node> BuildNodeFromTrie();
         SetOfAnimation BasicStructure(const std::vector<Node> &nodes);
-        Presentation InsertAnimation(int pos, int val);
-        Presentation UpdateAnimation(int pos, int val);
-        Presentation DeleteAnimation(int val);
-        Presentation SearchAnimation(int val, Color color);
-        Presentation CreateAnimation(const std::vector<Node> &nodes);
+        Presentation InsertAnimation( std::string s );
+        Presentation DeleteAnimation(std::string s );
+        Presentation SearchAnimation(std::string s ,  Color color);
+        Presentation CreateAnimation(TrieNode* root);
 
         void Run();
         void Init();

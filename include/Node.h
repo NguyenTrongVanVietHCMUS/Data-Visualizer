@@ -15,7 +15,7 @@ class Node
 
         Node(): position(Vector2{0, 0}), radius(0), value(0) {}
         Node(Vector2 pos, float r, int val) : position(pos), radius(r), value(val) {}
-
+        Node(Vector2 pos, float r, std::string text) : position(pos), radius(r), text(text) {}
         void DrawTextNode(const Font &fontValue, const Color &color, const bool &isLightMode);
         void DrawSolidNode(const Texture2D &textureNode, const Color &color, const bool &isLightMode);
         void DrawHollowNode(const Texture2D &textureNode, const Color &color, const bool &isLightMode);

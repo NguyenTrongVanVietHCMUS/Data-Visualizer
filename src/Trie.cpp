@@ -54,71 +54,79 @@ void Trie::Init()
     enterList.confirm = {Vector2{425 + 80 + 2, 570 + 35 + 2}, 80, 35, (char *)"Confirm"};
 
     nodes.clear();
-    str.clear();
     isLightMode = 1;
 
     speed = 0.05;
     posAnimation = 0;
     animations.clear();
 }
-// Vector2 Trie::calcPosition(TrieNode *root) {
-//     Vector2 width = {0, 0};
-//     std::vector<Vector2> widthList;
-//     std::vector<TrieNode*> queue;
-//     for (auto &child : root->children) {
-//         queue.push_back(child.second);
-//         widthList.push_back(calcPosition(child.second));
-//     }
-//     if (queue.size() == 0) return width;
-//     int mid1, mid2;
-//     if (queue.size() % 2 == 0) {
-//         mid1 = queue.size() / 2 - 1;
-//         mid2 = queue.size() / 2;
-//         queue[mid1]->setTargetedPosition((Vector2){- (widthList[mid1].y + xOFFSET / 2), yOFFSET});
-//         queue[mid2]->setTargetedPosition((Vector2){widthList[mid2].x + xOFFSET / 2, yOFFSET});
-//         width.x = widthList[mid1].x + widthList[mid1].y + xOFFSET / 2;
-//         width.y = widthList[mid2].x + widthList[mid2].y + xOFFSET / 2;
-//     } else {
-//         mid1 = queue.size() / 2;
-//         mid2 = queue.size() / 2;
-//         queue[mid1]->setTargetedPosition((Vector2){0, yOFFSET});
-//         width = widthList[mid1];
-//     }
-//     for (int i = mid1 - 1; i >= 0; i--) {
-//         queue[i]->setTargetedPosition((Vector2){- (width.x + widthList[i].y + xOFFSET), yOFFSET});
-//         width.x += widthList[i].x + widthList[i].y + xOFFSET;
-//     }
-//     for (int i = mid2 + 1; i < queue.size(); i++) {
-//         queue[i]->setTargetedPosition((Vector2){width.y + widthList[i].x + xOFFSET, yOFFSET});
-//         width.y += widthList[i].x + widthList[i].y + xOFFSET;
-//     }
 
-//     return width;
-// }
-std::vector<Node> Trie::BuildNodeFromTrie()
-{
-    
+Vector2 Trie::calcPosition(TrieNode *root) {
+    Vector2 width = {0, 0};
+    std::vector<Vector2> widthList;
+    std::vector<TrieNode*> queue;
+    for (auto &child : root->children) {
+        queue.push_back(child);
+        widthList.push_back(calcPosition(child));
+    }
+    if (queue.size() == 0) return width;
+    int mid1, mid2;
+    if (queue.size() % 2 == 0) {
+        mid1 = queue.size() / 2 - 1;
+        mid2 = queue.size() / 2;
+        queue[mid1]->setTargetedPosition({- (widthList[mid1].y + xOFFSET / 2), yOFFSET});
+        queue[mid2]->setTargetedPosition({widthList[mid2].x + xOFFSET / 2, yOFFSET});
+        width.x = widthList[mid1].x + widthList[mid1].y + xOFFSET / 2;
+        width.y = widthList[mid2].x + widthList[mid2].y + xOFFSET / 2;
+    } else {
+        mid1 = queue.size() / 2;
+        mid2 = queue.size() / 2;
+        queue[mid1]->setTargetedPosition({0, yOFFSET});
+        width = widthList[mid1];
+    }
+    for (int i = mid1 - 1; i >= 0; i--) {
+        queue[i]->setTargetedPosition({- (width.x + widthList[i].y + xOFFSET), yOFFSET});
+        width.x += widthList[i].x + widthList[i].y + xOFFSET;
+    }
+    for (int i = mid2 + 1; i < queue.size(); i++) {
+        queue[i]->setTargetedPosition({width.y + widthList[i].x + xOFFSET, yOFFSET});
+        width.y += widthList[i].x + widthList[i].y + xOFFSET;
+    }
+    return width;
 }
 
-Presentation Trie::CreateAnimation(const std::vector<Node> &nodes)
+Presentation Trie::CreateAnimation(TrieNode* root)
 {
+    calcPosition(root) ;    
     Presentation create;
-    { // Insert all nodes
-        create.CreateNewPresentation();
-        create.CreateNewSet(-1);
-        for (Node curNode: nodes) 
+    create.CreateNewPresentation() ; 
+    create.CreateNewSet(-1) ;
+    {// Add all nodes
+        auto AddNode = [&](TrieNode* node, auto&& AddNode_ref,Vector2 cur) -> void 
         {
-            create.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {curNode}));
-        }
+            if (!node) return;
+            cur+=node->TargetedPosition ;
+            // draw the node first 
+            create.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, cur));
+            for (auto& child : node->children) 
+            {
+                AddNode_ref(child.second, AddNode_ref,node);
+            }
+        };
+        AddNode(root, AddNode,{0,0});
     }
     { // Insert all edges
-        create.CopySetToLast(-1);
-        create.SetStartAnimation(-1, -1, 1);
-        create.CreateNewSet(-1);
-        for (int i = 1; i < int(nodes.size()); ++i) 
+        auto AddEdge = [&](TrieNode* node, auto&& AddEdge_ref,Vector2 cur) -> void 
         {
-            create.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, GREEN, {nodes[i - 1], nodes[i]}));
-        }
+            if (!node) return;
+            cur+=node->TargetedPosition ;
+            for (auto& child : node->children) 
+            {
+                AddEdge_ref(child.second, AddEdge_ref,node);
+                create.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, GREEN, Node(cur,24,node->c),Node(cur+child.second->TargetedPosition,24,node->c)));
+            }
+        };
+        AddEdge(root, AddEdge,{0,0});
     }
     { // Remove animations
         create.CreateNewPresentation();
@@ -145,31 +153,18 @@ Presentation Trie::CreateAnimation(const std::vector<Node> &nodes)
 
 void Trie::BuildCreateAnimation()
 {
-    nodes = BuildNodeFromValue(str);
     myPresentation.currentPresentation = 0;
-    myPresentation = CreateAnimation(nodes);
-}
-
-int Trie::FindPosition(int value)
-{
-    for (int i = 0; i < int(str.size()); ++i)
-    {
-        if (str[i] == value)
-        {
-            return i;
-        }
-    }
-    return -1;
+    myPresentation = CreateAnimation(root);
 }
 
 void Trie::ClearAllData()
 {
     nodes.clear();
-    str.clear() ; 
+
     myPresentation.Clear();
 }
 
-void TrieAdd(std::string s)
+void Trie::Insert(std::string s)
 {
     TrieNode *cur = root ; 
     for(auto c:s)
@@ -186,8 +181,8 @@ void TrieAdd(std::string s)
         }
         if(found==0)
         {
-            cur->children.push_back(new TrieNode(c)) ;
-            sort(cur->children.begin(),cur->children.end(),[](){return a->c < b->c ; }) ;
+            cur->children.push_back(new TrieNode({0,0},c)) ;
+            sort(cur->children.begin(),cur->children.end(),[](TrieNode* a , TrieNode *b ){return a->c < b->c ; }) ;
             for(auto x:cur->children)
             {
                 if(x->c == c)
@@ -212,7 +207,7 @@ void Trie::RandomNewData()
         {   
             tmp+=char(GetRandomValue('A','Z')) ;
         }
-        TrieAdd(tmp) ; 
+        Insert(tmp) ; 
     }
     BuildCreateAnimation();
 }
@@ -230,21 +225,27 @@ void Trie::InputDataFromFile()
     std::string s;
     getline(fin, s);
 
-    int curValue = -1;
+    std::string curValue = "" ;
     for (char &c: s)
     {
-        if ('0' <= c && c <= '9')
+        bool flag = 0 ;  
+        if (('A' <= c && c <= 'Z'))
         {
-            if (curValue == -1) curValue = (c - '0'); else curValue = 10 * curValue + (c - '0');
-            continue;
+            curValue+=c ; 
+            flag = 1 ; 
         }
-        if (curValue != -1)
+        else if('a' <= c && c <= 'z')
+        {
+            curValue+=c-'a'+'A' ; 
+            flag = 1 ; 
+        }
+        if(!flag)
         {
             str.push_back(curValue);
-            curValue = -1;
+            curValue = "" ;  
         }
     }
-    if (curValue != -1)
+    if (curValue != "") ; 
     {
         str.push_back(curValue);
     }
@@ -263,318 +264,32 @@ SetOfAnimation Trie::BasicStructure(const std::vector<Node> &nodes)
     return basicStructure;
 }
 
-Presentation Trie::SearchAnimation(int pos, Color color)
+Presentation Trie::SearchAnimation( std::string s , Color color)
 {
     Presentation search;
-    search.present = {BasicStructure(nodes)};
-    {
-        for (int i = 0; i < int(nodes.size()); ++i)
-        {
-            search.CopySetToLast(-1);
-            search.SetStartAnimation(-1, 1);
-            if (i > 0)
-            {
-                search.EraseAnimation(-1, -1, NewAnimation(2, 0, (i - 1 == pos ? color : ORANGE), {nodes[i - 1]}));
-                search.CreateNewSet(-1);
-                search.InsertAnimationToSet(-1, -1, NewAnimation(0, 0, ORANGE, {nodes[i - 1]}));
-                search.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, ORANGE, {nodes[i - 1]}));
-                search.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {nodes[i - 1], nodes[i]}));
-                search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, (i == pos ? color : ORANGE), {nodes[i]}));
-            }
-            else 
-            {
-                search.CreateNewSet(-1);
-                search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, (i == pos ? color : ORANGE), {nodes[i]}));
-            }
-            if (i == pos) 
-            {
-                return search;
-            }
-        }
-    }
-    if (nodes.empty() == false)
-    {
-        search.CopySetToLast(-1);
-        search.SetStartAnimation(-1, 1);
-        search.EraseAnimation(-1, -1, NewAnimation(2, 0, ORANGE, {nodes.back()}));
 
-        search.CreateNewSet(-1);
-        search.InsertAnimationToSet(-1, -1, NewAnimation(0, 0, ORANGE, {nodes.back()}));
-        search.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, ORANGE, {nodes.back()}));
-    }
     return search;
 }
 
-void Trie::Search(int val)
+void Trie::Search(std::string s )
 {
-    nodes = BuildNodeFromValue(str);
-    int pos = FindPosition(val);
-    myPresentation = SearchAnimation(pos, BLUE);
 }
 
-Presentation Trie::UpdateAnimation(int pos, int val)
+Presentation Trie::InsertAnimation( std::string s )
 {
-    Presentation update;
-    update = SearchAnimation(pos, BLUE);
-
-    update.CopySetToLast(-1);
-    update.SetStartAnimation(-1, 1);
-    update.EraseAnimation(-1, 0, NewAnimation(0, 0, BLACK, {nodes[pos]}));
-    
-    NewAnimation animation = update.GetAnimation(-1, -1, -1);
-    update.EraseAnimation(-1, -1, animation);
-
-    animation.type = 3;
-    animation.color = BLUE;
-    animation.curAnimation = 0;
-    update.InsertAnimationToSet(-1, -1, animation);
-
-    update.CopySetToLast(-1);
-    update.SetStartAnimation(-1, 1);
-
-    animation.type = 2;
-    animation.color = GREEN;
-    animation.curAnimation = 0;
-    animation.nodes[0].value = val;
-    update.InsertAnimationToSet(-1, -1, animation);
-
-    return update;
+    Presentation insert ; 
+    return insert ; 
 }
 
-void Trie::Update(int pos, int val)
+Presentation Trie::DeleteAnimation(std::string s )
 {
-    if (pos >= int(nodes.size())) return;
-    nodes = BuildNodeFromValue(str);
-    myPresentation.currentPresentation = 0;
-    myPresentation = UpdateAnimation(pos, val);
-    str[pos] = val;
-    nodes[pos].value = val;
-}
-
-Presentation Trie::InsertAnimation(int pos, int val)
-{
-    Presentation insert;
- 
-    if (pos == int(nodes.size()))
-    { 
-        if (nodes.empty() == true)
-        {
-            insert.CreateNewPresentation();
-            insert.CreateNewSet(-1);
-            insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {Node(Vector2{100.0f, 180.0f}, 24, val)}));
-        } 
-        else
-        {
-            insert = SearchAnimation(-1, BLUE);
-            insert.CopySetToLast(-1);
-            insert.SetStartAnimation(-1, 1);
-            insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {Node(Vector2{nodes.back().position.x + 100.0f, nodes.back().position.y}, 24, val)}));
-            insert.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {nodes.back(), Node(Vector2{nodes.back().position.x + 100.0f, nodes.back().position.y}, 24, val)}));
-        }
-    } 
-    else
-    {
-        insert = SearchAnimation(pos, BLUE);
-        
-        { // Move edge, Insert new node, Insert new Edge
-            insert.CopySetToLast(-1);
-            insert.SetStartAnimation(-1, 1);
-
-            NewAnimation tmpAnimation = insert.GetAnimation(-1, -1, -1);
-            insert.EraseAnimation(-1, -1, insert.GetAnimation(-1, -1, -1));
-            if (pos > 0)
-            {
-                insert.EraseAnimation(-1, -1, insert.GetAnimation(-1, -1, -1));
-            }
-            insert.InsertAnimationToSet(-1, -1, tmpAnimation);
-            if (pos > 0) 
-            {
-                insert.EraseAnimation(-1, 0, NewAnimation(4, 0, BLACK, {nodes[pos - 1], nodes[pos]}));
-            }
-            Node newNode(Vector2{nodes[pos].position.x, nodes[pos].position.y + 100.0f}, 24, val);
-            insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {newNode}));
-            insert.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {newNode, nodes[pos]}));
-            if (pos > 0)
-            {
-                insert.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, ORANGE, {nodes[pos - 1], nodes[pos - 1], nodes[pos], newNode}));
-            }
-            
-        }
-    
-        { // Move new node, nodes[pos], ... nodes.back()
-            insert.CopySetToLast(-1);
-            insert.SetStartAnimation(-1, 1);
-    
-            for (int i = int(nodes.size()) - 2; i >= pos; --i)
-            {
-                insert.EraseAnimation(-1, 0, NewAnimation(4, 0, BLACK, {nodes[i], nodes[i + 1]}));
-            }
-            for (int i = int(nodes.size()) - 1; i >= pos; --i)
-            {
-                insert.EraseAnimation(-1, 0, NewAnimation(0, 0, BLACK, {nodes[i]}));
-            }
-            
-            {
-                Node newNode(Vector2{nodes[pos].position.x, nodes[pos].position.y + 100.0f}, 24, val);
-                if (pos > 0)
-                {
-                    insert.EraseAnimation(-1, -1, NewAnimation(7, 0, ORANGE, {nodes[pos - 1], nodes[pos - 1], nodes[pos], newNode}));
-                }
-                insert.EraseAnimation(-1, -1, NewAnimation(5, 0, ORANGE, {newNode, nodes[pos]}));
-                insert.EraseAnimation(-1, -1, NewAnimation(2, 0, GREEN, {newNode}));          
-            }
-            
-            { // Delete BLUE node
-                insert.EraseAnimation(-1, pos + 1, NewAnimation(2, 0, BLUE, {nodes[pos]}));    
-            }
-    
-            Node newNode(Vector2{nodes[pos].position.x, nodes[pos].position.y + 100.0f}, 24, val);
-            Node lastNode = nodes.back();
-            lastNode.position.x += 100.f;
-    
-            // Remember to remove nodes.back()
-            nodes.push_back(lastNode);
-            
-            insert.CreateNewSet(-1);
-            insert.InsertAnimationToSet(-1, -1, NewAnimation(8, 0, GREEN, {newNode, nodes[pos]}));
-            insert.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, ORANGE, {newNode, nodes[pos], nodes[pos], nodes[pos + 1]}));
-            if (pos > 0)
-            {
-                insert.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, ORANGE, {nodes[pos - 1], nodes[pos - 1], newNode, nodes[pos]}));
-            }
-            for (int i = pos; i < int(nodes.size()) - 1; ++i)
-            {
-                insert.InsertAnimationToSet(-1, -1, NewAnimation(8, 0, (i == pos ? BLUE : BLACK), {nodes[i], nodes[i + 1]}));
-                if (i < int(nodes.size()) - 2) {
-                    insert.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, BLACK, {nodes[i], nodes[i + 1], nodes[i + 1], nodes[i + 2]}));
-                }
-            }
-    
-            nodes.pop_back();
-        }
-    }
-
-    return insert;
-}
-
-void Trie::Insert(int pos, int val)
-{
-    nodes = BuildNodeFromValue(str);
-    pos = std::min(pos, int(nodes.size()));
-    myPresentation.currentPresentation = 0;
-    myPresentation = InsertAnimation(pos, val);
-    str.insert(str.begin() + pos, val);
-    nodes = BuildNodeFromValue(str);
-}
-
-Presentation Trie::DeleteAnimation(int pos)
-{
-    Presentation _delete;
-    if (pos != -1)
-    {
-        _delete = SearchAnimation(pos, RED);
-
-        _delete.CopySetToLast(-1);
-        _delete.SetStartAnimation(-1, 1);
-        
-        NewAnimation animation = _delete.GetAnimation(-1, -1, -1);
-        _delete.EraseAnimation(-1, -1, NewAnimation(2, 0, RED, {nodes[pos]}));
-        if (pos > 0) 
-        {
-            _delete.EraseAnimation(-1, -1, NewAnimation(5, 0, ORANGE, {nodes[pos - 1], nodes[pos]}));
-        }
-        
-        SetOfAnimation tmpGroups = _delete.present.back();
-        animation.type = 3;
-        animation.color = RED;
-        animation.curAnimation = 0;
-        _delete.InsertAnimationToSet(-1, -1, animation);
-
-        if (pos < int(nodes.size()) - 1)
-        {   
-            NewAnimation deleteEdge = _delete.GetAnimation(-1, 0, int(nodes.size()) + pos);
-            deleteEdge.type = 6;
-            deleteEdge.color = RED;
-            deleteEdge.curAnimation = 0;
-            _delete.InsertAnimationToSet(-1, -1, animation);
-            _delete.EraseAnimation(-1, 0, _delete.GetAnimation(-1, 0, int(nodes.size()) + pos));
-        }
-        if (pos > 0)
-        {
-            _delete.EraseAnimation(-1, 0, _delete.GetAnimation(-1, 0, int(nodes.size()) + pos - 1));
-        }
-        _delete.EraseAnimation(-1, 0, _delete.GetAnimation(-1, 0, pos));
-
-        _delete.CopySetToLast(-1);
-        _delete.SetStartAnimation(-1, 1);
-        if (pos > 0 && pos < int(nodes.size()) - 1)
-        {
-            _delete.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {nodes[pos - 1], nodes[pos + 1]}));
-        }
-
-        _delete.present.push_back(tmpGroups);
-        if (pos > 0)
-        {
-            for (int i = int(nodes.size()) - 2; i >= pos; --i)
-            {
-                _delete.EraseAnimation(-1, 0, NewAnimation(4, 0, BLACK, {nodes[i], nodes[i + 1]}));
-            }
-            if (pos < int(nodes.size()) - 1)
-            {   
-                _delete.EraseAnimation(-1, 0, NewAnimation(0, 0, BLACK, {nodes[pos]}));
-            }
-            if (pos > 0)
-            {
-                _delete.EraseAnimation(-1, 0, NewAnimation(4, 0, BLACK, {nodes[pos - 1], nodes[pos]}));
-            }
-            for (int i = int(nodes.size()) - 1; i >= pos; --i)
-            {
-                _delete.EraseAnimation(-1, 0, NewAnimation(0, 0, BLACK, {nodes[i]}));
-            }
-        }
-        else 
-        {
-            while (_delete.present.back().setOfAnimation[0].size())
-            {
-                NewAnimation animation = _delete.present.back().setOfAnimation[0].back();
-                _delete.EraseAnimation(-1, 0, animation);
-            }
-        }
-
-        _delete.CreateNewSet(-1);
-        if (pos > 0 && pos < int(nodes.size()) - 1)
-        {
-            _delete.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, ORANGE, {nodes[pos - 1], nodes[pos - 1], nodes[pos + 1], nodes[pos]}));
-        }
-        for (int i = int(nodes.size()) - 1; i > pos; --i)
-        {
-            _delete.InsertAnimationToSet(-1, -1, NewAnimation(8, 0, BLACK, {nodes[i], nodes[i - 1]}));
-        }
-        for (int i = int(nodes.size()) - 2; i > pos; --i)
-        {
-            _delete.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, BLACK, {nodes[i], nodes[i - 1], nodes[i + 1], nodes[i]}));
-        }
-    }
-    else 
-    {
-        myPresentation = SearchAnimation(-1, RED);
-    }
-
+    Presentation _delete ;
     return _delete;
 }
 
-void Trie::Delete(int val)
+void Trie::Delete(std::string s )
 {
-    nodes = BuildNodeFromValue(str);
-    int pos = FindPosition(val);
-    myPresentation.currentPresentation = 0;
-    myPresentation = DeleteAnimation(pos);
-    if (pos != -1)
-    {
-        str.erase(str.begin() + pos);
-        nodes.erase(nodes.begin() + pos);
-        nodes = BuildNodeFromValue(str);
-    }
+    
 }
 
 void Trie::DrawToolBar()
