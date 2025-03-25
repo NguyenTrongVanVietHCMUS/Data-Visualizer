@@ -5,9 +5,9 @@ void Node::DrawTextNode(const Font &fontValue, const Color &color, const bool &i
 {
     char text[5];
     snprintf(text, sizeof(text), "%d", value);
-    Vector2 textSize = MeasureTextEx(GetFontDefault(), text, 20, 1);
+    Vector2 textSize = MeasureTextEx(fontValue, text, 18, 1);
     Color curColor = (ColorIsEqual(BLACK, color) ? (isLightMode ? BLACK : WHITE) : color);
-    DrawTextEx(fontValue, text, Vector2{position.x - textSize.x / 2, position.y - textSize.y / 2}, 20, 1, curColor);
+    DrawTextEx(fontValue, text, Vector2{position.x - textSize.x / 2, position.y - textSize.y / 2}, 18, 1, curColor);
 }
 
 void Node::DrawHollowNode(const Texture2D &textureNode, const Color &color, const bool &isLightMode)

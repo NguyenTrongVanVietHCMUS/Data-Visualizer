@@ -11,10 +11,12 @@ class Node
         int value;
         std::string text;
         Vector2 offset;
+        Vector2 velocity;
+        bool dragging;
 
 
         Node(): position(Vector2{0, 0}), radius(0), value(0) {}
-        Node(Vector2 pos, float r, int val) : position(pos), radius(r), value(val) {}
+        Node(Vector2 pos, float r, int val) : position(pos), radius(r), value(val), velocity({0, 0}), dragging(false) {}
 
         void DrawTextNode(const Font &fontValue, const Color &color, const bool &isLightMode);
         void DrawSolidNode(const Texture2D &textureNode, const Color &color, const bool &isLightMode);

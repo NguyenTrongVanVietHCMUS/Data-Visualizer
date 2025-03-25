@@ -20,7 +20,7 @@ class DataStructure
         Texture2D solidCircle = LoadTexture("../Textures/SolidCircle.png");
         Texture2D arrowEdge = LoadTexture("../Textures/ArrowEdge.png");
         Font robotoFont = LoadFont("../Fonts/Roboto_Condensed-SemiBold.ttf");
-        Font toolBarFont = LoadFont("../Fonts/Roboto_Condensed-SemiBold.ttf");
+        Font fontNumber = LoadFont("../Fonts/InterBold.ttf");
         
         std::vector<std::vector<bool>> flagToolBarButtons;
         std::vector<std::vector<Button>> toolBarButtons;
@@ -31,8 +31,6 @@ class DataStructure
         int isLightMode;
 
         float speed;
-        int posAnimation;
-        std::vector<std::vector<std::vector<NewAnimation>>> animations;
         Presentation myPresentation;
         
 

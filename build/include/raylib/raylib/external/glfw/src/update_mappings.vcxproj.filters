@@ -1,24 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Data-Visualizer\build\CMakeFiles\b692ee8e2fdbc9efff5c4e81ff7e614f\update_mappings.rule">
+    <CustomBuild Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\CMakeFiles\4a4256f3873e853fd9a2fc10cc528f2b\update_mappings.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Data-Visualizer\include\raylib\src\external\glfw\src\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src\external\glfw\src\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Data-Visualizer\include\raylib\src\external\glfw\src\mappings.h.in">
+    <None Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src\external\glfw\src\mappings.h.in">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Data-Visualizer\include\raylib\src\external\glfw\CMake\GenerateMappings.cmake" />
-    <None Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\CMakeFiles\update_mappings" />
+    <None Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src\external\glfw\CMake\GenerateMappings.cmake" />
+    <None Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\CMakeFiles\update_mappings" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{F8562C71-E281-378E-97A4-77D4ED64DD4C}</UniqueIdentifier>
+      <UniqueIdentifier>{8DFA8CD8-141A-39DF-871B-932FA3EC4B09}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{DF1621F7-429F-3E6D-B43C-78604F5FF64E}</UniqueIdentifier>
+      <UniqueIdentifier>{A751EA17-1407-3BB1-9F51-1E60CEF5085D}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -3,6 +3,7 @@
 #include "NewAnimation.h"
 #include "Button.h"
 #include "raylib.h"
+#include "Graph.h"
 #include "SinglyLinkedList.h"
 
 class Menu
@@ -14,9 +15,9 @@ class Menu
         Texture2D toLightMode; 
 
         Button *buttons;
-        Font currentFont;
         
         SinglyLinkedList myList;
+        Graph myGraph;
         
 
         Color GetColorBackground();

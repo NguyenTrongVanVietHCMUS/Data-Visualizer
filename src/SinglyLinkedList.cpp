@@ -53,23 +53,26 @@ void SinglyLinkedList::Init()
     enterList.textBox = {Vector2{425 + 80 + 2, 570}, 80, 35};
     enterList.confirm = {Vector2{425 + 80 + 2, 570 + 35 + 2}, 80, 35, (char *)"Confirm"};
 
+    flagToolBarButtons.resize(6);
+    for (int i = 0; i < 6; ++i) {
+        flagToolBarButtons[i].assign(toolBarButtons[i].size(), false);
+    }
+
     nodes.clear();
     values.clear();
     isLightMode = 1;
 
     speed = 0.05;
-    posAnimation = 0;
-    animations.clear();
 }
 
 std::vector<Node> SinglyLinkedList::BuildNodeFromValue(const std::vector<int> &values)
 {
-    float x = 100.0f, y = 180.0f;
+    float x = 50.0f, y = 200.0f;
     std::vector<Node> nodes;
     for (const int &value: values) 
     {
-        nodes.push_back({Vector2{x, y}, 24, value});
-        x += 100.0f;
+        nodes.push_back({Vector2{x, y}, 20, value});
+        x += 80.0f;
     }
     return nodes;
 }
@@ -147,7 +150,7 @@ void SinglyLinkedList::RandomNewData()
 {
     ClearAllData();
 
-    int n = GetRandomValue(1, 15);
+    int n = GetRandomValue(1, 20);
     for (int i = 1; i <= n; ++i)
     {
         values.push_back(GetRandomValue(0, 999));
@@ -160,7 +163,7 @@ void SinglyLinkedList::InputDataFromFile()
     ClearAllData();
 
     FilePathList droppedFiles = LoadDroppedFiles();
-    char *filePath = new char[2048];
+    char *filePath = new char[2448];
 
     TextCopy(filePath, droppedFiles.paths[0]);
     UnloadDroppedFiles(droppedFiles);
@@ -300,15 +303,15 @@ Presentation SinglyLinkedList::InsertAnimation(int pos, int val)
         {
             insert.CreateNewPresentation();
             insert.CreateNewSet(-1);
-            insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {Node(Vector2{100.0f, 180.0f}, 24, val)}));
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {Node(Vector2{100.0f, 180.0f}, 20, val)}));
         } 
         else
         {
             insert = SearchAnimation(-1, BLUE);
             insert.CopySetToLast(-1);
             insert.SetStartAnimation(-1, 1);
-            insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {Node(Vector2{nodes.back().position.x + 100.0f, nodes.back().position.y}, 24, val)}));
-            insert.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {nodes.back(), Node(Vector2{nodes.back().position.x + 100.0f, nodes.back().position.y}, 24, val)}));
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {Node(Vector2{nodes.back().position.x + 100.0f, nodes.back().position.y}, 20, val)}));
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {nodes.back(), Node(Vector2{nodes.back().position.x + 100.0f, nodes.back().position.y}, 20, val)}));
         }
     } 
     else
@@ -330,7 +333,7 @@ Presentation SinglyLinkedList::InsertAnimation(int pos, int val)
             {
                 insert.EraseAnimation(-1, 0, NewAnimation(4, 0, BLACK, {nodes[pos - 1], nodes[pos]}));
             }
-            Node newNode(Vector2{nodes[pos].position.x, nodes[pos].position.y + 100.0f}, 24, val);
+            Node newNode(Vector2{nodes[pos].position.x, nodes[pos].position.y + 100.0f}, 20, val);
             insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {newNode}));
             insert.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {newNode, nodes[pos]}));
             if (pos > 0)
@@ -354,7 +357,7 @@ Presentation SinglyLinkedList::InsertAnimation(int pos, int val)
             }
             
             {
-                Node newNode(Vector2{nodes[pos].position.x, nodes[pos].position.y + 100.0f}, 24, val);
+                Node newNode(Vector2{nodes[pos].position.x, nodes[pos].position.y + 100.0f}, 20, val);
                 if (pos > 0)
                 {
                     insert.EraseAnimation(-1, -1, NewAnimation(7, 0, ORANGE, {nodes[pos - 1], nodes[pos - 1], nodes[pos], newNode}));
@@ -367,7 +370,7 @@ Presentation SinglyLinkedList::InsertAnimation(int pos, int val)
                 insert.EraseAnimation(-1, pos + 1, NewAnimation(2, 0, BLUE, {nodes[pos]}));    
             }
     
-            Node newNode(Vector2{nodes[pos].position.x, nodes[pos].position.y + 100.0f}, 24, val);
+            Node newNode(Vector2{nodes[pos].position.x, nodes[pos].position.y + 100.0f}, 20, val);
             Node lastNode = nodes.back();
             lastNode.position.x += 100.f;
     
@@ -567,7 +570,7 @@ void SinglyLinkedList::DrawToolBar()
             {
                 if (j == 0 || flagToolBarButtons[i][0] == true)
                 {
-                    toolBarButtons[i][j].DrawButtonAndText(0.3, 0.1, LIME, true, toolBarFont, 22, RAYWHITE);
+                    toolBarButtons[i][j].DrawButtonAndText(0.3, 0.1, LIME, true, robotoFont, 22, RAYWHITE);
                 }
             }
         }
@@ -735,13 +738,12 @@ void SinglyLinkedList::HandleToolBar()
 }
 
 
-
 void SinglyLinkedList::Draw() 
 {  
-    myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, GetFontDefault(), GetFontDefault(), isLightMode, speed);
+    myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, fontNumber, GetFontDefault(), isLightMode, speed);
 }
 
-std::vector<int> StringToVector(std::string listChar)
+std::vector<int> SinglyLinkedList::StringToVector(std::string listChar)
 {
     std::vector<int> values;
     int cur = -1;

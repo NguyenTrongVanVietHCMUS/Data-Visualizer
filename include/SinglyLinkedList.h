@@ -1,15 +1,16 @@
 #pragma once
 #include "DataStructure.h"
 
-std::vector<int> StringToVector(std::string listChar);
-
 class SinglyLinkedList : public DataStructure 
 {
     public:
+        std::vector<int> StringToVector(std::string listChar);
         Font fontRoboto = LoadFont("../Fonts/Roboto_Condensed-SemiBold.ttf");
         TextBox enterList;
         TextBox insertI;
         TextBox insertV;
+        std::vector<Node> nodes;
+        std::vector<int> values;
 
         int FindPosition(int value);        
         void ClearAllData();

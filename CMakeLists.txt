@@ -24,6 +24,7 @@ add_executable(
      src/Textbox.cpp 
      src/SetOfAnimation.cpp
      src/Presentation.cpp
+     src/Graph.cpp
      )
 
 add_subdirectory("include/raylib")
