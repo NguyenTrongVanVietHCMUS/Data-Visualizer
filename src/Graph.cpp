@@ -87,7 +87,7 @@ void Graph::RandomNewData()
     {
         float x = GetRandomValue(100, GetScreenWidth() - 100);
         float y = GetRandomValue(100, GetScreenHeight() - 100);
-        nodes.emplace_back(Vector2{x, y}, NODE_RADIUS, i + 1);
+        nodes.emplace_back(Vector2{x, y}, NODE_RADIUS, std::to_string(i + 1));
     }
     
     edges.clear();

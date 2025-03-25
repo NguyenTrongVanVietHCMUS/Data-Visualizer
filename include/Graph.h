@@ -33,6 +33,8 @@ class Graph : public DataStructure
         TextBox enterList;
         TextBox insertI;
         TextBox insertV;
+
+        std::vector<int> values;
       
         void ClearAllData();
         void RandomNewData();

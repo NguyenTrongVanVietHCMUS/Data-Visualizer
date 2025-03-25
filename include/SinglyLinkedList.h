@@ -1,8 +1,6 @@
 #pragma once
 #include "DataStructure.h"
 
-std::vector<int> StringToVector(std::string listChar);
-
 class SinglyLinkedList : public DataStructure 
 {
     public:
@@ -11,8 +9,8 @@ class SinglyLinkedList : public DataStructure
         TextBox enterList;
         TextBox insertI;
         TextBox insertV;
-
-        int FindPosition(int value);        
+        std::vector<std::string>values ; 
+        int FindPosition(std::string value);        
         void ClearAllData();
         void RandomNewData();
         void InputDataFromFile();
