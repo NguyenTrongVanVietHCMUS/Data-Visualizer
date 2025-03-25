@@ -25,6 +25,7 @@ add_executable(
      src/SetOfAnimation.cpp
      src/Presentation.cpp
      src/Graph.cpp
+     src/Trie.cpp 
      )
 
 add_subdirectory("include/raylib")

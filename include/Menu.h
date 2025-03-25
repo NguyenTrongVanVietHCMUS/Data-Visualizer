@@ -5,7 +5,7 @@
 #include "raylib.h"
 #include "Graph.h"
 #include "SinglyLinkedList.h"
-
+#include "Trie.h"
 class Menu
 {
     private:
@@ -18,7 +18,7 @@ class Menu
         
         SinglyLinkedList myList;
         Graph myGraph;
-        
+        Trie myTrie;
 
         Color GetColorBackground();
         void DrawGradient(const bool isLightMode);

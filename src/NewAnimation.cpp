@@ -180,7 +180,6 @@ bool NewAnimation::DrawMoveEdgeAnimation(const Texture2D &arrowEdge, const Color
 
     return flag;
 }
-
 void NewAnimation::Init(int _type, const std::vector<Node> &_nodes)
 {
     type = _type;

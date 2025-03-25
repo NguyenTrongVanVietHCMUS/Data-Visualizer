@@ -4,6 +4,7 @@
 
 void Menu::Init() 
 {   
+
     buttons = new Button[8];
     buttons[0] = {Vector2{250, 250}, 300, 180, (char *)"One"};
     buttons[1] = {Vector2{650, 250}, 300, 180, (char *)"Two"};
@@ -25,6 +26,7 @@ void Menu::Init()
 
     myList.Init();
     myGraph.Init();
+    myTrie.Init(); 
 }
 
 void Menu::Clear() 
@@ -81,8 +83,9 @@ void Menu::Run() {
         if (dataStructure == 2) {
             
         }
-        if (dataStructure == 3) {
-            
+        if (dataStructure == 3) 
+        {
+            myTrie.Run();
         }
         if (dataStructure == 4) {
         
