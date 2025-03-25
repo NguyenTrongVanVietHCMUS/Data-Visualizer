@@ -24,10 +24,8 @@ void Menu::Init()
     toDarkMode = LoadTexture("../Textures/ToDarkMode.png");
     toLightMode = LoadTexture("../Textures/ToLightMode.png");
 
-    currentFont = LoadFont("../Font/RobotoBold.ttf");
-    SetTextureFilter(currentFont.texture, TEXTURE_FILTER_POINT);
-
     myList.Init();
+    myGraph.Init();
     myTrie.Init(); 
 }
 
@@ -93,7 +91,7 @@ void Menu::Run() {
         
         }
         if (dataStructure == 5) {
-        
+            myGraph.Run();
         }
         if (dataStructure == 6) {   
 

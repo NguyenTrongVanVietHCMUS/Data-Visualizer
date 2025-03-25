@@ -1,8 +1,6 @@
 #pragma once
 #include "DataStructure.h"
 
-
-
 class SinglyLinkedList : public DataStructure 
 {
     public:

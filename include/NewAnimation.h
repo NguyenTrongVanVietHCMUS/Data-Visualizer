@@ -20,6 +20,8 @@ class NewAnimation
 
         float curAnimation, startAnimation = 0;
         std::vector<Node> nodes;
+        int weight;
+        bool isDirected;
         
         void DrawHollowNode(const Texture2D &hollowCircle, const Font &font, const bool &isLightMode);
         void DrawSolidNode(const Texture2D &solidCircle, const Font &font, const bool &isLightMode);
@@ -33,8 +35,8 @@ class NewAnimation
         bool DrawMoveEdgeAnimation(const Texture2D &arrowEdge, const Color &color, const bool &isLightMode, float &curAnimation, const float &speed);
 
 
-        NewAnimation(int _type = 0, float _curAnimation = 0, Color _color = BLACK, std::vector<Node> _nodes = {}) : 
-            type(_type), curAnimation(_curAnimation), color(_color), nodes(_nodes) {}
+        NewAnimation(int _type = 0, float _curAnimation = 0, Color _color = BLACK, std::vector<Node> _nodes = {}, int _weight = 0, bool _isDirected = false) : 
+            type(_type), curAnimation(_curAnimation), color(_color), nodes(_nodes), weight(_weight), isDirected(_isDirected) {}
         void Init(int _type, const std::vector<Node> &_nodes);
         bool DrawAnimation(const Texture2D &hollowCircle, const Texture2D &solidCircle, const Texture2D &arrowEdge, const Font &fontNumber, const Font &fontText, const bool &isLightMode, const float &speed);
 };

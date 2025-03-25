@@ -58,8 +58,6 @@ void Trie::Init()
     isLightMode = 1;
 
     speed = 0.05;
-    posAnimation = 0;
-    animations.clear();
 }
 
 Vector2 Trie::calcPosition(TrieNode *root) {
@@ -108,7 +106,7 @@ Presentation Trie::CreateAnimation(TrieNode* root)
             if (!node) return;
             cur+=node->TargetedPosition ;
             // draw the node first 
-            create.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {Node(cur,24,node->c)}));
+            create.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {Node(cur,20,node->c)}));
             for (auto& child : node->children) 
             {
                 AddNode_ref(child, AddNode_ref,cur);
@@ -126,7 +124,7 @@ Presentation Trie::CreateAnimation(TrieNode* root)
             cur+=node->TargetedPosition ;
             for (auto& child : node->children) 
             {
-                create.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, GREEN, {Node(cur,24,node->c),Node(cur+child->TargetedPosition,24,node->c)}));
+                create.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, GREEN, {Node(cur,20,node->c),Node(cur+child->TargetedPosition,20,node->c)}));
                 AddEdge_ref(child, AddEdge_ref,cur);
             }
         };
@@ -140,7 +138,7 @@ Presentation Trie::CreateAnimation(TrieNode* root)
             if (!node) return;
             cur+=node->TargetedPosition ;
             // draw the node first 
-            create.InsertAnimationToSet(-1, -1, NewAnimation(0, 0, BLACK, {Node(cur,24,node->c)}));
+            create.InsertAnimationToSet(-1, -1, NewAnimation(0, 0, BLACK, {Node(cur,20,node->c)}));
             for (auto& child : node->children) 
             {
                 AddNode_ref(child, AddNode_ref,cur);
@@ -153,7 +151,7 @@ Presentation Trie::CreateAnimation(TrieNode* root)
             cur+=node->TargetedPosition ;
             for (auto& child : node->children) 
             {
-                create.InsertAnimationToSet(-1, -1, NewAnimation(4, 0, BLACK, {Node(cur,24,node->c),Node(cur+child->TargetedPosition,24,node->c)}));
+                create.InsertAnimationToSet(-1, -1, NewAnimation(4, 0, BLACK, {Node(cur,20,node->c),Node(cur+child->TargetedPosition,20,node->c)}));
                 AddEdge_ref(child, AddEdge_ref,cur);
             }
         };
@@ -163,7 +161,7 @@ Presentation Trie::CreateAnimation(TrieNode* root)
             if (!node) return;
             cur+=node->TargetedPosition ;
             // draw the node first 
-            create.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, GREEN, {Node(cur,24,node->c)}));
+            create.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, GREEN, {Node(cur,20,node->c)}));
             for (auto& child : node->children) 
             {
                 DelNode_ref(child, DelNode_ref,cur);
@@ -176,7 +174,7 @@ Presentation Trie::CreateAnimation(TrieNode* root)
             cur+=node->TargetedPosition ;
             for (auto& child : node->children) 
             {
-                create.InsertAnimationToSet(-1, -1, NewAnimation(6, 0, GREEN, {Node(cur,24,node->c),Node(cur+child->TargetedPosition,24,node->c)}));
+                create.InsertAnimationToSet(-1, -1, NewAnimation(6, 0, GREEN, {Node(cur,20,node->c),Node(cur+child->TargetedPosition,20,node->c)}));
                 DelEdge_ref(child, DelEdge_ref,cur);
             }
         };
@@ -309,7 +307,7 @@ SetOfAnimation Trie::BasicStructure(TrieNode* root )
             if (!node) return;
             cur+=node->CurrentPosition ;
             // draw the node first 
-            basicStructure.InsertAnimationToSet(-1, NewAnimation(0, 0, BLACK, {Node(cur,24,node->c)}));
+            basicStructure.InsertAnimationToSet(-1, NewAnimation(0, 0, BLACK, {Node(cur,20,node->c)}));
             for (auto& child : node->children) 
             {
                 AddNode_ref(child, AddNode_ref,cur);
@@ -322,7 +320,7 @@ SetOfAnimation Trie::BasicStructure(TrieNode* root )
             cur+=node->CurrentPosition ;
             for (auto& child : node->children) 
             {
-                basicStructure.InsertAnimationToSet(-1, NewAnimation(4, 0, BLACK, {Node(cur,24,node->c),Node(cur+child->CurrentPosition,24,child->c)}));
+                basicStructure.InsertAnimationToSet(-1, NewAnimation(4, 0, BLACK, {Node(cur,20,node->c),Node(cur+child->CurrentPosition,20,child->c)}));
                 AddEdge_ref(child, AddEdge_ref,cur);
             }
         };
@@ -346,14 +344,14 @@ Presentation Trie::SearchAnimation( std::string s , Color color)
             if(cur==root)
             {
                 search.CreateNewSet(-1);
-                search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, color, {Node(curPos,24,cur->c)}));
+                search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, color, {Node(curPos,20,cur->c)}));
             }
             bool ok = 0  ;
             for(auto x : cur->children)
             {
                 if(x->c[0]==c)
                 {
-                    search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, color, {Node(curPos+x->CurrentPosition,24,x->c)}));
+                    search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, color, {Node(curPos+x->CurrentPosition,20,x->c)}));
                     ok = 1 ; 
                     cur = x ; 
                     break ; 
@@ -415,12 +413,12 @@ Presentation Trie::InsertAnimation( std::string s )
                 if(!node)return ; 
                 cur+=node->CurrentPosition ;
                 nex+=node->TargetedPosition ;
-                insert.InsertAnimationToSet(-1, -1,NewAnimation(8, 0, BLACK, {Node(cur,24,node->c),Node(nex,24,node->c)}));
+                insert.InsertAnimationToSet(-1, -1,NewAnimation(8, 0, BLACK, {Node(cur,20,node->c),Node(nex,20,node->c)}));
                 for(auto x:node->children)
                 {
                     if(!x->running)
                     {
-                        insert.InsertAnimationToSet(-1,-1, NewAnimation(7, 0, BLACK, {Node(cur,24,node->c),Node(nex,24,node->c),Node(cur+x->CurrentPosition,24,node->c),Node(nex+x->TargetedPosition,24,x->c)}));
+                        insert.InsertAnimationToSet(-1,-1, NewAnimation(7, 0, BLACK, {Node(cur,20,node->c),Node(nex,20,node->c),Node(cur+x->CurrentPosition,20,node->c),Node(nex+x->TargetedPosition,20,x->c)}));
                         MoveNode_ref(x,MoveNode_ref,cur,nex) ; 
                     }
                 }
@@ -449,8 +447,8 @@ Presentation Trie::InsertAnimation( std::string s )
             {
                 if(x->c[0] == s[i])
                 {
-                    insert.InsertAnimationToSet(-1,-1, NewAnimation(2, 0, ORANGE, {Node(curPos+x->TargetedPosition,24,x->c)}));
-                    insert.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {Node(curPos,24,cur->c),Node(curPos+x->TargetedPosition,24,x->c)}));
+                    insert.InsertAnimationToSet(-1,-1, NewAnimation(2, 0, ORANGE, {Node(curPos+x->TargetedPosition,20,x->c)}));
+                    insert.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {Node(curPos,20,cur->c),Node(curPos+x->TargetedPosition,20,x->c)}));
                     x->running = 0 ;                                          
                     cur = x ;
                     break ;
@@ -474,7 +472,7 @@ Presentation Trie::DeleteAnimation(std::string s , Color color)
     Presentation _delete = SearchAnimation(s,color) ;
     ResetNodesPosition(root) ; 
     {
-        root->sl = 971419248;
+        root->sl = 971419208;
         auto DelNode =[&](TrieNode* node, Vector2 cur,auto&& DelNode_ref,std::string&s , int pos)->void
         {
             if(!node)return ; 
@@ -484,8 +482,8 @@ Presentation Trie::DeleteAnimation(std::string s , Color color)
             {
                 _delete.CopySetToLast(-1) ; 
                 _delete.SetStartAnimation(-1,1); 
-                _delete.EraseAnimation(-1,-1,NewAnimation(2,0,color,{Node(cur,24,node->c)})) ;
-                _delete.EraseAnimation(-1,0,NewAnimation(0,0,BLACK,{Node(cur,24,node->c)})) ;
+                _delete.EraseAnimation(-1,-1,NewAnimation(2,0,color,{Node(cur,20,node->c)})) ;
+                _delete.EraseAnimation(-1,0,NewAnimation(0,0,BLACK,{Node(cur,20,node->c)})) ;
             }
             if(pos==s.size())return ;  
             for(auto child:node->children)
@@ -497,7 +495,7 @@ Presentation Trie::DeleteAnimation(std::string s , Color color)
                     {
                         _delete.CopySetToLast(-1) ; 
                         _delete.SetStartAnimation(-1,1) ; 
-                        _delete.EraseAnimation(-1,0,NewAnimation(4,0,BLACK,{Node(cur,24,node->c),Node(cur+child->CurrentPosition,24,child->c)})) ;
+                        _delete.EraseAnimation(-1,0,NewAnimation(4,0,BLACK,{Node(cur,20,node->c),Node(cur+child->CurrentPosition,20,child->c)})) ;
                     }
                     break ; 
                 }
@@ -571,7 +569,7 @@ void Trie::DrawToolBar()
             {
                 if (j == 0 || flagToolBarButtons[i][0] == true)
                 {
-                    toolBarButtons[i][j].DrawButtonAndText(0.3, 0.1, LIME, true, toolBarFont, 22, RAYWHITE);
+                    toolBarButtons[i][j].DrawButtonAndText(0.3, 0.1, LIME, true, robotoFont, 22, RAYWHITE);
                 }
             }
         }
@@ -756,5 +754,5 @@ void Trie::ResetNodesPosition(TrieNode* root)
 void Trie::Draw() 
 {  
     ResetNodesPosition(root) ;
-    myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, GetFontDefault(), GetFontDefault(), isLightMode, speed);
+    myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, fontNumber, GetFontDefault(), isLightMode, speed);
 }
