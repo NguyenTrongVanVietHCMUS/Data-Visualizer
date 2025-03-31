@@ -26,6 +26,7 @@ class Presentation
         void SetCurAnimation(int positionPresentation, int positionSet, float curAnimation); 
 
         void EraseAnimation(int positionPresentation, int positionSet, NewAnimation animation); 
+        void EraseAnimation(int positionPresentation, NewAnimation animation);
         void InsertAnimationToSet(int positionPresentation, int positionSet, NewAnimation animation); 
 
         void CopySetToLast(int positionPresentation);

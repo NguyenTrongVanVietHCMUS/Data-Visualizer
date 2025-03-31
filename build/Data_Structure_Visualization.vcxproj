@@ -325,8 +325,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\main.cpp" />
-    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\DataStructure.cpp" />
-    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\SinglyLinkedList.cpp" />
     <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\Menu.cpp" />
     <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\NewAnimation.cpp" />
     <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\Button.cpp" />
@@ -334,8 +332,11 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\TextBox.cpp" />
     <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\SetOfAnimation.cpp" />
     <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\Presentation.cpp" />
-    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\Graph.cpp" />
+    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\DataStructure.cpp" />
+    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\SinglyLinkedList.cpp" />
+    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\Heap.cpp" />
     <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\Trie.cpp" />
+    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\Graph.cpp" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -4,12 +4,6 @@
     <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\DataStructure.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\SinglyLinkedList.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\Menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -31,10 +25,19 @@
     <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\Presentation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\Graph.cpp">
+    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\DataStructure.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\SinglyLinkedList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\Heap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\Trie.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\Graph.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

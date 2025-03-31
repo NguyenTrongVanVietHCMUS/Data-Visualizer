@@ -6,12 +6,16 @@
 #include <iostream>
 #include <random> 
 #include <numeric> 
-#include <algorithm> 
+#include <algorithm>
 
-void Graph::Run() 
+
+
+void Graph::Run()
 {
     HandleToolBar();
     DrawToolBar();
+
+    HandleDragging();
     Draw();
 }
 
@@ -32,19 +36,19 @@ void Graph::Init()
     };
     toolBarButtons[2] = 
     {
-        {Vector2{17, 607}, 160, 35, (char *)"Insert"}
+        {Vector2{17, 607}, 160, 35, (char *)"Settings"}
     };
     toolBarButtons[3] = 
     {
-        {Vector2{17, 644}, 160, 35, (char *)"Delete"}
+        {Vector2{17, 644}, 160, 35, (char *)"Source"}
     };
     toolBarButtons[4] = 
     {
-        {Vector2{17, 681}, 160, 35, (char *)"Update"}
+        {Vector2{17, 681}, 160, 35, (char *)"Shortest Path"}
     };
     toolBarButtons[5] = 
     {
-        {Vector2{17, 718}, 160, 35, (char *)"Search"}
+        {Vector2{17, 718}, 160, 35, (char *)"MST"}
     };
     flagToolBarButtons.resize(6);
     for (int i = 0; i < 6; ++i) {
@@ -60,14 +64,14 @@ void Graph::Init()
     edges.clear();
     isLightMode = 1;
 
-    speed = 0.05;
+    speed = 0.01;
     myPresentation.Clear();
 }
 
 void Graph::UpdateGraph()
 {
     myPresentation.currentPresentation = 0;
-    myPresentation = BasicStructure(nodes);
+    myPresentation.present = {BasicStructure(nodes)};
 }
 
 void Graph::ClearAllData()
@@ -77,9 +81,12 @@ void Graph::ClearAllData()
     myPresentation.Clear();
 }
 
+#include <map>
+
 void Graph::RandomNewData()
 {
     ClearAllData();
+    UnFixGraph();
     int n = GetRandomValue(5, 30); 
     nodes.reserve(n);
     
@@ -91,6 +98,8 @@ void Graph::RandomNewData()
     }
     
     edges.clear();
+    std::map<std::pair<int, int>, int> edgeMap; // Lưu cạnh để tránh trùng
+    
     bool isConnectedGraph = (GetRandomValue(1, 100) <= 60); 
     
     if (isConnectedGraph) {
@@ -102,7 +111,7 @@ void Graph::RandomNewData()
             int u = availableNodes[i - 1];
             int v = availableNodes[i];
             int w = GetRandomValue(1, 999);
-            edges.emplace_back(u, v, w);
+            edgeMap[{std::min(u, v), std::max(u, v)}] = w;
         }
         
         int extraEdges = GetRandomValue(n / 2, n * 2);
@@ -111,7 +120,10 @@ void Graph::RandomNewData()
             int v = GetRandomValue(0, n - 1);
             if (u != v) {
                 int w = GetRandomValue(1, 999);
-                edges.emplace_back(u, v, w);
+                auto key = std::make_pair(std::min(u, v), std::max(u, v));
+                if (edgeMap.find(key) == edgeMap.end() || edgeMap[key] > w) {
+                    edgeMap[key] = w;
+                }
             }
         }
     } else {
@@ -127,7 +139,7 @@ void Graph::RandomNewData()
                 int u = group[i - 1];
                 int v = group[i];
                 int w = GetRandomValue(1, 999);
-                edges.emplace_back(u, v, w);
+                edgeMap[{std::min(u, v), std::max(u, v)}] = w;
             }
             
             int extraEdges = GetRandomValue(1, (int)group.size());
@@ -136,68 +148,71 @@ void Graph::RandomNewData()
                 int v = group[GetRandomValue(0, group.size() - 1)];
                 if (u != v) {
                     int w = GetRandomValue(1, 999);
-                    edges.emplace_back(u, v, w);
+                    auto key = std::make_pair(std::min(u, v), std::max(u, v));
+                    if (edgeMap.find(key) == edgeMap.end() || edgeMap[key] > w) {
+                        edgeMap[key] = w;
+                    }
                 }
             }
         }
     }
     
+    for (std::pair<std::pair<int, int>, int> tmp: edgeMap) {
+        edges.push_back({tmp.first.first, tmp.first.second, tmp.second});
+    }
+    
     UpdateGraph();
 }
 
+
 void Graph::InputDataFromFile()
 {
-    // ClearAllData();
+    ClearAllData();
 
-    // FilePathList droppedFiles = LoadDroppedFiles();
-    // char *filePath = new char[2048];
+    FilePathList droppedFiles = LoadDroppedFiles();
+    char *filePath = new char[2048];
 
-    // TextCopy(filePath, droppedFiles.paths[0]);
-    // UnloadDroppedFiles(droppedFiles);
+    TextCopy(filePath, droppedFiles.paths[0]);
+    UnloadDroppedFiles(droppedFiles);
 
-    // std::ifstream fin(filePath);
-    // std::string s;
-    // getline(fin, s);
+    std::ifstream fin(filePath);
+    std::string s;
+    getline(fin, s);
 
-    // int curValue = -1;
-    // for (char &c: s)
-    // {
-    //     if ('0' <= c && c <= '9')
-    //     {
-    //         if (curValue == -1) curValue = (c - '0'); else curValue = 10 * curValue + (c - '0');
-    //         continue;
-    //     }
-    //     if (curValue != -1)
-    //     {
-    //         values.push_back(curValue);
-    //         curValue = -1;
-    //     }
-    // }
-    // if (curValue != -1)
-    // {
-    //     values.push_back(curValue);
-    // }
-    // fin.close();
+    int curValue = -1;
+    for (char &c: s)
+    {
+        if ('0' <= c && c <= '9')
+        {
+            if (curValue == -1) curValue = (c - '0'); else curValue = 10 * curValue + (c - '0');
+            continue;
+        }
+        if (curValue != -1)
+        {
+            values.push_back(curValue);
+            curValue = -1;
+        }
+    }
+    if (curValue != -1)
+    {
+        values.push_back(curValue);
+    }
+    fin.close();
     // BuildBasicStructure();
 }
 
-Presentation Graph::BasicStructure(const std::vector<Node> &nodes)
+SetOfAnimation Graph::BasicStructure(const std::vector<Node> &nodes)
 {
-    Presentation basicStructure;
+    SetOfAnimation basicStructure;
     { 
-        basicStructure.CreateNewPresentation();
-        basicStructure.CreateNewSet(-1);
+        basicStructure.CreateNewSet();
         for (Node curNode: nodes) 
         {
-            basicStructure.InsertAnimationToSet(-1, -1, NewAnimation(0, 0, BLACK, {curNode}));
+            basicStructure.InsertAnimationToSet(-1, NewAnimation(0, 0, BLACK, {curNode}));
         }
         for (Edge &e: edges)
         {
-            basicStructure.InsertAnimationToSet(-1, -1, NewAnimation(4, 0, BLACK, {nodes[e.u], nodes[e.v]}, e.w, isDirected));
-            if (isDirected == false)
-            {
-                basicStructure.InsertAnimationToSet(-1, -1, NewAnimation(4, 0, BLACK, {nodes[e.v], nodes[e.u]}, e.w, isDirected));
-            }
+            basicStructure.InsertAnimationToSet(-1, NewAnimation(9, 0, BLACK, {nodes[e.u], nodes[e.v]}, e.w));
         }
     }
     return basicStructure;
@@ -226,24 +241,24 @@ void Graph::DrawToolBar()
             insertI.DrawTextBox();
             insertV.DrawTextBox();
         }
-        if (flagToolBarButtons[3][0] == true) // Delete
+        if (flagToolBarButtons[3][0] == true) // Source
         {
-            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2}, 40, 35, (char *)"v ="};
+            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2}, 40, 35, (char *)"s ="};
             v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
             insertV.DrawTextBox();
         }
-        if (flagToolBarButtons[4][0] == true) // Update
+        if (flagToolBarButtons[4][0] == true) // Path
         {
-            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 40, 35, (char *)"v ="};
-            Button i = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2}, 40, 35, (char *)"i ="};
+            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 40, 35, (char *)"u ="};
+            Button i = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2}, 40, 35, (char *)"v ="};
             i.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
             v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
             insertI.DrawTextBox();
             insertV.DrawTextBox();
         }
-        if (flagToolBarButtons[5][0] == true) // Search
+        if (flagToolBarButtons[5][0] == true) // MST
         {
-            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 40, 35, (char *)"v ="};
+            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 40, 35, (char *)"s ="};
             v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
             insertV.DrawTextBox();
         }
@@ -261,11 +276,314 @@ void Graph::DrawToolBar()
     }
 }
 
-std::vector<int> Graph::StringToVector(std::string listChar)
+void Graph::FixGraph()
 {
-    return {0};
+    isFixed = true;
+    UpdateGraph();
 }
 
+void Graph::UnFixGraph()
+{
+    isFixed = false;
+    UpdateGraph();
+}
+
+void Graph::MinimumSpanningTree(int source)
+{
+    FixGraph();
+    myPresentation = MinimumSpanningTreeAnimation(source);
+    myPresentation.currentPresentation = 0;
+}
+
+void Graph::ShortestPath(int start, int _end)
+{
+    FixGraph();
+    myPresentation = ShortestPathAnimation(start, _end);
+    myPresentation.currentPresentation = 0;
+}
+
+Presentation Graph::ShortestPathFromSourceAnimation(int source)
+{
+    Presentation shortestPath;
+    shortestPath.present = {BasicStructure(nodes)};
+
+    std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, std::greater<std::pair<int, int>>> pq;
+    int INF = 1e9 + 7;
+    std::vector<int> dist(int(nodes.size()), INF);
+    std::vector<int> lastWeight(int(nodes.size()), -1);
+    std::vector<int> lastUpdate(int(nodes.size()), -1);
+
+    --source;
+    dist[source] = 0;
+    pq.emplace(0, source);
+    while (pq.size()) 
+    {
+        int u = pq.top().second, du = pq.top().first;
+        pq.pop();
+        if (dist[u] != du) continue;
+        shortestPath.CopySetToLast(-1);
+        shortestPath.SetStartAnimation(-1, 1);
+        shortestPath.CreateNewSet(-1);
+        if (lastUpdate[u] != -1)
+        {
+            shortestPath.InsertAnimationToSet(-1, -1, NewAnimation(11, 0, ORANGE, {nodes[lastUpdate[u]], nodes[u]}, lastWeight[u]));
+        }
+        shortestPath.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, ORANGE, {nodes[u]}));
+
+        shortestPath.CopySetToLast(-1);
+        shortestPath.SetStartAnimation(-1, 1);
+        shortestPath.CreateNewSet(-1);
+        for (Edge &e: edges)
+        {
+            int from = e.u, to = e.v, weight = e.w;
+            if (from == u)
+            {
+                if (dist[to] > dist[from] + weight)
+                {
+                    shortestPath.InsertAnimationToSet(-1, -1, NewAnimation(11, 0, PINK, {nodes[from], nodes[to]}, weight));
+                    shortestPath.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, PINK, {nodes[to]}));
+                    dist[to] = dist[from] + weight;
+                    if (lastUpdate[to] != -1)
+                    {
+                        shortestPath.EraseAnimation(-1, NewAnimation(11, 0, PINK, {nodes[lastUpdate[to]], nodes[to]}, lastWeight[to]));
+                    }
+                    lastUpdate[to] = from;
+                    lastWeight[to] = weight;
+                    pq.emplace(dist[to], to);
+                }
+            }
+            std::swap(from, to);
+            if (from == u)
+            {
+                if (dist[to] > dist[from] + weight)
+                {
+                    shortestPath.InsertAnimationToSet(-1, -1, NewAnimation(11, 0, PINK, {nodes[from], nodes[to]}, weight));
+                    shortestPath.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, PINK, {nodes[to]}));
+                    dist[to] = dist[from] + weight;
+                    if (lastUpdate[to] != -1)
+                    {
+                        shortestPath.EraseAnimation(-1, NewAnimation(11, 0, PINK, {nodes[lastUpdate[to]], nodes[to]}, lastWeight[to]));
+                    }
+                    lastUpdate[to] = from;
+                    lastWeight[to] = weight;
+                    pq.emplace(dist[to], to);
+                }
+            }
+            std::swap(from, to);
+        }
+    }
+
+    return shortestPath;
+}
+
+Presentation Graph::ShortestPathAnimation(int start, int _end)
+{
+    Presentation shortestPath;
+    shortestPath.present = {BasicStructure(nodes)};
+
+    std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, std::greater<std::pair<int, int>>> pq;
+    int INF = 1e9 + 7;
+    std::vector<int> dist(int(nodes.size()), INF);
+    std::vector<int> lastWeight(int(nodes.size()), -1);
+    std::vector<int> lastUpdate(int(nodes.size()), -1);
+
+    --start;
+    --_end;
+    dist[start] = 0;
+    pq.emplace(0, start);
+    while (pq.size()) 
+    {
+        int u = pq.top().second, du = pq.top().first;
+        pq.pop();
+        if (dist[u] != du) continue;
+        shortestPath.CopySetToLast(-1);
+        shortestPath.SetStartAnimation(-1, 1);
+        shortestPath.CreateNewSet(-1);
+        if (lastUpdate[u] != -1)
+        {
+            shortestPath.InsertAnimationToSet(-1, -1, NewAnimation(11, 0, ORANGE, {nodes[lastUpdate[u]], nodes[u]}, lastWeight[u]));
+        }
+        shortestPath.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, ORANGE, {nodes[u]}));
+        if (u == _end)
+        {
+            shortestPath.CopySetToLast(-1);
+            shortestPath.SetStartAnimation(-1, 1);
+            shortestPath.CreateNewSet(-1);
+            while (u != start)
+            {
+                shortestPath.InsertAnimationToSet(-1, -1, NewAnimation(11, 0, BLUE, {nodes[lastUpdate[u]], nodes[u]}, lastWeight[u]));
+                shortestPath.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, BLUE, {nodes[u]}));
+                u = lastUpdate[u];
+            }
+            shortestPath.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, BLUE, {nodes[u]}));
+            return shortestPath;
+        }
+        
+        shortestPath.CopySetToLast(-1);
+        shortestPath.SetStartAnimation(-1, 1);
+        shortestPath.CreateNewSet(-1);
+        for (Edge &e: edges)
+        {
+            int from = e.u, to = e.v, weight = e.w;
+            if (from == u)
+            {
+                if (dist[to] > dist[from] + weight)
+                {
+                    shortestPath.InsertAnimationToSet(-1, -1, NewAnimation(11, 0, PINK, {nodes[from], nodes[to]}, weight));
+                    shortestPath.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, PINK, {nodes[to]}));
+                    dist[to] = dist[from] + weight;
+                    if (lastUpdate[to] != -1)
+                    {
+                        shortestPath.EraseAnimation(-1, NewAnimation(11, 0, PINK, {nodes[lastUpdate[to]], nodes[to]}, lastWeight[to]));
+                    }
+                    lastUpdate[to] = from;
+                    lastWeight[to] = weight;
+                    pq.emplace(dist[to], to);
+                }
+            }
+            std::swap(from, to);
+            if (from == u)
+            {
+                if (dist[to] > dist[from] + weight)
+                {
+                    shortestPath.InsertAnimationToSet(-1, -1, NewAnimation(11, 0, PINK, {nodes[from], nodes[to]}, weight));
+                    shortestPath.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, PINK, {nodes[to]}));
+                    dist[to] = dist[from] + weight;
+                    if (lastUpdate[to] != -1)
+                    {
+                        shortestPath.EraseAnimation(-1, NewAnimation(11, 0, PINK, {nodes[lastUpdate[to]], nodes[to]}, lastWeight[to]));
+                    }
+                    lastUpdate[to] = from;
+                    lastWeight[to] = weight;
+                    pq.emplace(dist[to], to);
+                }
+            }
+            std::swap(from, to);
+        }
+    }
+
+    shortestPath.present = {BasicStructure(nodes)};
+    return shortestPath;
+}
+
+Presentation Graph::MinimumSpanningTreeAnimation(int source)
+{
+    Presentation mst;
+    mst.present = {BasicStructure(nodes)};
+    for (SetOfAnimation &curSet: mst.present)
+    {
+        for (std::vector<NewAnimation> &vec: curSet.setOfAnimation)
+        {
+            for (NewAnimation &curAnimation: vec)
+            {
+                if (curAnimation.type == 9)
+                {
+                    curAnimation.color = Fade(isLightMode ? BLACK : WHITE, 0.2);
+                }
+            }
+        }
+    }
+
+    std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, std::greater<std::pair<int, int>>> pq;
+    std::vector<int> lastUpdate(int(nodes.size()), -1);
+    std::vector<int> lastWeight(int(nodes.size()), -1);
+    int INF = 1e9 + 7;
+    std::vector<int> dist(int(nodes.size()), INF);
+
+    --source;
+    dist[source] = 0;
+    pq.emplace(0, source);
+    while (pq.size())
+    {
+        int u = pq.top().second, du = pq.top().first; pq.pop();
+
+        if (du != dist[u]) continue;
+        dist[u] = -INF;
+        mst.CopySetToLast(-1);
+        mst.SetStartAnimation(-1, 1);
+        mst.CreateNewSet(-1);
+        if (lastUpdate[u] != -1)
+        {
+            mst.InsertAnimationToSet(-1, -1, NewAnimation(10, 0, ORANGE, {nodes[lastUpdate[u]], nodes[u]}, lastWeight[u]));
+        }
+        mst.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, ORANGE, {nodes[u]}));
+        
+        mst.CopySetToLast(-1);
+        mst.SetStartAnimation(-1, 1);
+        mst.CreateNewSet(-1);
+        for (Edge &e: edges)
+        {
+            int from = e.u, to = e.v, weight = e.w;
+            if (from == u)
+            {
+                if (dist[to] > -INF) 
+                {
+                    mst.InsertAnimationToSet(-1, -1, NewAnimation(9, 0, BLACK, {nodes[from], nodes[to]}, weight));
+                    int f = from, t = to;
+                    if (f > t) std::swap(f, t);
+                    mst.EraseAnimation(-1, NewAnimation(9, 0, Fade(isLightMode ? BLACK : WHITE, 0.2), {nodes[f], nodes[t]}));
+                }
+                if (dist[to] >  weight)
+                {
+                    dist[to] = weight;
+                    lastUpdate[to] = from;
+                    lastWeight[to] = weight;
+                    pq.emplace(dist[to], to);
+                }
+            }
+            std::swap(from, to);
+            if (from == u)
+            {
+                if (dist[to] > -INF) 
+                {
+                    mst.InsertAnimationToSet(-1, -1, NewAnimation(9, 0, BLACK, {nodes[from], nodes[to]}, weight));
+                    int f = from, t = to;
+                    if (f > t) std::swap(f, t);
+                    mst.EraseAnimation(-1, NewAnimation(9, 0, Fade(isLightMode ? BLACK : WHITE, 0.2), {nodes[f], nodes[t]}));
+                }
+                if (dist[to] > weight)
+                {
+                    dist[to] = weight;
+                    lastUpdate[to] = from;
+                    lastWeight[to] = weight;
+                    pq.emplace(dist[to], to);
+                }
+            }
+            std::swap(from, to);
+        }
+    }
+
+    return mst;
+}
+
+void Graph::ShortestPathFromSource(int source)
+{
+    FixGraph();
+    myPresentation = ShortestPathFromSourceAnimation(source);
+    myPresentation.currentPresentation = 0;
+}
+
+std::vector<int> Graph::StringToVector(std::string listChar)
+{
+    std::vector<int> values;
+    int cur = -1;
+    for (int i = 0; i < int(listChar.size()); ++i) 
+    {
+        if (listChar[i] == ' ' || listChar[i] == ',')
+        {
+            if (cur > -1) values.push_back(cur);
+            cur = -1;
+            continue;
+        }
+        cur = cur == -1 ? (listChar[i] - '0') : 10 * cur + (listChar[i] - '0');
+    }
+    if (cur > -1)
+    {
+        values.push_back(cur);
+    }
+    return values;
+}
+                     
 void Graph::HandleToolBar()
 {
     if (toolBarButtons[0][0].CheckMouseClickInRectangle()) // Open_Close Bar
@@ -375,7 +693,7 @@ void Graph::HandleToolBar()
     
             return;
         }
-        if (flagToolBarButtons[3][0] == true) // Delete
+        if (flagToolBarButtons[3][0] == true) // Source
         {
             std::string v = insertV.HandleTextBox();
             if (v.empty() == true) 
@@ -384,12 +702,11 @@ void Graph::HandleToolBar()
             }
             flagToolBarButtons[3][0] = false;
             int vValue = StringToVector(v)[0];
-
-            // Delete(vValue);
+            ShortestPathFromSource(vValue);
     
             return;
         }
-        if (flagToolBarButtons[4][0] == true) // Update
+        if (flagToolBarButtons[4][0] == true) // Path
         {
             std::string i = insertI.HandleTextBox();
             std::string v = insertV.HandleTextBox();
@@ -404,11 +721,12 @@ void Graph::HandleToolBar()
             flagToolBarButtons[4][0] = false;
             int iValue = StringToVector(i)[0];
             int vValue = StringToVector(v)[0];
-            // Update(iValue, vValue);
+            ShortestPath(iValue, vValue);
+
     
             return;
         }
-        if (flagToolBarButtons[5][0] == true) // Search
+        if (flagToolBarButtons[5][0] == true) // MST
         {
             std::string v = insertV.HandleTextBox();
             if (v.empty() == true) 
@@ -417,7 +735,7 @@ void Graph::HandleToolBar()
             }
             flagToolBarButtons[5][0] = false;
             int vValue = StringToVector(v)[0];
-            // Search(vValue);
+            MinimumSpanningTree(vValue);
     
             return;
         }
@@ -428,9 +746,11 @@ void Graph::HandleToolBar()
 
 void Graph::Draw() 
 {  
-    HandleDragging();
-    ApplyForces();
-    UpdateGraph();
+    if (isFixed == false)
+    {
+        ApplyForces();
+        UpdateGraph();
+    }
     myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, fontNumber, GetFontDefault(), isLightMode, speed);
 }
 

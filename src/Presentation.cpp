@@ -117,6 +117,22 @@ void Presentation::EraseAnimation(int positionPresentation, int positionSet, New
     present[positionPresentation].EraseAnimation(positionSet, animation);
 }
 
+void Presentation::EraseAnimation(int positionPresentation, NewAnimation animation)
+{
+    if (positionPresentation == -1) 
+    {
+        positionPresentation = int(present.size()) - 1;
+        if (positionPresentation < 0)
+        {
+            return;
+        }
+    }
+    for (int j = 0; j < int(present[positionPresentation].setOfAnimation.size()); ++j)
+    {
+        present[positionPresentation].EraseAnimation(j, animation);
+    }
+}
+
 void Presentation::InsertAnimationToSet(int positionPresentation, int positionSet, NewAnimation animation)
 {
     if (positionPresentation == -1) 

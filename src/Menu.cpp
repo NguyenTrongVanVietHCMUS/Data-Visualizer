@@ -25,8 +25,9 @@ void Menu::Init()
     toLightMode = LoadTexture("../Textures/ToLightMode.png");
 
     myList.Init();
+    myHeap.Init();
+    myTrie.Init();
     myGraph.Init();
-    myTrie.Init(); 
 }
 
 void Menu::Clear() 
@@ -81,7 +82,7 @@ void Menu::Run() {
             myList.Run();
         }
         if (dataStructure == 2) {
-            
+            myHeap.Run();
         }
         if (dataStructure == 3) 
         {

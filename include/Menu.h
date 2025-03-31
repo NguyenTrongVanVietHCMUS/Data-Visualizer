@@ -3,9 +3,10 @@
 #include "NewAnimation.h"
 #include "Button.h"
 #include "raylib.h"
-#include "Graph.h"
 #include "SinglyLinkedList.h"
+#include "Heap.h"
 #include "Trie.h"
+#include "Graph.h"
 class Menu
 {
     private:
@@ -18,6 +19,7 @@ class Menu
         
         SinglyLinkedList myList;
         Graph myGraph;
+        Heap myHeap;
         Trie myTrie;
 
         Color GetColorBackground();
