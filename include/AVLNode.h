@@ -15,5 +15,5 @@ class AVLNode
         std::set<std::pair<std::string,std::string>> EdgeSet() ;
         // AVLNode* rightRotate(std::string c ); 
         // AVLNode* leftRotate(std::string c ); 
-        AVLNode* clone() ; 
+        AVLNode* minNode() ; 
 };

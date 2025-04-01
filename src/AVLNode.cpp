@@ -35,10 +35,11 @@ std::set<std::pair<std::string,std::string>> AVLNode:: EdgeSet()
     go(this,go) ;
     return res ; 
 }
-AVLNode* AVLNode::clone()
+AVLNode* AVLNode::minNode()
 {
-    AVLNode* res= new AVLNode(CurrentPosition,c,height) ;
-    if(left)res=left->clone() ; 
-    if(right)res=right->clone() ;  
-    return res ;  
-}
+    AVLNode* current = this;
+    while (current && current->left) {
+        current = current->left;
+    }
+    return current;
+}   

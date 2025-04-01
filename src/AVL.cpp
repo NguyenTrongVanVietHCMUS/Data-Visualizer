@@ -592,8 +592,6 @@ Presentation AVL::InsertAnimation( std::string s )
             MoveNode(root,MoveNode) ; 
             RotateEdge(root,edgeset,RotateEdge) ;
             ResetNodesPosition(root) ; 
-            // insert.SetStartAnimation(-1,1) ; 
-            // AddNewEdge(root,edgeset,AddNewEdge) ; 
             insert.CopySetToLast(-1) ; 
             insert.SetStartAnimation(-1,1) ; 
             insert.present.push_back(BasicStructure(root)) ; 
@@ -610,21 +608,125 @@ void AVL::Insert(std::string s )
     myPresentation = InsertAnimation(s) ; 
 
 }
-Presentation AVL::DeleteAnimation(std::string s , Color color)
+Presentation AVL::DeleteAnimation(std::string s, Color color)
 {
-    Presentation _delete = SearchAnimation(s,color) ;
+    Presentation _delete;
+    if (!root) return _delete;
+
+    _delete.present = {BasicStructure(root)};
+    auto MoveNode=[&](AVLNode* node,auto&&MoveNode_ref)
+    {
+        if(!node)return ;    
+        _delete.InsertAnimationToSet(-1, -1,NewAnimation(8, 0, BLACK, {Node(node->CurrentPosition,20,node->c),Node(node->TargetedPosition,20,node->c)}));
+        if(node->left)
+        {
+            MoveNode_ref(node->left,MoveNode_ref) ; 
+        }
+        if(node->right)
+        {
+            MoveNode_ref(node->right,MoveNode_ref) ; 
+        }
+    } ; 
+    auto RotateEdge = [&](AVLNode* node,std::set<std::pair<std::string,std::string>>&exist,auto&& RotateEdge_ref)
+    {
+        if(!node)return  ; 
+        if(node->left)
+        {
+            if(exist.find({node->c,node->left->c})!=exist.end())_delete.InsertAnimationToSet(-1,-1, NewAnimation(7, 0, BLACK, {Node(node->CurrentPosition,20,node->c),Node(node->TargetedPosition,20,node->c),Node(node->left->CurrentPosition,20,node->left->c),Node(node->left->TargetedPosition,20,node->left->c)}));
+            RotateEdge_ref(node->left,exist,RotateEdge_ref) ; 
+        }
+        if(node->right)
+        {
+            if(exist.find({node->c,node->right->c})!=exist.end())_delete.InsertAnimationToSet(-1,-1, NewAnimation(7, 0, BLACK, {Node(node->CurrentPosition,20,node->c),Node(node->TargetedPosition,20,node->c),Node(node->right->CurrentPosition,20,node->right->c),Node(node->right->TargetedPosition,20,node->right->c)}));
+            RotateEdge_ref(node->right,exist,RotateEdge_ref) ; 
+        }
+    } ; 
+    auto DeleteNode = [&](AVLNode*& node, std::string c, auto&& DeleteNode_ref) -> void {
+        if (!node) return;
+        
+        // Animation before deleting node
+        _delete.CopySetToLast(-1) ; 
+        _delete.SetStartAnimation(-1,1) ; 
+        _delete.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, color, {Node(node->CurrentPosition, 20, node->c)}));
+        _delete.CopySetToLast(-1);
+        _delete.SetStartAnimation(-1, 1);
+        
+        if (stoi(c) < stoi(node->c)) {
+            DeleteNode_ref(node->left, c, DeleteNode_ref);
+        }
+        else if (stoi(c) > stoi(node->c)) {
+            DeleteNode_ref(node->right, c, DeleteNode_ref);
+        }
+        else {
+            // Node to be deleted is found
+            
+            // Case 1: Node has one or no child
+            if (!node->left) {
+                AVLNode* temp = node->right;
+                delete node;
+                node = temp;
+            }
+            else if (!node->right) {
+                AVLNode* temp = node->left;
+                delete node;
+                node = temp;
+            }
+            // Case 2: Node has two children
+            else {
+                // Find the in-order successor (smallest node in right subtree)
+                AVLNode* temp = node->right->minNode();
+                node->c = temp->c; // Copy the in-order successor's data
+                // Delete the in-order successor
+                DeleteNode_ref(node->right, temp->c, DeleteNode_ref);
+            }
+        }
+
+        // If the tree has only one node, just return
+        if (!node) return;
+        
+        // Update the height of the current node
+        node->height = 1 + std::max(height(node->left), height(node->right));
+        // Balance the node
+        int balance = getBalance(node);
+        _delete.CreateNewPresentation() ; 
+        _delete.CreateNewSet(-1) ; 
+        std::set<std::pair<std::string,std::string>> edgeset = root->EdgeSet()  ;
+
+        if (balance > 1 && getBalance(node->left) >= 0) {
+            node = rightRotate(node);
+        }
+        else if (balance < -1 && getBalance(node->right) <= 0) {
+            node = leftRotate(node);
+        }
+        else if (balance > 1 && getBalance(node->left) < 0) {
+            node->left = leftRotate(node->left);
+            node = rightRotate(node);
+        }
+        else if (balance < -1 && getBalance(node->right) > 0) {
+            node->right = rightRotate(node->right);
+            node = leftRotate(node);
+        }
+
+        // Update the position and handle the animation for movement
+
+        calcPosition(root);
+        MoveNode(root, MoveNode);
+        RotateEdge(root,edgeset,RotateEdge) ; 
+        ResetNodesPosition(root);
+        _delete.CopySetToLast(-1);
+        _delete.SetStartAnimation(-1, 1);
+        _delete.present.push_back(BasicStructure(root));
+    };
+    
+    DeleteNode(root, s, DeleteNode);
+
     return _delete;
 }
 
 void AVL::Delete(std::string s )
 {
     myPresentation.currentPresentation = 0 ; 
-    if(std::find(str.begin(),str.end(),s)==str.end())
-    {
-        myPresentation.present = {BasicStructure(root)};
-        return ; 
-    }
-    str.erase(std::find(str.begin(),str.end(),s)) ;
+    if(find(str.begin(),str.end(),s)!=str.end())str.erase(find(str.begin(),str.end(),s)) ; 
     myPresentation = DeleteAnimation(s,RED) ; 
 }
 
