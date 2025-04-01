@@ -3,9 +3,10 @@
 #include "NewAnimation.h"
 #include "Button.h"
 #include "raylib.h"
-#include "Graph.h"
 #include "SinglyLinkedList.h"
+#include "AVL.h" 
 #include "Trie.h"
+#include "Graph.h"
 class Menu
 {
     private:
@@ -19,7 +20,7 @@ class Menu
         SinglyLinkedList myList;
         Graph myGraph;
         Trie myTrie;
-
+        AVL myAVL;
         Color GetColorBackground();
         void DrawGradient(const bool isLightMode);
     public:

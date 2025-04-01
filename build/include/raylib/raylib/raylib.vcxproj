@@ -22,7 +22,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{3154FFA9-98C9-3780-9A42-2C5E2A22FECD}</ProjectGuid>
+    <ProjectGuid>{9AD9868A-C935-38DC-AD73-CA75B0D20C21}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
     <Platform>x64</Platform>
@@ -59,27 +59,27 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\Debug\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">V:\Data-Visualizer\build\include\raylib\raylib\Debug\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">raylib.dir\Debug\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">raylib</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.lib</TargetExt>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\Release\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">V:\Data-Visualizer\build\include\raylib\raylib\Release\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">raylib.dir\Release\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">raylib</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.lib</TargetExt>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\MinSizeRel\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">V:\Data-Visualizer\build\include\raylib\raylib\MinSizeRel\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">raylib.dir\MinSizeRel\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">raylib</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.lib</TargetExt>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\RelWithDebInfo\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">V:\Data-Visualizer\build\include\raylib\raylib\RelWithDebInfo\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">raylib.dir\RelWithDebInfo\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">raylib</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib.h;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raygui\src;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/include/raylib/src/external/glfw/include"</AdditionalOptions>
+      <AdditionalIncludeDirectories>V:\Data-Visualizer\include\raylib.h;V:\Data-Visualizer\include\raygui\src;V:\Data-Visualizer\include;V:\Data-Visualizer\include\raylib\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "V:/Data-Visualizer/include/raylib/src/external/glfw/include"</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -99,10 +99,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;PLATFORM_DESKTOP;GRAPHICS_API_OPENGL_33;_CRT_SECURE_NO_WARNINGS;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib.h;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raygui\src;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src\external\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>V:\Data-Visualizer\include\raylib.h;V:\Data-Visualizer\include\raygui\src;V:\Data-Visualizer\include;V:\Data-Visualizer\include\raylib\src;V:\Data-Visualizer\include\raylib\src\external\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib.h;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raygui\src;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src\external\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>V:\Data-Visualizer\include\raylib.h;V:\Data-Visualizer\include\raygui\src;V:\Data-Visualizer\include;V:\Data-Visualizer\include\raylib\src;V:\Data-Visualizer\include\raylib\src\external\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -115,8 +115,8 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib.h;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raygui\src;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/include/raylib/src/external/glfw/include"</AdditionalOptions>
+      <AdditionalIncludeDirectories>V:\Data-Visualizer\include\raylib.h;V:\Data-Visualizer\include\raygui\src;V:\Data-Visualizer\include;V:\Data-Visualizer\include\raylib\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "V:/Data-Visualizer/include/raylib/src/external/glfw/include"</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <ExceptionHandling>
@@ -137,10 +137,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;PLATFORM_DESKTOP;GRAPHICS_API_OPENGL_33;_CRT_SECURE_NO_WARNINGS;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib.h;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raygui\src;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src\external\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>V:\Data-Visualizer\include\raylib.h;V:\Data-Visualizer\include\raygui\src;V:\Data-Visualizer\include;V:\Data-Visualizer\include\raylib\src;V:\Data-Visualizer\include\raylib\src\external\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib.h;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raygui\src;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src\external\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>V:\Data-Visualizer\include\raylib.h;V:\Data-Visualizer\include\raygui\src;V:\Data-Visualizer\include;V:\Data-Visualizer\include\raylib\src;V:\Data-Visualizer\include\raylib\src\external\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -153,8 +153,8 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib.h;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raygui\src;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/include/raylib/src/external/glfw/include"</AdditionalOptions>
+      <AdditionalIncludeDirectories>V:\Data-Visualizer\include\raylib.h;V:\Data-Visualizer\include\raygui\src;V:\Data-Visualizer\include;V:\Data-Visualizer\include\raylib\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "V:/Data-Visualizer/include/raylib/src/external/glfw/include"</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <ExceptionHandling>
@@ -175,10 +175,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;PLATFORM_DESKTOP;GRAPHICS_API_OPENGL_33;_CRT_SECURE_NO_WARNINGS;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib.h;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raygui\src;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src\external\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>V:\Data-Visualizer\include\raylib.h;V:\Data-Visualizer\include\raygui\src;V:\Data-Visualizer\include;V:\Data-Visualizer\include\raylib\src;V:\Data-Visualizer\include\raylib\src\external\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib.h;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raygui\src;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src\external\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>V:\Data-Visualizer\include\raylib.h;V:\Data-Visualizer\include\raygui\src;V:\Data-Visualizer\include;V:\Data-Visualizer\include\raylib\src;V:\Data-Visualizer\include\raylib\src\external\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -191,8 +191,8 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib.h;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raygui\src;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/include/raylib/src/external/glfw/include"</AdditionalOptions>
+      <AdditionalIncludeDirectories>V:\Data-Visualizer\include\raylib.h;V:\Data-Visualizer\include\raygui\src;V:\Data-Visualizer\include;V:\Data-Visualizer\include\raylib\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "V:/Data-Visualizer/include/raylib/src/external/glfw/include"</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -212,10 +212,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;PLATFORM_DESKTOP;GRAPHICS_API_OPENGL_33;_CRT_SECURE_NO_WARNINGS;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib.h;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raygui\src;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src\external\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>V:\Data-Visualizer\include\raylib.h;V:\Data-Visualizer\include\raygui\src;V:\Data-Visualizer\include;V:\Data-Visualizer\include\raylib\src;V:\Data-Visualizer\include\raylib\src\external\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib.h;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raygui\src;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src\external\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>V:\Data-Visualizer\include\raylib.h;V:\Data-Visualizer\include\raygui\src;V:\Data-Visualizer\include;V:\Data-Visualizer\include\raylib\src;V:\Data-Visualizer\include\raylib\src\external\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -227,11 +227,11 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src\CMakeLists.txt">
+    <CustomBuild Include="V:\Data-Visualizer\include\raylib\src\CMakeLists.txt">
       <UseUtf8Encoding>Always</UseUtf8Encoding>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/include/raylib/src/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule V:/Data-Visualizer/include/raylib/src/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer -BC:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/build --check-stamp-file C:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/build/include/raylib/raylib/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SV:/Data-Visualizer -BV:/Data-Visualizer/build --check-stamp-file V:/Data-Visualizer/build/include/raylib/raylib/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -239,12 +239,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-3.31\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindOpenGL.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-3.31\Templates\CPackConfig.cmake.in;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\CompileDefinitions.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\GlfwImport.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\InstallConfigurations.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\JoinPaths.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\LibraryConfigurations.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\LibraryPathToLinkerFlags.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\PackConfigurations.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\PopulateConfigVariablesLocally.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\raylib-config-version.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\raylib.pc.in;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-3.31\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindOpenGL.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-3.31\Templates\CPackConfig.cmake.in;V:\Data-Visualizer\include\raylib\cmake\CompileDefinitions.cmake;V:\Data-Visualizer\include\raylib\cmake\GlfwImport.cmake;V:\Data-Visualizer\include\raylib\cmake\InstallConfigurations.cmake;V:\Data-Visualizer\include\raylib\cmake\JoinPaths.cmake;V:\Data-Visualizer\include\raylib\cmake\LibraryConfigurations.cmake;V:\Data-Visualizer\include\raylib\cmake\LibraryPathToLinkerFlags.cmake;V:\Data-Visualizer\include\raylib\cmake\PackConfigurations.cmake;V:\Data-Visualizer\include\raylib\cmake\PopulateConfigVariablesLocally.cmake;V:\Data-Visualizer\include\raylib\cmake\raylib-config-version.cmake;V:\Data-Visualizer\include\raylib\raylib.pc.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">V:\Data-Visualizer\build\include\raylib\raylib\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/include/raylib/src/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule V:/Data-Visualizer/include/raylib/src/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer -BC:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/build --check-stamp-file C:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/build/include/raylib/raylib/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SV:/Data-Visualizer -BV:/Data-Visualizer/build --check-stamp-file V:/Data-Visualizer/build/include/raylib/raylib/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -252,12 +252,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-3.31\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindOpenGL.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-3.31\Templates\CPackConfig.cmake.in;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\CompileDefinitions.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\GlfwImport.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\InstallConfigurations.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\JoinPaths.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\LibraryConfigurations.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\LibraryPathToLinkerFlags.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\PackConfigurations.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\PopulateConfigVariablesLocally.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\raylib-config-version.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\raylib.pc.in;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-3.31\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindOpenGL.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-3.31\Templates\CPackConfig.cmake.in;V:\Data-Visualizer\include\raylib\cmake\CompileDefinitions.cmake;V:\Data-Visualizer\include\raylib\cmake\GlfwImport.cmake;V:\Data-Visualizer\include\raylib\cmake\InstallConfigurations.cmake;V:\Data-Visualizer\include\raylib\cmake\JoinPaths.cmake;V:\Data-Visualizer\include\raylib\cmake\LibraryConfigurations.cmake;V:\Data-Visualizer\include\raylib\cmake\LibraryPathToLinkerFlags.cmake;V:\Data-Visualizer\include\raylib\cmake\PackConfigurations.cmake;V:\Data-Visualizer\include\raylib\cmake\PopulateConfigVariablesLocally.cmake;V:\Data-Visualizer\include\raylib\cmake\raylib-config-version.cmake;V:\Data-Visualizer\include\raylib\raylib.pc.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">V:\Data-Visualizer\build\include\raylib\raylib\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/include/raylib/src/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule V:/Data-Visualizer/include/raylib/src/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer -BC:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/build --check-stamp-file C:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/build/include/raylib/raylib/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SV:/Data-Visualizer -BV:/Data-Visualizer/build --check-stamp-file V:/Data-Visualizer/build/include/raylib/raylib/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -265,12 +265,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-3.31\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindOpenGL.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-3.31\Templates\CPackConfig.cmake.in;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\CompileDefinitions.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\GlfwImport.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\InstallConfigurations.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\JoinPaths.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\LibraryConfigurations.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\LibraryPathToLinkerFlags.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\PackConfigurations.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\PopulateConfigVariablesLocally.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\raylib-config-version.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\raylib.pc.in;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-3.31\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindOpenGL.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-3.31\Templates\CPackConfig.cmake.in;V:\Data-Visualizer\include\raylib\cmake\CompileDefinitions.cmake;V:\Data-Visualizer\include\raylib\cmake\GlfwImport.cmake;V:\Data-Visualizer\include\raylib\cmake\InstallConfigurations.cmake;V:\Data-Visualizer\include\raylib\cmake\JoinPaths.cmake;V:\Data-Visualizer\include\raylib\cmake\LibraryConfigurations.cmake;V:\Data-Visualizer\include\raylib\cmake\LibraryPathToLinkerFlags.cmake;V:\Data-Visualizer\include\raylib\cmake\PackConfigurations.cmake;V:\Data-Visualizer\include\raylib\cmake\PopulateConfigVariablesLocally.cmake;V:\Data-Visualizer\include\raylib\cmake\raylib-config-version.cmake;V:\Data-Visualizer\include\raylib\raylib.pc.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">V:\Data-Visualizer\build\include\raylib\raylib\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/include/raylib/src/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule V:/Data-Visualizer/include/raylib/src/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer -BC:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/build --check-stamp-file C:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/build/include/raylib/raylib/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SV:/Data-Visualizer -BV:/Data-Visualizer/build --check-stamp-file V:/Data-Visualizer/build/include/raylib/raylib/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -278,55 +278,55 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-3.31\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindOpenGL.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-3.31\Templates\CPackConfig.cmake.in;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\CompileDefinitions.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\GlfwImport.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\InstallConfigurations.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\JoinPaths.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\LibraryConfigurations.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\LibraryPathToLinkerFlags.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\PackConfigurations.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\PopulateConfigVariablesLocally.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\raylib-config-version.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\raylib.pc.in;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-3.31\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindOpenGL.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-3.31\Templates\CPackConfig.cmake.in;V:\Data-Visualizer\include\raylib\cmake\CompileDefinitions.cmake;V:\Data-Visualizer\include\raylib\cmake\GlfwImport.cmake;V:\Data-Visualizer\include\raylib\cmake\InstallConfigurations.cmake;V:\Data-Visualizer\include\raylib\cmake\JoinPaths.cmake;V:\Data-Visualizer\include\raylib\cmake\LibraryConfigurations.cmake;V:\Data-Visualizer\include\raylib\cmake\LibraryPathToLinkerFlags.cmake;V:\Data-Visualizer\include\raylib\cmake\PackConfigurations.cmake;V:\Data-Visualizer\include\raylib\cmake\PopulateConfigVariablesLocally.cmake;V:\Data-Visualizer\include\raylib\cmake\raylib-config-version.cmake;V:\Data-Visualizer\include\raylib\raylib.pc.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">V:\Data-Visualizer\build\include\raylib\raylib\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src\raudio.c" />
-    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src\rcore.c" />
-    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src\rmodels.c" />
-    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src\rshapes.c" />
-    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src\rtext.c" />
-    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src\rtextures.c" />
-    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src\utils.c" />
-    <Object Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\context.obj" />
-    <Object Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\init.obj" />
-    <Object Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\input.obj" />
-    <Object Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\monitor.obj" />
-    <Object Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\platform.obj" />
-    <Object Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\vulkan.obj" />
-    <Object Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\window.obj" />
-    <Object Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\egl_context.obj" />
-    <Object Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\osmesa_context.obj" />
-    <Object Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\null_init.obj" />
-    <Object Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\null_monitor.obj" />
-    <Object Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\null_window.obj" />
-    <Object Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\null_joystick.obj" />
-    <Object Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\win32_module.obj" />
-    <Object Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\win32_time.obj" />
-    <Object Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\win32_thread.obj" />
-    <Object Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\win32_init.obj" />
-    <Object Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\win32_joystick.obj" />
-    <Object Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\win32_monitor.obj" />
-    <Object Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\win32_window.obj" />
-    <Object Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\wgl_context.obj" />
-    <ClInclude Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src\raylib.h" />
-    <ClInclude Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src\rcamera.h" />
-    <ClInclude Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src\rlgl.h" />
-    <ClInclude Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\src\raymath.h" />
+    <ClCompile Include="V:\Data-Visualizer\include\raylib\src\raudio.c" />
+    <ClCompile Include="V:\Data-Visualizer\include\raylib\src\rcore.c" />
+    <ClCompile Include="V:\Data-Visualizer\include\raylib\src\rmodels.c" />
+    <ClCompile Include="V:\Data-Visualizer\include\raylib\src\rshapes.c" />
+    <ClCompile Include="V:\Data-Visualizer\include\raylib\src\rtext.c" />
+    <ClCompile Include="V:\Data-Visualizer\include\raylib\src\rtextures.c" />
+    <ClCompile Include="V:\Data-Visualizer\include\raylib\src\utils.c" />
+    <Object Include="V:\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\context.obj" />
+    <Object Include="V:\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\init.obj" />
+    <Object Include="V:\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\input.obj" />
+    <Object Include="V:\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\monitor.obj" />
+    <Object Include="V:\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\platform.obj" />
+    <Object Include="V:\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\vulkan.obj" />
+    <Object Include="V:\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\window.obj" />
+    <Object Include="V:\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\egl_context.obj" />
+    <Object Include="V:\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\osmesa_context.obj" />
+    <Object Include="V:\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\null_init.obj" />
+    <Object Include="V:\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\null_monitor.obj" />
+    <Object Include="V:\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\null_window.obj" />
+    <Object Include="V:\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\null_joystick.obj" />
+    <Object Include="V:\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\win32_module.obj" />
+    <Object Include="V:\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\win32_time.obj" />
+    <Object Include="V:\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\win32_thread.obj" />
+    <Object Include="V:\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\win32_init.obj" />
+    <Object Include="V:\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\win32_joystick.obj" />
+    <Object Include="V:\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\win32_monitor.obj" />
+    <Object Include="V:\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\win32_window.obj" />
+    <Object Include="V:\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.dir\$(Configuration)\wgl_context.obj" />
+    <ClInclude Include="V:\Data-Visualizer\include\raylib\src\raylib.h" />
+    <ClInclude Include="V:\Data-Visualizer\include\raylib\src\rcamera.h" />
+    <ClInclude Include="V:\Data-Visualizer\include\raylib\src\rlgl.h" />
+    <ClInclude Include="V:\Data-Visualizer\include\raylib\src\raymath.h" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\ZERO_CHECK.vcxproj">
-      <Project>{3982F94C-E275-3CD0-85CC-904941D1E0B0}</Project>
+    <ProjectReference Include="V:\Data-Visualizer\build\ZERO_CHECK.vcxproj">
+      <Project>{6DBFC80C-24B6-39B9-AFB3-06E5B171C855}</Project>
       <Name>ZERO_CHECK</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.vcxproj">
-      <Project>{8E7B6B00-F989-3097-8951-4ADEC4996792}</Project>
+    <ProjectReference Include="V:\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.vcxproj">
+      <Project>{0325E3F5-E506-311C-863C-0097A969A904}</Project>
       <Name>glfw</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
