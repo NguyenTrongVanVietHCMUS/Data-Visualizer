@@ -47,6 +47,7 @@ void AVL::Init()
     for (int i = 0; i < 6; ++i) {
         flagToolBarButtons[i].assign(toolBarButtons[i].size(), false);
     }
+    flagToolBarButtons[0][0] = true ; 
 
     // enterList.Init();
     enterList.oldWidth = 80;

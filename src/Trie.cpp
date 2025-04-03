@@ -47,7 +47,7 @@ void Trie::Init()
     for (int i = 0; i < 6; ++i) {
         flagToolBarButtons[i].assign(toolBarButtons[i].size(), false);
     }
-
+    flagToolBarButtons[0][0] = true ; 
     // enterList.Init();
     enterList.oldWidth = 80;
     enterList.textBox = {Vector2{425 + 80 + 2, 570}, 80, 35};
