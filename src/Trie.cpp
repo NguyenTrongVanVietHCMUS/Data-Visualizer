@@ -472,7 +472,7 @@ Presentation Trie::DeleteAnimation(std::string s , Color color)
     Presentation _delete = SearchAnimation(s,color) ;
     ResetNodesPosition(root) ; 
     {
-        root->sl = 971419208;
+        root->sl = 971419248;
         auto DelNode =[&](TrieNode* node, Vector2 cur,auto&& DelNode_ref,std::string&s , int pos)->void
         {
             if(!node)return ; 

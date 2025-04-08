@@ -11,6 +11,14 @@ bool Button::CheckMouseClickInRectangle()
     return CheckMouseInRectangle() && IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
 }
 
+void Button::DrawButtonTexture()
+{
+    Color curColor = SKYBLUE;
+    if (CheckMouseInRectangle()) 
+    curColor = Fade(curColor, 0.2);
+    DrawTexture(texture, position.x, position.y, curColor);
+}
+
 void Button::DrawText(Font font, int fontSize, Color textColor)
 {
     Vector2 textSize = MeasureTextEx(font, text, fontSize, 1);

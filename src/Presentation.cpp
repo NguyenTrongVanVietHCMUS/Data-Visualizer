@@ -50,7 +50,7 @@ void Presentation::SetStartAnimation(int positionPresentation, float startAnimat
     }
     for (int i = 0; i < int(present[positionPresentation].setOfAnimation.size()); ++i)
     {
-        present[positionPresentation].SetCurAnimation(i, startAnimation);
+        present[positionPresentation].SetStartAnimation(i, startAnimation);
     }
 }
 
@@ -115,6 +115,22 @@ void Presentation::EraseAnimation(int positionPresentation, int positionSet, New
         }
     }
     present[positionPresentation].EraseAnimation(positionSet, animation);
+}
+
+void Presentation::EraseAnimation(int positionPresentation, NewAnimation animation)
+{
+    if (positionPresentation == -1) 
+    {
+        positionPresentation = int(present.size()) - 1;
+        if (positionPresentation < 0)
+        {
+            return;
+        }
+    }
+    for (int j = 0; j < int(present[positionPresentation].setOfAnimation.size()); ++j)
+    {
+        present[positionPresentation].EraseAnimation(j, animation);
+    }
 }
 
 void Presentation::InsertAnimationToSet(int positionPresentation, int positionSet, NewAnimation animation)
@@ -189,10 +205,71 @@ NewAnimation Presentation::GetAnimation(int positionPresentation, int positionSe
 
 void Presentation::DrawPresentation(const Texture2D &hollowCircle, const Texture2D &solidCircle, const Texture2D &arrowEdge, const Font &fontValue, const Font &fontText, const bool &isLightMode, const float &speed)
 {
-    if (present.empty() == false)
+    if (!present.empty())
     {
         currentPresentation = std::min(currentPresentation, int(present.size()) - 1);
-        currentPresentation += present[currentPresentation].DrawSetOfAnimation(hollowCircle, solidCircle, arrowEdge, fontValue, fontText, isLightMode, speed) == true;
+        currentPresentation += present[currentPresentation].DrawSetOfAnimation(hollowCircle, solidCircle, arrowEdge, fontValue, fontText, isLightMode, speed, list, position, width, height, numberOfPresentation) == true;
 
+    }
+}
+
+
+
+int Presentation::CountNumberOfAnimation()
+{
+    int res = 0;
+    for (SetOfAnimation &curSet: present)
+    {
+        for (std::vector<NewAnimation> &curGroup: curSet.setOfAnimation) 
+        {
+            bool flag = false;
+            for (NewAnimation &curAnimation: curGroup) 
+            {
+                if (curAnimation.type > 1 && curAnimation.type != 4 && curAnimation.startAnimation != 1)
+                {
+                    flag = true;
+                }
+            }
+            res += flag;
+        }
+    }
+    return res;
+}
+
+void Presentation::InitBoardText(const std::vector<std::string> &_list, Vector2 _postition, float _width, float _height)
+{
+    list = _list;
+    position = _postition;
+    width = _width;
+    height = _height;
+}
+
+void Presentation::SetAllhighlightLines(int startPresentation, int endPresentation, std::vector<int> listHighlights)
+{
+    if (startPresentation == -1) 
+    {
+        startPresentation = int(present.size()) - 1;
+        if (startPresentation < 0)
+        {
+            return;
+        }
+    }
+    if (endPresentation == -1) 
+    {
+        endPresentation = int(present.size()) - 1;
+        if (endPresentation < 0)
+        {
+            return;
+        }
+    }
+    for (int i = startPresentation; i <= endPresentation; ++i)  
+    {
+        for (std::vector<NewAnimation> &curGroup: present[i].setOfAnimation)
+        {
+            for (NewAnimation &curAnimation: curGroup)
+            {
+                curAnimation.listHighlights = listHighlights;
+            }
+        }
     }
 }

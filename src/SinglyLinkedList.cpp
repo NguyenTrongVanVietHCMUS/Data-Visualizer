@@ -9,7 +9,11 @@ void SinglyLinkedList::Run()
 {
     HandleToolBar();
     DrawToolBar();
+
     Draw();
+
+    HandleRemote();
+    DrawRemote();
 }
 
 void SinglyLinkedList::Init()
@@ -17,31 +21,31 @@ void SinglyLinkedList::Init()
     toolBarButtons.resize(6);
     toolBarButtons[0] = 
     {
-        {Vector2{0, 570}, 15, 183, (char *)"Open_Close"}
+        {Vector2{0, 570 - 50}, 15, 183, (char *)"Open_Close"}
     };
     toolBarButtons[1] = 
     {
-        {Vector2{17, 570}, 160, 35, (char *)"Create"},
-        {Vector2{179, 570}, 80, 35, (char *)"Empty"},
-        {Vector2{261, 570}, 80, 35, (char *)"Random"},
-        {Vector2{343, 570}, 80, 35, (char *)"File"},
-        {Vector2{425, 570}, 80, 35, (char *)"Enter"},
+        {Vector2{17, 570 - 50}, 160, 35, (char *)"Create"},
+        {Vector2{179, 570 - 50}, 80, 35, (char *)"Empty"},
+        {Vector2{261, 570 - 50}, 80, 35, (char *)"Random"},
+        {Vector2{343, 570 - 50}, 80, 35, (char *)"File"},
+        {Vector2{425, 570 - 50}, 80, 35, (char *)"Enter"},
     };
     toolBarButtons[2] = 
     {
-        {Vector2{17, 607}, 160, 35, (char *)"Insert"}
+        {Vector2{17, 607 - 50}, 160, 35, (char *)"Insert"}
     };
     toolBarButtons[3] = 
     {
-        {Vector2{17, 644}, 160, 35, (char *)"Delete"}
+        {Vector2{17, 644 - 50}, 160, 35, (char *)"Delete"}
     };
     toolBarButtons[4] = 
     {
-        {Vector2{17, 681}, 160, 35, (char *)"Update"}
+        {Vector2{17, 681 - 50}, 160, 35, (char *)"Update"}
     };
     toolBarButtons[5] = 
     {
-        {Vector2{17, 718}, 160, 35, (char *)"Search"}
+        {Vector2{17, 718 - 50}, 160, 35, (char *)"Search"}
     };
     flagToolBarButtons.resize(6);
     for (int i = 0; i < 6; ++i) {
@@ -50,8 +54,8 @@ void SinglyLinkedList::Init()
 
     // enterList.Init();
     enterList.oldWidth = 80;
-    enterList.textBox = {Vector2{425 + 80 + 2, 570}, 80, 35};
-    enterList.confirm = {Vector2{425 + 80 + 2, 570 + 35 + 2}, 80, 35, (char *)"Confirm"};
+    enterList.textBox = {Vector2{425 + 80 + 2, 570 - 50}, 80, 35};
+    enterList.confirm = {Vector2{425 + 80 + 2, 570 + 35 + 2 - 50}, 80, 35, (char *)"Confirm"};
 
     flagToolBarButtons.resize(6);
     for (int i = 0; i < 6; ++i) {
@@ -62,7 +66,63 @@ void SinglyLinkedList::Init()
     values.clear();
     isLightMode = 1;
 
-    speed = 0.05;
+    speed = 0.03;
+
+
+    remoteButtons.resize(7);
+    remoteButtons[0] = {{71, 754}, 31, 34, (char*)"undo"};
+    remoteButtons[1] = {{132, 757}, 43, 31, (char*)"pre"};
+    remoteButtons[2] = {{272, 757}, 44, 32, (char*)"next"};
+    remoteButtons[3] = {{350, 754}, 31, 34, (char*)"redo"};
+    remoteButtons[4] = {{202, 747}, 44, 50, (char*)"pause"};
+    remoteButtons[5] = {{205, 750}, 37, 47, (char*)"continue"};
+    remoteButtons[6] = {{198, 743}, 52, 54, (char*)"repeat"};
+
+    flagRemote.assign(7, true);
+    flagRemote[5] = false;
+    flagRemote[6] = false;
+    for (int i = 0; i < 7; ++i)
+    {
+        remoteButtons[i].texture = remoteTextures[i];
+    }
+
+    createList = {
+        "Create new SinglyLinkedList!"
+    };
+    searchList = {
+        "if (!pHead || pHead->value == value) return pHead;",
+        "Node *cur = pHead;",
+        "while (cur != nullptr) {",
+        "   if (cur->value == value) return cur;",
+        "   cur = cur->pNext;",
+        "}",
+        "return nullptr;"
+    };
+    updateList = {
+        "Node *cur = pHead;",
+        "while (!cur && k > 0) {",
+        "   k -= 1;",
+        "   cur = cur->pNext;",
+        "}",
+        "cur->value = value;"
+    };
+    insertList = {
+        "if (pHead == nullptr)",
+        "   return new Node(value);",
+        "if (k == 0)",
+        "   return new Node(value, pHead);",
+        "Node *cur = pHead, prev = nullptr;",
+        "while (!cur && k > 0) {",
+        "   k -= 1;",
+        "   prev = cur",
+        "   cur = cur->pNext;",
+        "}",
+        "prev->pNext = new Node(value, cur);",
+        "return pHead;"
+    };
+    positionBoard = Vector2{1600 - 400, 800 - 300};
+    width = 400;
+    height = 300;
 }
 
 std::vector<Node> SinglyLinkedList::BuildNodeFromValue(const std::vector<std::string> &values)
@@ -85,7 +145,7 @@ Presentation SinglyLinkedList::CreateAnimation(const std::vector<Node> &nodes)
         create.CreateNewSet(-1);
         for (Node curNode: nodes) 
         {
-            create.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {curNode}));
+            create.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {curNode}, 0, {0}));
         }
     }
     { // Insert all edges
@@ -94,7 +154,7 @@ Presentation SinglyLinkedList::CreateAnimation(const std::vector<Node> &nodes)
         create.CreateNewSet(-1);
         for (int i = 1; i < int(nodes.size()); ++i) 
         {
-            create.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, GREEN, {nodes[i - 1], nodes[i]}));
+            create.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, GREEN, {nodes[i - 1], nodes[i]}, 0, {0}));
         }
     }
     { // Remove animations
@@ -102,19 +162,19 @@ Presentation SinglyLinkedList::CreateAnimation(const std::vector<Node> &nodes)
         create.CreateNewSet(-1);
         for (Node curNode: nodes) 
         {
-            create.InsertAnimationToSet(-1, -1, NewAnimation(0, 0, BLACK, {curNode}));
+            create.InsertAnimationToSet(-1, -1, NewAnimation(0, 0, BLACK, {curNode}, 0, {0}));
         }
         for (int i = 1; i < int(nodes.size()); ++i) 
         {
-            create.InsertAnimationToSet(-1, -1, NewAnimation(4, 0, BLACK, {nodes[i - 1], nodes[i]}));
+            create.InsertAnimationToSet(-1, -1, NewAnimation(4, 0, BLACK, {nodes[i - 1], nodes[i]}, 0, {0}));
         }
         for (Node curNode: nodes) 
         {
-            create.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, GREEN, {curNode}));
+            create.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, GREEN, {curNode}, 0, {0}));
         }
         for (int i = 1; i < int(nodes.size()); ++i) 
         {
-            create.InsertAnimationToSet(-1, -1, NewAnimation(6, 0, GREEN, {nodes[i - 1], nodes[i]}));
+            create.InsertAnimationToSet(-1, -1, NewAnimation(6, 0, GREEN, {nodes[i - 1], nodes[i]}, 0, {0}));
         }
     }
     return create;
@@ -125,6 +185,7 @@ void SinglyLinkedList::BuildCreateAnimation()
     nodes = BuildNodeFromValue(values);
     myPresentation.currentPresentation = 0;
     myPresentation = CreateAnimation(nodes);
+    myPresentation.InitBoardText(createList, positionBoard, width, height);
 }
 
 int SinglyLinkedList::FindPosition(std::string value)
@@ -211,6 +272,14 @@ Presentation SinglyLinkedList::SearchAnimation(int pos, Color color)
 {
     Presentation search;
     search.present = {BasicStructure(nodes)};
+    search.CopySetToLast(-1);
+    search.CreateNewSet(-1);
+    search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {0}));
+    if (nodes.size() && pos == 0)
+    {
+        search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, color, {nodes[0]}, 0, {0}));
+        return search;
+    }
     {
         for (int i = 0; i < int(nodes.size()); ++i)
         {
@@ -218,20 +287,29 @@ Presentation SinglyLinkedList::SearchAnimation(int pos, Color color)
             search.SetStartAnimation(-1, 1);
             if (i > 0)
             {
-                search.EraseAnimation(-1, -1, NewAnimation(2, 0, (i - 1 == pos ? color : ORANGE), {nodes[i - 1]}));
+                search.EraseAnimation(-1, NewAnimation(2, 0, ORANGE, {nodes[i - 1]}, 0));
                 search.CreateNewSet(-1);
-                search.InsertAnimationToSet(-1, -1, NewAnimation(0, 0, ORANGE, {nodes[i - 1]}));
-                search.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, ORANGE, {nodes[i - 1]}));
-                search.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {nodes[i - 1], nodes[i]}));
-                search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, (i == pos ? color : ORANGE), {nodes[i]}));
+                search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {2}));
+                search.InsertAnimationToSet(-1, -1, NewAnimation(0, 0, ORANGE, {nodes[i - 1]}, 0, {2}));
+                search.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, ORANGE, {nodes[i - 1]}, 0, {2}));
+                search.CreateNewSet(-1);
+                search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {3}));
+                search.CreateNewSet(-1);
+                search.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {nodes[i - 1], nodes[i]}, 0, {4}));
+                search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, (i == pos ? color : ORANGE), {nodes[i]}, 0, {4}));
             }
             else 
             {
                 search.CreateNewSet(-1);
-                search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, (i == pos ? color : ORANGE), {nodes[i]}));
+                search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {1}));
+                search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, (i == pos ? color : ORANGE), {nodes[i]}, 0, {1}));
             }
             if (i == pos) 
             {
+                search.CreateNewSet(-1);
+                search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {2}));
+                search.CreateNewSet(-1);
+                search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {3}));
                 return search;
             }
         }
@@ -240,11 +318,16 @@ Presentation SinglyLinkedList::SearchAnimation(int pos, Color color)
     {
         search.CopySetToLast(-1);
         search.SetStartAnimation(-1, 1);
-        search.EraseAnimation(-1, -1, NewAnimation(2, 0, ORANGE, {nodes.back()}));
+        search.EraseAnimation(-1, -1, NewAnimation(2, 0, ORANGE, {nodes.back()}, 0, {}));
 
         search.CreateNewSet(-1);
         search.InsertAnimationToSet(-1, -1, NewAnimation(0, 0, ORANGE, {nodes.back()}));
         search.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, ORANGE, {nodes.back()}));
+        search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {2}));
+
+        search.CreateNewSet(-1);
+        search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {6}));
+        
     }
     return search;
 }
@@ -254,27 +337,62 @@ void SinglyLinkedList::Search(std::string val)
     nodes = BuildNodeFromValue(values);
     int pos = FindPosition(val);
     myPresentation = SearchAnimation(pos, BLUE);
+    myPresentation.InitBoardText(searchList, positionBoard, width, height);
 }
 
 Presentation SinglyLinkedList::UpdateAnimation(int pos, std::string val)
 {
     Presentation update;
-    update = SearchAnimation(pos, BLUE);
+    Color color = BLUE;
+
+    update.present = {BasicStructure(nodes)};
+    update.CopySetToLast(-1);
+    {
+        for (int i = 0; i < int(nodes.size()); ++i)
+        {
+            update.CopySetToLast(-1);
+            update.SetStartAnimation(-1, 1);
+            if (i > 0)
+            {
+                update.EraseAnimation(-1, NewAnimation(2, 0, ORANGE, {nodes[i - 1]}));
+                update.CreateNewSet(-1);
+                update.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {1}));
+                update.InsertAnimationToSet(-1, -1, NewAnimation(0, 0, ORANGE, {nodes[i - 1]}, 0, {1}));
+                update.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, ORANGE, {nodes[i - 1]}, 0, {1}));
+                update.CreateNewSet(-1);
+                update.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {2}));
+                update.CreateNewSet(-1);
+                update.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {nodes[i - 1], nodes[i]}, 0, {3}));
+                update.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, (i == pos ? color : ORANGE), {nodes[i]}, 0, {3}));
+            }
+            else 
+            {
+                update.CreateNewSet(-1);
+                update.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {0}));
+                update.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, (i == pos ? color : ORANGE), {nodes[i]}, 0, {0}));
+            }
+            if (i == pos) 
+            {
+                update.CreateNewSet(-1);
+                update.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {1}));
+                break;
+            }
+        }
+    }
 
     update.CopySetToLast(-1);
     update.SetStartAnimation(-1, 1);
     update.EraseAnimation(-1, 0, NewAnimation(0, 0, BLACK, {nodes[pos]}));
     
-    NewAnimation animation = update.GetAnimation(-1, -1, -1);
-    update.EraseAnimation(-1, -1, animation);
+    NewAnimation animation = NewAnimation(2, 0, color, {nodes[pos]});
+    update.EraseAnimation(-1, animation);
 
+    update.CreateNewSet(-1);
     animation.type = 3;
     animation.color = BLUE;
     animation.curAnimation = 0;
+    animation.listHighlights = {5};
     update.InsertAnimationToSet(-1, -1, animation);
-
-    update.CopySetToLast(-1);
-    update.SetStartAnimation(-1, 1);
 
     animation.type = 2;
     animation.color = GREEN;
@@ -287,10 +405,21 @@ Presentation SinglyLinkedList::UpdateAnimation(int pos, std::string val)
 
 void SinglyLinkedList::Update(int pos, std::string val)
 {
-    if (pos >= int(nodes.size())) return;
     nodes = BuildNodeFromValue(values);
     myPresentation.currentPresentation = 0;
+    if (pos >= int(nodes.size())) 
+    {
+        myPresentation.present = {BasicStructure(nodes)};
+        myPresentation.CopySetToLast(-1);
+        myPresentation.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {0}));
+        std::vector<std::string> outSideRange = {
+            "The position is out side of range!!"  
+        };
+        myPresentation.InitBoardText(outSideRange, positionBoard, width, height);
+        return;   
+    }
     myPresentation = UpdateAnimation(pos, val);
+    myPresentation.InitBoardText(updateList, positionBoard, width, height);
     values[pos] = val;
     nodes[pos].value = val;
 }
@@ -298,105 +427,143 @@ void SinglyLinkedList::Update(int pos, std::string val)
 Presentation SinglyLinkedList::InsertAnimation(int pos, std::string val)
 {
     Presentation insert;
- 
-    if (pos == int(nodes.size()))
-    { 
-        if (nodes.empty() == true)
+    Color color = BLUE;
+
+    insert.present = {BasicStructure(nodes)};
+    insert.CopySetToLast(-1);
+
+    insert.CreateNewSet(-1);
+    insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {0}));
+
+    if (nodes.empty() == true)
+    {
+        insert.CreateNewSet(-1);
+        insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {1}));
+        insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {Node(Vector2{100.0f, 180.0f}, 20, val)}, 0, {1}));
+        return insert;
+    } 
+
+    insert.CreateNewSet(-1);
+    insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {2}));
+
+    if (pos == 0)
+    {
+        Node newNode(Vector2{nodes[0].position.x, nodes[0].position.y + 80.f}, 20, val);
+        insert.CopySetToLast(-1);
+        insert.CreateNewSet(-1);
+        insert.SetStartAnimation(-1, 1);
+        insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {newNode}, 0, {3}));
+        insert.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {newNode, nodes[0]}, 0, {3}));
+        
+        insert.CreateNewPresentation();
+        insert.CreateNewSet(-1);
+        std::vector<Node> tmpNodes = nodes;
+        tmpNodes.push_back(Node(Vector2{nodes.back().position.x + 80.f, nodes.back().position.y}, 20, val));
+
+        insert.InsertAnimationToSet(-1, -1, NewAnimation(8, 0, GREEN, {newNode, nodes[0]}, 0, {3}));
+        for (int i = 0; i < int(tmpNodes.size()) - 1; ++i)
         {
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(8, 0, BLACK, {tmpNodes[i], tmpNodes[i + 1]}, 0, {3}));
+        }
+        insert.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, ORANGE, {newNode, tmpNodes[0], tmpNodes[0], tmpNodes[1]}, 0, {3}));
+        for (int i = 0; i < int(tmpNodes.size()) - 2; ++i)
+        {
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, BLACK, {tmpNodes[i], tmpNodes[i + 1], tmpNodes[i + 1], tmpNodes[i + 2]}, 0, {3}));
+        }
+
+        return insert;
+    }
+
+    for (int i = 0; i < int(nodes.size()); ++i)
+    {
+        insert.CopySetToLast(-1);
+        insert.SetStartAnimation(-1, 1);
+        if (i > 0)
+        {
+            insert.EraseAnimation(-1, NewAnimation(2, 0, ORANGE, {nodes[i - 1]}));
+            insert.CreateNewSet(-1);
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {5}));
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(0, 0, ORANGE, {nodes[i - 1]}, 0, {5}));
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, ORANGE, {nodes[i - 1]}, 0, {5}));
+            insert.CreateNewSet(-1);
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {6}));
+            insert.CreateNewSet(-1);
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {7}));
+            insert.CreateNewSet(-1);
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {nodes[i - 1], nodes[i]}, 0, {8}));
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, (i == pos ? color : ORANGE), {nodes[i]}, 0, {8}));
+        }
+        else 
+        {
+            insert.CreateNewSet(-1);
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {4}));
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, (i == pos ? color : ORANGE), {nodes[i]}, 0, {4}));
+        }
+        if (i == pos) 
+        {
+            insert.CopySetToLast(-1);
+            insert.CreateNewSet(-1);
+            insert.SetStartAnimation(-1, 1);
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {5}));
+
+            Node newNode(Vector2{nodes[pos].position.x, nodes[pos].position.y + 80.f}, 20, val);
+            insert.CreateNewSet(-1);
+            insert.SetStartAnimation(-1, 1);
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {newNode}, 0, {10}));
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {nodes[pos - 1], newNode}, 0, {10}));
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {newNode, nodes[pos]}, 0, {10}));
+            insert.EraseAnimation(-1, NewAnimation(4, 0, BLACK, {nodes[pos - 1], nodes[pos]}, 0, {10}));
+            insert.EraseAnimation(-1, NewAnimation(5, 0, ORANGE, {nodes[pos - 1], nodes[pos]}, 0, {10}));
+
             insert.CreateNewPresentation();
             insert.CreateNewSet(-1);
-            insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {Node(Vector2{100.0f, 180.0f}, 20, val)}));
-        } 
-        else
-        {
-            insert = SearchAnimation(-1, BLUE);
-            insert.CopySetToLast(-1);
-            insert.SetStartAnimation(-1, 1);
-            insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {Node(Vector2{nodes.back().position.x + 100.0f, nodes.back().position.y}, 20, val)}));
-            insert.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {nodes.back(), Node(Vector2{nodes.back().position.x + 100.0f, nodes.back().position.y}, 20, val)}));
-        }
-    } 
-    else
-    {
-        insert = SearchAnimation(pos, BLUE);
-        
-        { // Move edge, Insert new node, Insert new Edge
-            insert.CopySetToLast(-1);
-            insert.SetStartAnimation(-1, 1);
-
-            NewAnimation tmpAnimation = insert.GetAnimation(-1, -1, -1);
-            insert.EraseAnimation(-1, -1, insert.GetAnimation(-1, -1, -1));
-            if (pos > 0)
+            for (int i = 0; i < pos; ++i)
             {
-                insert.EraseAnimation(-1, -1, insert.GetAnimation(-1, -1, -1));
-            }
-            insert.InsertAnimationToSet(-1, -1, tmpAnimation);
-            if (pos > 0) 
-            {
-                insert.EraseAnimation(-1, 0, NewAnimation(4, 0, BLACK, {nodes[pos - 1], nodes[pos]}));
-            }
-            Node newNode(Vector2{nodes[pos].position.x, nodes[pos].position.y + 100.0f}, 20, val);
-            insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {newNode}));
-            insert.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {newNode, nodes[pos]}));
-            if (pos > 0)
-            {
-                insert.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, ORANGE, {nodes[pos - 1], nodes[pos - 1], nodes[pos], newNode}));
-            }
-            
-        }
-    
-        { // Move new node, nodes[pos], ... nodes.back()
-            insert.CopySetToLast(-1);
-            insert.SetStartAnimation(-1, 1);
-    
-            for (int i = int(nodes.size()) - 2; i >= pos; --i)
-            {
-                insert.EraseAnimation(-1, 0, NewAnimation(4, 0, BLACK, {nodes[i], nodes[i + 1]}));
-            }
-            for (int i = int(nodes.size()) - 1; i >= pos; --i)
-            {
-                insert.EraseAnimation(-1, 0, NewAnimation(0, 0, BLACK, {nodes[i]}));
-            }
-            
-            {
-                Node newNode(Vector2{nodes[pos].position.x, nodes[pos].position.y + 100.0f}, 20, val);
-                if (pos > 0)
+                insert.InsertAnimationToSet(-1, -1, NewAnimation(0, 0, BLACK, {nodes[i]}, 0, {10}));
+                if (i + 1 < pos)
                 {
-                    insert.EraseAnimation(-1, -1, NewAnimation(7, 0, ORANGE, {nodes[pos - 1], nodes[pos - 1], nodes[pos], newNode}));
+                    insert.InsertAnimationToSet(-1, -1, NewAnimation(4, 0, BLACK, {nodes[i], nodes[i + 1]}, 0, {10}));
                 }
-                insert.EraseAnimation(-1, -1, NewAnimation(5, 0, ORANGE, {newNode, nodes[pos]}));
-                insert.EraseAnimation(-1, -1, NewAnimation(2, 0, GREEN, {newNode}));          
             }
-            
-            { // Delete BLUE node
-                insert.EraseAnimation(-1, pos + 1, NewAnimation(2, 0, BLUE, {nodes[pos]}));    
-            }
-    
-            Node newNode(Vector2{nodes[pos].position.x, nodes[pos].position.y + 100.0f}, 20, val);
-            Node lastNode = nodes.back();
-            lastNode.position.x += 100.f;
-    
-            // Remember to remove nodes.back()
-            nodes.push_back(lastNode);
-            
-            insert.CreateNewSet(-1);
-            insert.InsertAnimationToSet(-1, -1, NewAnimation(8, 0, GREEN, {newNode, nodes[pos]}));
-            insert.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, ORANGE, {newNode, nodes[pos], nodes[pos], nodes[pos + 1]}));
-            if (pos > 0)
-            {
-                insert.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, ORANGE, {nodes[pos - 1], nodes[pos - 1], newNode, nodes[pos]}));
-            }
+            nodes.push_back(Node(Vector2{nodes.back().position.x + 80.f, nodes.back().position.y}, 20, val));
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, ORANGE, {nodes[pos - 1], nodes[pos - 1], newNode, nodes[pos]}, 0, {10}));
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, ORANGE, {newNode, nodes[pos], nodes[pos], nodes[pos + 1]}, 0, {10}));
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(8, 0, ORANGE, {newNode, nodes[pos]}, 0, {10}));
+
             for (int i = pos; i < int(nodes.size()) - 1; ++i)
             {
-                insert.InsertAnimationToSet(-1, -1, NewAnimation(8, 0, (i == pos ? BLUE : BLACK), {nodes[i], nodes[i + 1]}));
-                if (i < int(nodes.size()) - 2) {
-                    insert.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, BLACK, {nodes[i], nodes[i + 1], nodes[i + 1], nodes[i + 2]}));
+                insert.InsertAnimationToSet(-1, -1, NewAnimation(8, 0, BLACK, {nodes[i], nodes[i + 1]}, 0, {10}));
+                if (i + 1 < int(nodes.size()) - 1)
+                {
+                    insert.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, BLACK, {nodes[i], nodes[i + 1], nodes[i + 1], nodes[i + 2]}, 0, {10}));
                 }
-            }
-    
+            }  
+
             nodes.pop_back();
+            insert.CreateNewSet(-1);
+            insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {11}));
+
+            return insert;
         }
     }
+
+    if (pos == int(nodes.size()))
+    { 
+        insert.CopySetToLast(-1);
+        insert.SetStartAnimation(-1, 1);
+        insert.EraseAnimation(-1, NewAnimation(2, 0, ORANGE, {nodes.back()}));
+        insert.CreateNewSet(-1);
+        insert.InsertAnimationToSet(-1, -1, NewAnimation(0, 0, ORANGE, {nodes.back()}, 0, {5}));
+        insert.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, ORANGE, {nodes.back()}, 0, {5}));
+
+        insert.CreateNewSet(-1);
+        insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {Node(Vector2{nodes.back().position.x + 80.0f, nodes.back().position.y}, 20, val)}, 0, {10}));
+        insert.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {nodes.back(), Node(Vector2{nodes.back().position.x + 80.0f, nodes.back().position.y}, 20, val)}, 0, {10}));
+
+        insert.CreateNewSet(-1);
+        insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {11}));        
+    } 
+ 
 
     return insert;
 }
@@ -407,6 +574,7 @@ void SinglyLinkedList::Insert(int pos, std::string val)
     pos = std::min(pos, int(nodes.size()));
     myPresentation.currentPresentation = 0;
     myPresentation = InsertAnimation(pos, val);
+    myPresentation.InitBoardText(insertList, positionBoard, width, height);
     values.insert(values.begin() + pos, val);
     nodes = BuildNodeFromValue(values);
 }
@@ -524,7 +692,7 @@ void SinglyLinkedList::Delete(std::string val)
 void SinglyLinkedList::DrawToolBar()
 {
     toolBarButtons[0][0].DrawButton(0.3, 0.1, LIME, true); 
-    DrawTextureEx(flagToolBarButtons[0][0] == false ? toolBarRightArrow : toolBarLeftArrow, Vector2{2.5, 570 + 183.0 / 2 - 16.0 / 2}, 0, 1, WHITE);
+    DrawTextureEx(flagToolBarButtons[0][0] == false ? toolBarRightArrow : toolBarLeftArrow, Vector2{2.5, 570 - 50 + 183.0 / 2 - 16.0 / 2}, 0, 1, WHITE);
     if (flagToolBarButtons[1][3] == true) 
     {
         DrawTextureEx(dropFile, Vector2{float(GetScreenWidth() / 2.0 - 354.25), float(GetScreenHeight() / 2.0 - 200)}, 0, 0.5, Fade(LIME, 0.8));
@@ -537,8 +705,8 @@ void SinglyLinkedList::DrawToolBar()
         }
         if (flagToolBarButtons[2][0] == true) // Insert
         {
-            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2}, 40, 35, (char *)"v ="};
-            Button i = {Vector2{17 + 160 + 2, 607}, 40, 35, (char *)"i ="};
+            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2 - 50}, 40, 35, (char *)"v ="};
+            Button i = {Vector2{17 + 160 + 2, 607 - 50}, 40, 35, (char *)"i ="};
             i.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
             v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
             insertI.DrawTextBox();
@@ -546,14 +714,14 @@ void SinglyLinkedList::DrawToolBar()
         }
         if (flagToolBarButtons[3][0] == true) // Delete
         {
-            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2}, 40, 35, (char *)"v ="};
+            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2 - 50}, 40, 35, (char *)"v ="};
             v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
             insertV.DrawTextBox();
         }
         if (flagToolBarButtons[4][0] == true) // Update
         {
-            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 40, 35, (char *)"v ="};
-            Button i = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2}, 40, 35, (char *)"i ="};
+            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2 + 35 + 2 - 50}, 40, 35, (char *)"v ="};
+            Button i = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2 - 50}, 40, 35, (char *)"i ="};
             i.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
             v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
             insertI.DrawTextBox();
@@ -561,7 +729,7 @@ void SinglyLinkedList::DrawToolBar()
         }
         if (flagToolBarButtons[5][0] == true) // Search
         {
-            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 40, 35, (char *)"v ="};
+            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2 + 35 + 2 - 50}, 40, 35, (char *)"v ="};
             v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
             insertV.DrawTextBox();
         }
@@ -577,6 +745,11 @@ void SinglyLinkedList::DrawToolBar()
             }
         }
     }
+}
+
+void SinglyLinkedList::HandleRemote()
+{
+    
 }
 
 void SinglyLinkedList::HandleToolBar()
@@ -596,6 +769,7 @@ void SinglyLinkedList::HandleToolBar()
             for (int j = 0; j < int(toolBarButtons[i].size()); ++j) 
             {
                 if (toolBarButtons[i][j].CheckMouseClickInRectangle()) {
+                    if (j != 0 && flagToolBarButtons[i][0] == false) continue;
                     for (int i = 1; i < 6; ++i) 
                     {
                         std::fill(flagToolBarButtons[i].begin() + (j > 0), flagToolBarButtons[i].end(), false);
@@ -604,34 +778,34 @@ void SinglyLinkedList::HandleToolBar()
                     if (i == 2 && j == 0)
                     {
                         insertI.oldWidth = 60;
-                        insertI.textBox = {Vector2{17 + 160 + 2 + 35, 607}, 60, 35};
-                        insertI.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
+                        insertI.textBox = {Vector2{17 + 160 + 2 + 35, 607 - 50}, 60, 35};
+                        insertI.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 - 50}, 60, 35, (char *)"Confirm"};
 
                         insertV.oldWidth = 60;
-                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2}, 60, 35};
-                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
+                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 - 50}, 60, 35};
+                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 - 50}, 60, 35, (char *)"Confirm"};
                     }
                     if (i == 3 && j == 0)
                     {
                         insertV.oldWidth = 60;
-                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2}, 60, 35};
-                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
+                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 - 50}, 60, 35};
+                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 - 50}, 60, 35, (char *)"Confirm"};
                     }
                     if (i == 4 && j == 0)
                     {
                         insertI.oldWidth = 60;
-                        insertI.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2}, 60, 35};
-                        insertI.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
+                        insertI.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 - 50}, 60, 35};
+                        insertI.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2 - 50}, 60, 35, (char *)"Confirm"};
 
                         insertV.oldWidth = 60;
-                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35};
-                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
+                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 - 50}, 60, 35};
+                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2 - 50}, 60, 35, (char *)"Confirm"};
                     }
                     if (i == 5 && j == 0)
                     {
                         insertV.oldWidth = 60;
-                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35};
-                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
+                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 - 50}, 60, 35};
+                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2 - 50}, 60, 35, (char *)"Confirm"};
                     }
                 }
             }
@@ -748,7 +922,41 @@ void SinglyLinkedList::HandleToolBar()
 
 void SinglyLinkedList::Draw() 
 {  
-    myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, fontNumber, GetFontDefault(), isLightMode, speed);
+    myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, fontNumber, robotoFont, isLightMode, speed);
+    std::cerr << myPresentation.numberOfPresentation << ' ' << myPresentation.CountNumberOfAnimation() << '\n';
+}
+
+void SinglyLinkedList::DrawRemote()
+{
+    for (int i = 0; i < 4; ++i)
+    {
+        if (flagRemote[i] == true) 
+        {
+            remoteButtons[i].DrawButtonTexture();
+        }
+    }
+    remoteButtons[4 + curRemoteState].DrawButtonTexture();
+
+    const int screenWidth = 1600;
+    const int screenHeight = 800;
+
+    // Toạ độ & kích thước thanh slider
+    int sliderX = 450;                 // Cách trái xa hơn để né trọn bộ điều khiển
+    int sliderY = screenHeight - 30;   // Gần đáy
+    int sliderWidth = screenWidth - 450 - 450; // Ngắn bên phải lại (100px)
+    int sliderHeight = 8;
+
+    float progress = myPresentation.numberOfPresentation / (float)myPresentation.CountNumberOfAnimation();
+
+    // Vẽ thanh slider
+    DrawRectangle(sliderX, sliderY, sliderWidth, sliderHeight, DARKGRAY);
+    DrawRectangle(sliderX, sliderY, sliderWidth * progress, sliderHeight, SKYBLUE);
+
+    // Vẽ nút trượt
+    int handleRadius = 10;
+    int handleX = sliderX + (int)(sliderWidth * progress);
+    int handleY = sliderY + sliderHeight / 2;
+    DrawCircle(handleX, handleY, handleRadius, SKYBLUE);
 }
 
 std::vector<int> SinglyLinkedList::StringToVector(std::string listChar)

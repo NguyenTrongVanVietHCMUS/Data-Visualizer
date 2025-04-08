@@ -5,6 +5,7 @@
 #include "raylib.h"
 #include "SinglyLinkedList.h"
 #include "AVL.h" 
+#include "Heap.h"
 #include "Trie.h"
 #include "Graph.h"
 class Menu
@@ -19,6 +20,7 @@ class Menu
         
         SinglyLinkedList myList;
         Graph myGraph;
+        Heap myHeap;
         Trie myTrie;
         AVL myAVL;
         Color GetColorBackground();

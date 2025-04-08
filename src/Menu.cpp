@@ -7,10 +7,10 @@ void Menu::Init()
 
     buttons = new Button[8];
     buttons[0] = {Vector2{250, 250}, 300, 180, (char *)"LINK LIST "};
-    buttons[1] = {Vector2{650, 250}, 300, 180, (char *)"AVL"};
+    buttons[1] = {Vector2{650, 250}, 300, 180, (char *)"HEAP"};
     buttons[2] = {Vector2{1050, 250}, 300, 180, (char *)"TRIE"};
-    buttons[3] = {Vector2{250, 500}, 300, 180, (char *)"Four"};
-    buttons[4] = {Vector2{650, 500}, 300, 180, (char *)"Five"};   
+    buttons[3] = {Vector2{250, 500}, 300, 180, (char *)"AVL"};
+    buttons[4] = {Vector2{650, 500}, 300, 180, (char *)"GRAPH"};   
     buttons[5] = {Vector2{1050, 500}, 300, 180, (char *)"Six"};
     buttons[6] = {Vector2{1532, 12}, 48, 48, (char *)"Seven"};
     buttons[7] = {Vector2{20, 12}, 48, 48, (char *)"Eight"};
@@ -25,9 +25,10 @@ void Menu::Init()
     toLightMode = LoadTexture("../Textures/ToLightMode.png");
 
     myList.Init();
+    myHeap.Init();
+    myTrie.Init();
     myAVL.Init() ; 
     myGraph.Init();
-    myTrie.Init(); 
 }
 
 void Menu::Clear() 
@@ -82,14 +83,14 @@ void Menu::Run() {
             myList.Run();
         }
         if (dataStructure == 2) {
-            myAVL.Run() ; 
+            myHeap.Run();
         }
         if (dataStructure == 3) 
         {
             myTrie.Run();
         }
         if (dataStructure == 4) {
-        
+            myAVL.Run(); 
         }
         if (dataStructure == 5) {
             myGraph.Run();

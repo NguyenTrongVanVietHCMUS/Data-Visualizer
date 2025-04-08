@@ -15,8 +15,6 @@ file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Fonts
 add_executable(
      ${PROJECT_NAME}
      src/main.cpp 
-     src/DataStructure.cpp 
-     src/SinglyLinkedList.cpp
      src/Menu.cpp
      src/NewAnimation.cpp
      src/Button.cpp 
@@ -24,8 +22,11 @@ add_executable(
      src/Textbox.cpp 
      src/SetOfAnimation.cpp
      src/Presentation.cpp
-     src/Graph.cpp
+     src/DataStructure.cpp 
+     src/SinglyLinkedList.cpp
+     src/Heap.cpp
      src/Trie.cpp 
+     src/Graph.cpp
      src/AVL.cpp
      src/AVLNode.cpp 
      )
