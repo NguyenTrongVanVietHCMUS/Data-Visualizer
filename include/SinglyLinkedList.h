@@ -28,21 +28,27 @@ class SinglyLinkedList : public DataStructure
         Presentation SearchAnimation(int val, Color color);
         Presentation CreateAnimation(const std::vector<Node> &nodes);
 
+        int CountNumberOfAnimation();
+
         void Run();
         void Init();
         void Clear();
-        
-        
-        
-
-        void DrawToolBar();
-        void HandleToolBar();
-        
-        
-        
-        
-        
 
         void Draw();
+        void DrawRemote();
+        void HandleRemote();
+        void DrawToolBar();
+        void HandleToolBar();
+    
         
+
+
+        std::vector<std::string> createList;
+        std::vector<std::string> searchList;
+        std::vector<std::string> updateList;
+        std::vector<std::string> insertList;
+        std::vector<std::string> deleteList;
+        std::vector<std::string> notFound;
+        Vector2 positionBoard;
+        float width, height;
 };

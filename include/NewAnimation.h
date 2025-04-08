@@ -23,7 +23,8 @@ class NewAnimation
         float curAnimation, startAnimation = 0;
         std::vector<Node> nodes;
         int weight;
-        bool isDirected;
+        std::vector<int> listHighlights;
+        
 
         Vector2 CalculateWeightPosition(const Vector2 &newStart, const Vector2 &newEnd);
         
@@ -42,8 +43,9 @@ class NewAnimation
         bool DrawInsertGraphEdgeAnimation(const Color &color, const Font &fontNumber, const bool &isLightMode, float &curAnimation, const float &speed);
         bool DrawInsertGraphDirectedEdgeAnimation(const Texture2D &texture, const Color &color, const Font &fontNumber, const bool &isLightMode, float &curAnimation, const float &speed);
 
-        NewAnimation(int _type = 0, float _curAnimation = 0, Color _color = BLACK, std::vector<Node> _nodes = {}, int _weight = 0, bool _isDirected = false) : 
-            type(_type), curAnimation(_curAnimation), color(_color), nodes(_nodes), weight(_weight), isDirected(_isDirected) {}
         void Init(int _type, const std::vector<Node> &_nodes);
         bool DrawAnimation(const Texture2D &hollowCircle, const Texture2D &solidCircle, const Texture2D &arrowEdge, const Font &fontNumber, const Font &fontText, const bool &isLightMode, const float &speed);
+
+        NewAnimation(int _type = 0, float _curAnimation = 0, Color _color = BLACK, std::vector<Node> _nodes = {}, int _weight = 0, std::vector<int> _list = {}) : 
+            type(_type), curAnimation(_curAnimation), color(_color), nodes(_nodes), weight(_weight), listHighlights(_list) {}
 };

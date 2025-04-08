@@ -21,10 +21,27 @@ class DataStructure
         Texture2D arrowEdge = LoadTexture("../Textures/ArrowEdge.png");
         Font robotoFont = LoadFont("../Fonts/Roboto_Condensed-SemiBold.ttf");
         Font fontNumber = LoadFont("../Fonts/InterBold.ttf");
+        Texture2D remoteTextures[7] = 
+        {
+            LoadTexture("../Textures/undo.png"),
+            LoadTexture("../Textures/pre.png"),
+            LoadTexture("../Textures/next.png"),
+            LoadTexture("../Textures/redo.png"),
+            LoadTexture("../Textures/pause.png"), 
+            LoadTexture("../Textures/continue.png"),
+            LoadTexture("../Textures/repeat.png")
+        };
+        std::vector<Button> remoteButtons;
+        std::vector<bool> flagRemote;
+        int curRemoteState = 0; 
+        // 0 -> continue
+        // 1 -> pause
+        // 2 -> repeat
+        
         
         std::vector<std::vector<bool>> flagToolBarButtons;
         std::vector<std::vector<Button>> toolBarButtons;
-        // std::vector<Button> removeButtons;
+        
 
         std::vector<Node> nodes;
         int isLightMode;

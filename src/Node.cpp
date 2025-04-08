@@ -35,8 +35,11 @@ bool Node::DrawInsertNodeAnimation(const Texture2D &textureNode, const Font &fon
         flag = true;
         curAnimation = 1;
     }
-    DrawSolidNode(textureNode, Fade(color, curAnimation), isLightMode);
-    DrawTextNode(fontValue, Fade((isLightMode ? BLACK : WHITE), curAnimation), isLightMode);
+    if (ColorIsEqual(color, Fade(BLACK, 0)) == false) 
+    {
+        DrawSolidNode(textureNode, Fade(color, curAnimation), isLightMode);
+        DrawTextNode(fontValue, Fade((isLightMode ? BLACK : WHITE), curAnimation), isLightMode);
+    }
     return flag;
 }
 

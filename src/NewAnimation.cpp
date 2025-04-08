@@ -17,12 +17,14 @@ void NewAnimation::DrawNormalEdge(const Texture &arrowEdge, const bool &isLightM
 
     Vector2 unitDir = {direction.x / length, direction.y / length};
     Vector2 newStart = {startPos.x + unitDir.x * radius, startPos.y + unitDir.y * radius};
-    Vector2 newEnd = {float(endPos.x - unitDir.x * (radius + 5)), float(endPos.y - unitDir.y * (radius + 5))};
+    Vector2 newEnd = {endPos.x - unitDir.x * radius, endPos.y - unitDir.y * radius}; // Adjusted to stop at node boundary
     DrawLineEx(newStart, newEnd, 3.0f, curColor);
 
+    // Calculate angle and arrow position
     float angle = atan2f(direction.y, direction.x) * RAD2DEG;
-    Vector2 arrowPos = {newEnd.x - unitDir.x * 4, newEnd.y - unitDir.y * 4};
-    DrawTexturePro(arrowEdge, {0, 0, 15, 11}, {arrowPos.x, arrowPos.y, 15, 11}, {7.5, 5.5}, angle, curColor);
+    // Position the arrow so its tip is at newEnd
+    Vector2 arrowPos = {newEnd.x - unitDir.x * 8, newEnd.y - unitDir.y * 8}; // Offset by half texture width (8) to align tip
+    DrawTexturePro(arrowEdge, {0, 0, 16, 12}, {arrowPos.x, arrowPos.y, 16, 12}, {8, 6}, angle, curColor);
 }
 
 void NewAnimation::DrawHollowNode(const Texture2D &hollowCircle, const Font &fontNumber, const bool &isLightMode)
@@ -103,7 +105,7 @@ bool NewAnimation::DrawInsertEdgeAnimation(const Texture &arrowEdge, const Color
 
     float angle = atan2f(direction.y, direction.x) * RAD2DEG;
     Vector2 arrowPos = {newCur.x - unitDir.x * 4, newCur.y - unitDir.y * 4};
-    DrawTexturePro(arrowEdge, {0, 0, 15, 11}, {arrowPos.x, arrowPos.y, 15, 11}, {7.5, 5.5}, angle, curColor);
+    DrawTexturePro(arrowEdge, {0, 0, 16, 12}, {arrowPos.x, arrowPos.y, 16, 12}, {8, 6}, angle, curColor);
 
     return flag;
 }
@@ -136,7 +138,7 @@ bool NewAnimation::DrawDeleteEdgeAnimation(const Texture2D &arrowEdge, const Col
     newEnd = {endPos.x - unitDir.x * (radius + 5), endPos.y - unitDir.y * (radius + 5)};
     float angle = atan2f(direction.y, direction.x) * RAD2DEG;
     Vector2 arrowPos = {newEnd.x - unitDir.x * 4, newEnd.y - unitDir.y * 4};
-    DrawTexturePro(arrowEdge, {0, 0, 15, 11}, {arrowPos.x, arrowPos.y, 15, 11}, {7.5, 5.5}, angle, Fade(color, 1 - curAnimation));
+    DrawTexturePro(arrowEdge, {0, 0, 16, 12}, {arrowPos.x, arrowPos.y, 16, 12}, {8, 6}, angle, Fade(color, 1 - curAnimation));
 
     return flag;
 }
@@ -176,7 +178,7 @@ bool NewAnimation::DrawMoveEdgeAnimation(const Texture2D &arrowEdge, const Color
 
     float angle = atan2f(direction.y, direction.x) * RAD2DEG;
     Vector2 arrowPos = {newEnd.x - unitDir.x * 4, newEnd.y - unitDir.y * 4};
-    DrawTexturePro(arrowEdge, {0, 0, 15, 11}, {arrowPos.x, arrowPos.y, 15, 11}, {7.5, 5.5}, angle, curColor);
+    DrawTexturePro(arrowEdge, {0, 0, 16, 12}, {arrowPos.x, arrowPos.y, 16, 12}, {8, 6}, angle, curColor);
 
     return flag;
 }
@@ -299,7 +301,7 @@ bool NewAnimation::DrawInsertGraphDirectedEdgeAnimation(const Texture2D &arrowEd
 
     float angle = atan2f(direction.y, direction.x) * RAD2DEG;
     Vector2 arrowPos = {newCur.x - unitDir.x * 4, newCur.y - unitDir.y * 4};
-    DrawTexturePro(arrowEdge, {0, 0, 15, 11}, {arrowPos.x, arrowPos.y, 15, 11}, {7.5, 5.5}, angle, curColor);
+    DrawTexturePro(arrowEdge, {0, 0, 16, 12}, {arrowPos.x, arrowPos.y, 16, 12}, {8, 6}, angle, curColor);
 
     // Hiển thị trọng số khi cạnh gần hoàn thành (>= 80%)
     if (curAnimation > 0.8f) {
