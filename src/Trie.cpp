@@ -47,7 +47,7 @@ void Trie::Init()
     for (int i = 0; i < 6; ++i) {
         flagToolBarButtons[i].assign(toolBarButtons[i].size(), false);
     }
-
+    flagToolBarButtons[0][0] = true ; 
     // enterList.Init();
     enterList.oldWidth = 80;
     enterList.textBox = {Vector2{425 + 80 + 2, 570}, 80, 35};
@@ -502,6 +502,70 @@ Presentation Trie::DeleteAnimation(std::string s , Color color)
             }
         };
         DelNode(root,{0,0},DelNode,s,0) ;
+        auto calcPosition = [&](TrieNode *root,auto&& calcPosition_ref)->Vector2 
+        {
+            Vector2 width = {0, 0};
+            std::vector<Vector2> widthList;
+            std::vector<TrieNode*> queue;
+            for (auto &child : root->children)if(child->sl)
+            {
+                queue.push_back(child);
+                widthList.push_back(calcPosition_ref(child,calcPosition_ref));
+            }
+            if (queue.size() == 0) return width;
+            int mid1, mid2;
+            if (queue.size() % 2 == 0) {
+                mid1 = queue.size() / 2 - 1;
+                mid2 = queue.size() / 2;
+                queue[mid1]->setTargetedPosition({- (widthList[mid1].y + xOFFSET / 2), yOFFSET});
+                queue[mid2]->setTargetedPosition({widthList[mid2].x + xOFFSET / 2, yOFFSET});
+                width.x = widthList[mid1].x + widthList[mid1].y + xOFFSET / 2;
+                width.y = widthList[mid2].x + widthList[mid2].y + xOFFSET / 2;
+            } else {
+                mid1 = queue.size() / 2;
+                mid2 = queue.size() / 2;
+                queue[mid1]->setTargetedPosition({0, yOFFSET});
+                width = widthList[mid1];
+            }
+            for (int i = mid1 - 1; i >= 0; i--) {
+                queue[i]->setTargetedPosition({- (width.x + widthList[i].y + xOFFSET), yOFFSET});
+                width.x += widthList[i].x + widthList[i].y + xOFFSET;
+            }
+            for (int i = mid2 + 1; i < queue.size(); i++) {
+                queue[i]->setTargetedPosition({width.y + widthList[i].x + xOFFSET, yOFFSET});
+                width.y += widthList[i].x + widthList[i].y + xOFFSET;
+            }
+            return width;
+        }; 
+        calcPosition(root,calcPosition) ;
+        _delete.CreateNewPresentation() ; 
+        _delete.CreateNewSet(-1) ; 
+        auto MoveEdge =[&](TrieNode* root , Vector2 cur , Vector2 nex , auto&& MoveEdge_ref)->void
+        {
+            if(!root)return ; 
+            cur+=root->CurrentPosition ; 
+            nex+=root->TargetedPosition ; 
+            _delete.InsertAnimationToSet(-1,-1,NewAnimation(8,0,BLACK,{Node(cur,20,root->c),Node(nex,20,root->c)})) ;
+            for(auto child:root->children)if(child->sl)
+            {
+                _delete.InsertAnimationToSet(-1,-1,NewAnimation(7,0,BLACK,{Node(cur,20,root->c),Node(nex,20,root->c),Node(cur+child->CurrentPosition,20,root->c),Node(nex+child->TargetedPosition,20,child->c)})) ;
+                MoveEdge_ref(child,cur,nex,MoveEdge_ref) ; 
+            }
+        };
+        MoveEdge(root,{0,0},{0,0},MoveEdge) ; 
+        auto RemoveNode = [&](TrieNode*&node,auto&& RemoveNode_ref)->void
+        {
+            if(node->sl==0)
+            {
+                node=nullptr ; 
+                return ; 
+            }
+            for(auto&child:node->children)
+            {
+                RemoveNode_ref,(child,RemoveNode_ref) ; 
+            }
+        };
+        RemoveNode(root,RemoveNode) ;
     }
     return _delete;
 }

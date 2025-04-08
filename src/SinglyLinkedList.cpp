@@ -57,7 +57,7 @@ void SinglyLinkedList::Init()
     for (int i = 0; i < 6; ++i) {
         flagToolBarButtons[i].assign(toolBarButtons[i].size(), false);
     }
-
+    flagToolBarButtons[0][0] = true ; 
     nodes.clear();
     values.clear();
     isLightMode = 1;

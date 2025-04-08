@@ -6,9 +6,9 @@ void Menu::Init()
 {   
 
     buttons = new Button[8];
-    buttons[0] = {Vector2{250, 250}, 300, 180, (char *)"One"};
-    buttons[1] = {Vector2{650, 250}, 300, 180, (char *)"Two"};
-    buttons[2] = {Vector2{1050, 250}, 300, 180, (char *)"Three"};
+    buttons[0] = {Vector2{250, 250}, 300, 180, (char *)"LINK LIST "};
+    buttons[1] = {Vector2{650, 250}, 300, 180, (char *)"AVL"};
+    buttons[2] = {Vector2{1050, 250}, 300, 180, (char *)"TRIE"};
     buttons[3] = {Vector2{250, 500}, 300, 180, (char *)"Four"};
     buttons[4] = {Vector2{650, 500}, 300, 180, (char *)"Five"};   
     buttons[5] = {Vector2{1050, 500}, 300, 180, (char *)"Six"};
@@ -25,6 +25,7 @@ void Menu::Init()
     toLightMode = LoadTexture("../Textures/ToLightMode.png");
 
     myList.Init();
+    myAVL.Init() ; 
     myGraph.Init();
     myTrie.Init(); 
 }
@@ -81,7 +82,7 @@ void Menu::Run() {
             myList.Run();
         }
         if (dataStructure == 2) {
-            
+            myAVL.Run() ; 
         }
         if (dataStructure == 3) 
         {
