@@ -17,12 +17,14 @@ void NewAnimation::DrawNormalEdge(const Texture &arrowEdge, const bool &isLightM
 
     Vector2 unitDir = {direction.x / length, direction.y / length};
     Vector2 newStart = {startPos.x + unitDir.x * radius, startPos.y + unitDir.y * radius};
-    Vector2 newEnd = {float(endPos.x - unitDir.x * (radius + 5)), float(endPos.y - unitDir.y * (radius + 5))};
+    Vector2 newEnd = {endPos.x - unitDir.x * radius, endPos.y - unitDir.y * radius}; // Adjusted to stop at node boundary
     DrawLineEx(newStart, newEnd, 3.0f, curColor);
 
+    // Calculate angle and arrow position
     float angle = atan2f(direction.y, direction.x) * RAD2DEG;
-    Vector2 arrowPos = {newEnd.x - unitDir.x * 4, newEnd.y - unitDir.y * 4};
-    DrawTexturePro(arrowEdge, {0, 0, 15, 11}, {arrowPos.x, arrowPos.y, 15, 11}, {7.5, 5.5}, angle, curColor);
+    // Position the arrow so its tip is at newEnd
+    Vector2 arrowPos = {newEnd.x - unitDir.x * 8, newEnd.y - unitDir.y * 8}; // Offset by half texture width (8) to align tip
+    DrawTexturePro(arrowEdge, {0, 0, 16, 12}, {arrowPos.x, arrowPos.y, 16, 12}, {8, 6}, angle, curColor);
 }
 
 void NewAnimation::DrawHollowNode(const Texture2D &hollowCircle, const Font &fontNumber, const bool &isLightMode)
@@ -103,7 +105,7 @@ bool NewAnimation::DrawInsertEdgeAnimation(const Texture &arrowEdge, const Color
 
     float angle = atan2f(direction.y, direction.x) * RAD2DEG;
     Vector2 arrowPos = {newCur.x - unitDir.x * 4, newCur.y - unitDir.y * 4};
-    DrawTexturePro(arrowEdge, {0, 0, 15, 11}, {arrowPos.x, arrowPos.y, 15, 11}, {7.5, 5.5}, angle, curColor);
+    DrawTexturePro(arrowEdge, {0, 0, 16, 12}, {arrowPos.x, arrowPos.y, 16, 12}, {8, 6}, angle, curColor);
 
     return flag;
 }
@@ -136,7 +138,7 @@ bool NewAnimation::DrawDeleteEdgeAnimation(const Texture2D &arrowEdge, const Col
     newEnd = {endPos.x - unitDir.x * (radius + 5), endPos.y - unitDir.y * (radius + 5)};
     float angle = atan2f(direction.y, direction.x) * RAD2DEG;
     Vector2 arrowPos = {newEnd.x - unitDir.x * 4, newEnd.y - unitDir.y * 4};
-    DrawTexturePro(arrowEdge, {0, 0, 15, 11}, {arrowPos.x, arrowPos.y, 15, 11}, {7.5, 5.5}, angle, Fade(color, 1 - curAnimation));
+    DrawTexturePro(arrowEdge, {0, 0, 16, 12}, {arrowPos.x, arrowPos.y, 16, 12}, {8, 6}, angle, Fade(color, 1 - curAnimation));
 
     return flag;
 }
@@ -176,10 +178,151 @@ bool NewAnimation::DrawMoveEdgeAnimation(const Texture2D &arrowEdge, const Color
 
     float angle = atan2f(direction.y, direction.x) * RAD2DEG;
     Vector2 arrowPos = {newEnd.x - unitDir.x * 4, newEnd.y - unitDir.y * 4};
-    DrawTexturePro(arrowEdge, {0, 0, 15, 11}, {arrowPos.x, arrowPos.y, 15, 11}, {7.5, 5.5}, angle, curColor);
+    DrawTexturePro(arrowEdge, {0, 0, 16, 12}, {arrowPos.x, arrowPos.y, 16, 12}, {8, 6}, angle, curColor);
 
     return flag;
 }
+
+bool NewAnimation::DrawNormalGraphEdge(const Font &fontNumber, const bool &isLightMode, float &curAnimation, const float &speed) {
+    if (nodes.size() < 2) return false;
+
+    Color curColor = (ColorIsEqual(color, BLACK) ? (isLightMode ? BLACK : WHITE) : color);
+    
+    if (curAnimation < startAnimation) curAnimation = startAnimation;
+    bool flag = false;
+    curAnimation += speed;
+
+    if (curAnimation >= 1) {
+        curAnimation = 1;
+        flag = true;
+    }
+
+    float radius = nodes[0].radius;
+    Vector2 startPos = nodes[0].position, endPos = nodes[1].position;
+    Vector2 direction = {endPos.x - startPos.x, endPos.y - startPos.y};
+    float length = sqrt(direction.x * direction.x + direction.y * direction.y);
+
+    if (length <= 2 * radius) return false;
+
+    Vector2 unitDir = {direction.x / length, direction.y / length};
+    Vector2 newStart = {startPos.x + unitDir.x * radius, startPos.y + unitDir.y * radius};
+    Vector2 newEnd = {endPos.x - unitDir.x * radius, endPos.y - unitDir.y * radius};
+
+    DrawLineEx(newStart, newEnd, 3.0f, curColor);
+
+    // Tính toán vị trí trọng số
+    Vector2 weightPos = CalculateWeightPosition(newStart, newEnd);
+    if (weight != -1) {
+        DrawTextEx(fontNumber, TextFormat("%d", weight), weightPos, 14, 0, curColor);
+    }
+
+    return flag;
+}
+
+bool NewAnimation::DrawInsertGraphEdgeAnimation(const Color &color, const Font &fontNumber, const bool &isLightMode, float &curAnimation, const float &speed) {  
+    if (nodes.size() < 2) return false;
+
+    Color curColor = (ColorIsEqual(color, BLACK) ? (isLightMode ? BLACK : WHITE) : color);
+
+    if (curAnimation < startAnimation) curAnimation = startAnimation;
+    bool flag = false;
+    curAnimation += speed;
+
+    if (curAnimation >= 1) {
+        curAnimation = 1;
+        flag = true;
+    }
+
+    float radius = nodes[0].radius;
+    Vector2 startPos = nodes[0].position, endPos = nodes[1].position;
+    Vector2 direction = {endPos.x - startPos.x, endPos.y - startPos.y};
+    float length = sqrt(direction.x * direction.x + direction.y * direction.y);
+
+    if (length < radius * 2) {
+        return flag;
+    }
+
+    Vector2 unitDir = {direction.x / length, direction.y / length};
+    Vector2 newStart = {startPos.x + unitDir.x * radius, startPos.y + unitDir.y * radius};
+    Vector2 newEnd = {endPos.x - unitDir.x * radius, endPos.y - unitDir.y * radius};
+
+    // Vẽ cạnh với hiệu ứng xuất hiện dần
+    Vector2 newCur = {
+        newStart.x + (newEnd.x - newStart.x) * curAnimation,
+        newStart.y + (newEnd.y - newStart.y) * curAnimation
+    };
+    DrawLineEx(newStart, newCur, 3.0f, Fade(curColor, curAnimation));
+
+    // Hiển thị trọng số khi cạnh gần hoàn thành (>= 80%)
+    if (curAnimation > 0.8f) {
+        Vector2 weightPos = CalculateWeightPosition(newStart, newEnd);
+        if (weight != -1) {
+            DrawTextEx(fontNumber, TextFormat("%d", weight), weightPos, 14, 0, Fade(color, curAnimation));
+        }
+    }
+
+    return flag;
+}
+
+bool NewAnimation::DrawInsertGraphDirectedEdgeAnimation(const Texture2D &arrowEdge, const Color &color, const Font &fontNumber, const bool &isLightMode, float &curAnimation, const float &speed)
+{
+    if (nodes.size() < 2) return false;
+
+    Color curColor = (ColorIsEqual(color, BLACK) ? (isLightMode ? BLACK : WHITE) : color);
+
+    if (curAnimation < startAnimation) curAnimation = startAnimation;
+    bool flag = false;
+    curAnimation += speed;
+
+    if (curAnimation >= 1) {
+        curAnimation = 1;
+        flag = true;
+    }
+
+    float radius = nodes[0].radius;
+    Vector2 startPos = nodes[0].position, endPos = nodes[1].position;
+    Vector2 direction = {endPos.x - startPos.x, endPos.y - startPos.y};
+    float length = sqrt(direction.x * direction.x + direction.y * direction.y);
+
+    if (length < radius * 2) {
+        return flag;
+    }
+
+    Vector2 unitDir = {direction.x / length, direction.y / length};
+    Vector2 newStart = {startPos.x + unitDir.x * radius, startPos.y + unitDir.y * radius};
+    Vector2 newEnd = {endPos.x - unitDir.x * radius, endPos.y - unitDir.y * radius};
+
+    // Vẽ cạnh với hiệu ứng xuất hiện dần
+    Vector2 newCur = {
+        newStart.x + (newEnd.x - newStart.x) * curAnimation,
+        newStart.y + (newEnd.y - newStart.y) * curAnimation
+    };
+    DrawLineEx(newStart, newCur, 3.0f, Fade(curColor, curAnimation));
+
+    float angle = atan2f(direction.y, direction.x) * RAD2DEG;
+    Vector2 arrowPos = {newCur.x - unitDir.x * 4, newCur.y - unitDir.y * 4};
+    DrawTexturePro(arrowEdge, {0, 0, 16, 12}, {arrowPos.x, arrowPos.y, 16, 12}, {8, 6}, angle, curColor);
+
+    // Hiển thị trọng số khi cạnh gần hoàn thành (>= 80%)
+    if (curAnimation > 0.8f) {
+        Vector2 weightPos = CalculateWeightPosition(newStart, newEnd);
+        if (weight != -1) {
+            DrawTextEx(fontNumber, TextFormat("%d", weight), weightPos, 14, 0, Fade(color, curAnimation));
+        }
+    }
+
+    return flag;
+}
+
+// Hàm tính vị trí trọng số để cả 2 hàm vẽ cùng một vị trí
+Vector2 NewAnimation::CalculateWeightPosition(const Vector2 &newStart, const Vector2 &newEnd) {
+    Vector2 midPoint = {(newStart.x + newEnd.x) / 2, (newStart.y + newEnd.y) / 2};
+    float angle = atan2(abs(newEnd.y - newStart.y), abs(newEnd.x - newStart.x));
+    float offset = 15;
+    return {midPoint.x + offset * sin(angle), midPoint.y - offset * cos(angle)};
+}
+
+
 void NewAnimation::Init(int _type, const std::vector<Node> &_nodes)
 {
     type = _type;
@@ -226,6 +369,18 @@ bool NewAnimation::DrawAnimation(const Texture2D &hollowCircle, const Texture2D 
     if (type == 8)
     {
         return DrawMoveNodeAnimation(hollowCircle, fontNumber, isLightMode, curAnimation, speed);
+    }
+    if (type == 9)
+    {
+        return DrawNormalGraphEdge(fontNumber, isLightMode, curAnimation, speed);
+    }
+    if (type == 10)
+    {
+        return DrawInsertGraphEdgeAnimation(color, fontNumber, isLightMode, curAnimation, speed);
+    }
+    if (type == 11)
+    {
+        return DrawInsertGraphDirectedEdgeAnimation(arrowEdge, color, fontNumber, isLightMode, curAnimation, speed);
     }
     return false;
 }

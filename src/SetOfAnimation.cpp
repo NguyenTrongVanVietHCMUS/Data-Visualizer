@@ -1,18 +1,51 @@
 #include "SetOfAnimation.h"
-#include "iostream"
+#include <iostream>
+#include <vector>
+#include <algorithm>
 
-bool SetOfAnimation::DrawSetOfAnimation(const Texture2D &hollowCircle, const Texture2D &solidCircle, const Texture2D &arrowEdge, const Font &fontNumber, const Font &fontText, const bool &isLightMode, const float &speed)
+bool SetOfAnimation::DrawSetOfAnimation(const Texture2D &hollowCircle, const Texture2D &solidCircle, const Texture2D &arrowEdge, const Font &fontNumber, const Font &fontText, const bool &isLightMode, const float &speed, const std::vector<std::string> &list, Vector2 position, float width, float height, int &numberOfPresentation)
 {
     for (std::vector<NewAnimation> &curSet: setOfAnimation)
     {
-        bool doneSet = true;
+        bool doneSet = true, isNewSet = false;
         for (NewAnimation &animation: curSet)
         {
+            if (animation.type > 1 && animation.type != 4 && animation.startAnimation == 0 && animation.curAnimation < 1.0f)
+            {
+                isNewSet = true;
+            }
             doneSet &= animation.DrawAnimation(hollowCircle, solidCircle, arrowEdge, fontNumber, fontText, isLightMode, speed);
+            DrawRectangle(position.x, position.y, width, height, Color{ 197, 75, 99, 255 });
+            // Thêm padding lề trái để chữ không bị sát mép
+            float textPaddingX = 15; // Đẩy lề trái
+            float textPaddingY = 10; // Khoảng cách từ trên xuống
+            float lineSpacing = 25;  // Khoảng cách giữa các dòng
+            float lineHeight = 22;   // Chiều cao mỗi dòng
+            Vector2 textPos = { position.x + textPaddingX, position.y + textPaddingY };
+            std::vector<int> &highlightLines = animation.listHighlights;
+            for (size_t i = 0; i < list.size(); i++)
+            {
+                bool isHighlighted = std::find(highlightLines.begin(), highlightLines.end(), static_cast<int>(i)) != highlightLines.end();
+
+                if (isHighlighted)
+                {
+                    DrawRectangle(position.x, textPos.y - 2, width, lineHeight, BLACK);
+                    DrawTextEx(fontText, list[i].c_str(), textPos, 20, 0, Color{ 173, 216, 230, 255 });
+                }
+                else
+                {
+                    DrawTextEx(fontText, list[i].c_str(), textPos, 20, 0, RAYWHITE);
+                }
+                textPos.y += lineHeight;
+            }
         }
         if (doneSet == false)
         {
             return false;
+        }
+        if (isNewSet)
+        {
+            ++numberOfPresentation;
         }
     }
     return true;

@@ -16,6 +16,6 @@ class SetOfAnimation
         void SetCurAnimation(int positionSet, float curAnimation); 
         void EraseAnimation(int positionSet, NewAnimation animation); 
         void InsertAnimationToSet(int positionSet, NewAnimation animation);
-        bool DrawSetOfAnimation(const Texture2D &hollowCircle, const Texture2D &solidCircle, const Texture2D &arrowEdge, const Font &fontValue, const Font &fontText, const bool &isLightMode, const float &speed);
+        bool DrawSetOfAnimation(const Texture2D &hollowCircle, const Texture2D &solidCircle, const Texture2D &arrowEdge, const Font &fontValue, const Font &fontText, const bool &isLightMode, const float &speed, const std::vector<std::string> &list, Vector2 position, float width, float height, int &numberOfPresentation);
 
 };

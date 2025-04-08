@@ -1,14 +1,15 @@
 #pragma once
 #include "Node.h"
+#include <queue>
 #include "DataStructure.h"
 
 class Graph : public DataStructure
 {
     public:
         const float NODE_RADIUS = 20.0f;     
-        const float DESIRED_DISTANCE = 180.0f;
-        const float REPULSION_STRENGTH = 30000.0f; 
-        const float ATTRACTION_STRENGTH = 0.005f; 
+        const float DESIRED_DISTANCE = 120.0f; 
+        const float ATTRACTION_STRENGTH = 0.01f;
+        const float REPULSION_STRENGTH = 10000.0f; 
         const float CENTER_PULL = 0.002f;      
         const float MAX_FORCE = 10.0f;        
         const float DAMPING = 0.85f;          
@@ -44,13 +45,21 @@ class Graph : public DataStructure
         void Delete(int val);
         void Search(int val);
         void Update(int pos, int val);
+        void FixGraph();
+        void UnFixGraph();
+        void MinimumSpanningTree(int source);
+        void ShortestPath(int start, int _end);
+        void ShortestPathFromSource(int source);
         std::vector<int> StringToVector(std::string listChar);
 
-        Presentation BasicStructure(const std::vector<Node> &nodes);
+        SetOfAnimation BasicStructure(const std::vector<Node> &nodes);
         Presentation InsertAnimation(int pos, int val);
         Presentation UpdateAnimation(int pos, int val);
         Presentation DeleteAnimation(int val);
         Presentation SearchAnimation(int val, Color color);
+        Presentation ShortestPathFromSourceAnimation(int source);
+        Presentation ShortestPathAnimation(int start, int _end);
+        Presentation MinimumSpanningTreeAnimation(int source);
 
         void Run();
         void Init();
