@@ -2,10 +2,10 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "RelWithDebInfo/Data_Structure_Visualization.exe"
+			"path" : "Debug/Data_Structure_Visualization.exe"
 		},
 		{
-			"path" : "RelWithDebInfo/Data_Structure_Visualization.pdb"
+			"path" : "Debug/Data_Structure_Visualization.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -74,7 +74,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "/DWIN32 /D_WINDOWS /GR /EHsc /Zi /O2 /Ob1 /DNDEBUG -MD"
+					"fragment" : "/DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd"
 				}
 			],
 			"defines" : 
@@ -133,15 +133,15 @@
 	"dependencies" : 
 	[
 		{
-			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
-		},
-		{
 			"backtrace" : 2,
 			"id" : "raylib::@e4891b6c0c6e0340b882"
 		},
 		{
 			"backtrace" : 2,
 			"id" : "glfw::@7c2bc65cfa90d9fbb0a8"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
 		}
 	],
 	"id" : "Data_Structure_Visualization::@6890427a1f51a3e7e1df",
@@ -150,7 +150,7 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "/DWIN32 /D_WINDOWS /GR /EHsc /Zi /O2 /Ob1 /DNDEBUG -MD",
+				"fragment" : "/DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd",
 				"role" : "flags"
 			},
 			{
@@ -159,7 +159,7 @@
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "include\\raylib\\raylib\\RelWithDebInfo\\raylib.lib",
+				"fragment" : "include\\raylib\\raylib\\Debug\\raylib.lib",
 				"role" : "libraries"
 			},
 			{
