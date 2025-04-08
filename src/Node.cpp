@@ -3,7 +3,7 @@
 
 void Node::DrawTextNode(const Font &fontValue, const Color &color, const bool &isLightMode)
 {
-    char text[5];  
+    char text[15];  
     for(int i = 0 ; i<value.size();i++)
     {
         text[i] = value[i] ; 

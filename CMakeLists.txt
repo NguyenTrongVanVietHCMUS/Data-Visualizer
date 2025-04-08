@@ -27,6 +27,8 @@ add_executable(
      src/Heap.cpp
      src/Trie.cpp 
      src/Graph.cpp
+     src/AVL.cpp
+     src/AVLNode.cpp 
      )
 
 add_subdirectory("include/raylib")

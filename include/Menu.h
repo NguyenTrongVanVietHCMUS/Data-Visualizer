@@ -4,6 +4,7 @@
 #include "Button.h"
 #include "raylib.h"
 #include "SinglyLinkedList.h"
+#include "AVL.h" 
 #include "Heap.h"
 #include "Trie.h"
 #include "Graph.h"
@@ -21,7 +22,7 @@ class Menu
         Graph myGraph;
         Heap myHeap;
         Trie myTrie;
-
+        AVL myAVL;
         Color GetColorBackground();
         void DrawGradient(const bool isLightMode);
     public:

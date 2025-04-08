@@ -337,6 +337,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\Heap.cpp" />
     <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\Trie.cpp" />
     <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\Graph.cpp" />
+    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\AVL.cpp" />
+    <ClCompile Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\src\AVLNode.cpp" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
