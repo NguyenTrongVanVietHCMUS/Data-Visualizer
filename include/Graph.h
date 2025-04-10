@@ -40,6 +40,7 @@ class Graph : public DataStructure
         void ClearAllData();
         void RandomNewData();
         void InputDataFromFile();
+        void InputDataFromKeyboard(std::vector<int> values);
         void UpdateGraph();
         void Insert(int pos, int val);
         void Delete(int val);
