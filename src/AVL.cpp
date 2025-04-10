@@ -961,5 +961,5 @@ void AVL::ResetNodesPosition(AVLNode* root)
 void AVL::Draw() 
 {  
     ResetNodesPosition(root) ;
-    myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, fontNumber, GetFontDefault(), isLightMode, speed);
+    myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, fontNumber, GetFontDefault(), isLightMode, speed, curRemoteState);
 }
