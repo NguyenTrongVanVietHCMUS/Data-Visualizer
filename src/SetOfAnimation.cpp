@@ -3,10 +3,39 @@
 #include <vector>
 #include <algorithm>
 
-bool SetOfAnimation::DrawSetOfAnimation(const Texture2D &hollowCircle, const Texture2D &solidCircle, const Texture2D &arrowEdge, const Font &fontNumber, const Font &fontText, const bool &isLightMode, const float &speed, const std::vector<std::string> &list, Vector2 position, float width, float height, int &numberOfPresentation)
+bool SetOfAnimation::DrawSetOfAnimation(const Texture2D &hollowCircle, const Texture2D &solidCircle, const Texture2D &arrowEdge, const Font &fontNumber, const Font &fontText, const bool &isLightMode, const float &speed, const std::vector<std::string> &list, Vector2 position, float width, float height, int &numberOfPresentation, int curRemoteState)
 {
     for (std::vector<NewAnimation> &curSet: setOfAnimation)
     {
+        auto checkIsAnimation = [&]()
+        {
+            for (NewAnimation &curAnimation : curSet)
+            {
+                if (curAnimation.type > 1 && curAnimation.type != 4 && curAnimation.startAnimation == 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        };
+        auto checkIsNotDone = [&]()
+        {
+            for (NewAnimation &curAnimation : curSet)
+            {
+                if (curAnimation.type > 1 && curAnimation.type != 4 && curAnimation.startAnimation == 0)
+                {
+                    if (curAnimation.curAnimation < 1.0f) return true;
+                }
+            }
+            return false;
+        };
+        if (curRemoteState == 1) 
+        {
+            if (checkIsAnimation() && checkIsNotDone()) 
+            {
+                return false;
+            }
+        }
         bool doneSet = true, isNewSet = false;
         for (NewAnimation &animation: curSet)
         {
@@ -14,7 +43,7 @@ bool SetOfAnimation::DrawSetOfAnimation(const Texture2D &hollowCircle, const Tex
             {
                 isNewSet = true;
             }
-            doneSet &= animation.DrawAnimation(hollowCircle, solidCircle, arrowEdge, fontNumber, fontText, isLightMode, speed);
+            doneSet &= animation.DrawAnimation(hollowCircle, solidCircle, arrowEdge, fontNumber, fontText, isLightMode, speed, curRemoteState);
             DrawRectangle(position.x, position.y, width, height, Color{ 197, 75, 99, 255 });
             // Thêm padding lề trái để chữ không bị sát mép
             float textPaddingX = 15; // Đẩy lề trái
@@ -47,6 +76,7 @@ bool SetOfAnimation::DrawSetOfAnimation(const Texture2D &hollowCircle, const Tex
         {
             ++numberOfPresentation;
         }
+       
     }
     return true;
 }

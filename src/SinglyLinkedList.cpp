@@ -186,6 +186,7 @@ void SinglyLinkedList::BuildCreateAnimation()
     myPresentation.currentPresentation = 0;
     myPresentation = CreateAnimation(nodes);
     myPresentation.InitBoardText(createList, positionBoard, width, height);
+    curRemoteState = 0;
 }
 
 int SinglyLinkedList::FindPosition(std::string value)
@@ -338,6 +339,7 @@ void SinglyLinkedList::Search(std::string val)
     int pos = FindPosition(val);
     myPresentation = SearchAnimation(pos, BLUE);
     myPresentation.InitBoardText(searchList, positionBoard, width, height);
+    curRemoteState = 0;
 }
 
 Presentation SinglyLinkedList::UpdateAnimation(int pos, std::string val)
@@ -422,6 +424,7 @@ void SinglyLinkedList::Update(int pos, std::string val)
     myPresentation.InitBoardText(updateList, positionBoard, width, height);
     values[pos] = val;
     nodes[pos].value = val;
+    curRemoteState = 0;
 }
 
 Presentation SinglyLinkedList::InsertAnimation(int pos, std::string val)
@@ -563,7 +566,6 @@ Presentation SinglyLinkedList::InsertAnimation(int pos, std::string val)
         insert.CreateNewSet(-1);
         insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {11}));        
     } 
- 
 
     return insert;
 }
@@ -577,6 +579,7 @@ void SinglyLinkedList::Insert(int pos, std::string val)
     myPresentation.InitBoardText(insertList, positionBoard, width, height);
     values.insert(values.begin() + pos, val);
     nodes = BuildNodeFromValue(values);
+    curRemoteState = 0;
 }
 
 Presentation SinglyLinkedList::DeleteAnimation(int pos)
@@ -687,6 +690,7 @@ void SinglyLinkedList::Delete(std::string val)
         nodes.erase(nodes.begin() + pos);
         nodes = BuildNodeFromValue(values);
     }
+    curRemoteState = 0;
 }
 
 void SinglyLinkedList::DrawToolBar()
@@ -745,11 +749,6 @@ void SinglyLinkedList::DrawToolBar()
             }
         }
     }
-}
-
-void SinglyLinkedList::HandleRemote()
-{
-    
 }
 
 void SinglyLinkedList::HandleToolBar()
@@ -922,8 +921,136 @@ void SinglyLinkedList::HandleToolBar()
 
 void SinglyLinkedList::Draw() 
 {  
-    myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, fontNumber, robotoFont, isLightMode, speed);
-    std::cerr << myPresentation.numberOfPresentation << ' ' << myPresentation.CountNumberOfAnimation() << '\n';
+    myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, fontNumber, robotoFont, isLightMode, speed, curRemoteState);
+}
+
+void SinglyLinkedList::HandleRemote()
+{
+    auto SetCurAnimation = [&](int _start, int _end, int _cur)
+    {
+        for (int k = _start; k <= _end; ++k)
+        {
+            for (int i = 0; i < int(myPresentation.present[k].setOfAnimation.size()); ++i)
+            {
+                for (NewAnimation &curAnimation: myPresentation.present[k].setOfAnimation[i])
+                {
+                    curAnimation.curAnimation = _cur;
+                }
+            }
+        }
+        return;
+    };
+    auto _SetCurAnimation = [&](int currentPresentation, int _end, int _cur)
+    {
+        for (int i = 0; i <= _end; ++i)
+        {
+            for (NewAnimation &curAnimation: myPresentation.present[currentPresentation].setOfAnimation[i])
+            {
+                curAnimation.curAnimation = _cur;
+            }
+        }
+        return;
+    };
+    Vector2 mousePos = GetMousePosition();
+    const int screenWidth = 1600;
+    const int screenHeight = 800;
+
+    // Vị trí và kích thước thanh slider giống như trong DrawRemote
+    int sliderX = 450;
+    int sliderY = screenHeight - 30;
+    int sliderWidth = screenWidth - 450 - 450;
+    int sliderHeight = 8;
+
+    // Bán kính nút trượt
+    int handleRadius = 10;
+
+    // Kiểm tra nếu chuột nằm trong vùng thanh slider
+    Rectangle sliderRect = { (float)sliderX, (float)(sliderY - handleRadius), 
+                             (float)sliderWidth, (float)(sliderHeight + 2 * handleRadius) };
+
+    // Kéo thanh tua
+    if (CheckCollisionPointRec(mousePos, sliderRect) && IsMouseButtonDown(MOUSE_LEFT_BUTTON))
+    {
+        float relativeX = mousePos.x - sliderX;
+
+        // Giới hạn giá trị nằm trong khoảng cho phép
+        if (relativeX < 0) relativeX = 0;
+        if (relativeX > sliderWidth) relativeX = (float)sliderWidth;
+
+        float progress = relativeX / sliderWidth;
+        int totalFrames = myPresentation.CountNumberOfAnimation();
+        int newFrame = (int)(progress * totalFrames + 0.5f);
+
+        // Cập nhật trạng thái trình chiếu
+        int i, j;
+        myPresentation.numberOfPresentation = newFrame;
+        myPresentation.FindPosition(newFrame, i, j);
+        std::cerr << newFrame << ' ' << i << ' ' << j << '\n';
+        myPresentation.currentPresentation = i;
+        myPresentation.SetCurToStartAnimation(i + 1, -1);
+        myPresentation.SetCurToStartAnimationInOnePresentation(i, j + 1);
+        SetCurAnimation(0, i - 1, 1);
+        _SetCurAnimation(i, j + 0, 1);
+        
+        
+        curRemoteState = 1; // Chuyển về trạng thái play nếu đang pause
+    }
+
+    // Các xử lý nút điều khiển khác giữ nguyên
+    if (remoteButtons[4 + curRemoteState].CheckMouseClickInRectangle() == true)
+    {
+        if (curRemoteState == 2)
+        {
+            myPresentation.SetCurToStartAnimation(0, -1);
+            myPresentation.currentPresentation = 0;
+            myPresentation.numberOfPresentation = 0;
+        }
+        curRemoteState = !curRemoteState;
+    }
+    if (remoteButtons[0].CheckMouseClickInRectangle() == true)
+    {
+        curRemoteState = 1;
+        myPresentation.SetCurToStartAnimation(0, -1);
+        myPresentation.currentPresentation = 0;
+        myPresentation.numberOfPresentation = 0;
+    }
+    if (remoteButtons[3].CheckMouseClickInRectangle() == true)
+    {
+        curRemoteState = 1;
+        myPresentation.SetCurAnimation(0, -1, 1);
+        myPresentation.numberOfPresentation = myPresentation.CountNumberOfAnimation();
+    }
+    if (remoteButtons[1].CheckMouseClickInRectangle() == true)
+    {
+        int i, j;
+        int newFrame = std::max(0, myPresentation.numberOfPresentation - 1);
+        myPresentation.numberOfPresentation = newFrame;
+        myPresentation.FindPosition(newFrame, i, j);
+        std::cerr << newFrame << ' ' << i << ' ' << j << '\n';
+        myPresentation.currentPresentation = i;
+        myPresentation.SetCurToStartAnimation(i + 1, -1);
+        myPresentation.SetCurToStartAnimationInOnePresentation(i, j + 1);
+        SetCurAnimation(0, i - 1, 1);
+        _SetCurAnimation(i, j + 0, 1);
+        curRemoteState = 1;
+    }
+    if (remoteButtons[2].CheckMouseClickInRectangle() == true)
+    {
+        int i, j;
+        int newFrame = std::min(myPresentation.CountNumberOfAnimation(), myPresentation.numberOfPresentation + 1);
+        myPresentation.numberOfPresentation = newFrame;
+        myPresentation.FindPosition(newFrame, i, j);
+        std::cerr << newFrame << ' ' << i << ' ' << j << '\n';
+        myPresentation.currentPresentation = i;
+        myPresentation.SetCurToStartAnimation(i + 1, -1);
+        myPresentation.SetCurToStartAnimationInOnePresentation(i, j + 1);
+        SetCurAnimation(0, i - 1, 1);
+        _SetCurAnimation(i, j + 0, 1);
+        curRemoteState = 1;
+    }
+    std::cerr << myPresentation.numberOfPresentation << '\n';
+
+    myPresentation.NormPresentation(curRemoteState);
 }
 
 void SinglyLinkedList::DrawRemote()
@@ -934,6 +1061,9 @@ void SinglyLinkedList::DrawRemote()
         {
             remoteButtons[i].DrawButtonTexture();
         }
+    }
+    if (myPresentation.numberOfPresentation == myPresentation.CountNumberOfAnimation()) {
+        curRemoteState = 2;
     }
     remoteButtons[4 + curRemoteState].DrawButtonTexture();
 
