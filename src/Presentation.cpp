@@ -203,13 +203,12 @@ NewAnimation Presentation::GetAnimation(int positionPresentation, int positionSe
     return present[positionPresentation].GetAnimation(positionSet, i);
 }
 
-void Presentation::DrawPresentation(const Texture2D &hollowCircle, const Texture2D &solidCircle, const Texture2D &arrowEdge, const Font &fontValue, const Font &fontText, const bool &isLightMode, const float &speed)
+void Presentation::DrawPresentation(const Texture2D &hollowCircle, const Texture2D &solidCircle, const Texture2D &arrowEdge, const Font &fontValue, const Font &fontText, const bool &isLightMode, const float &speed, int curRemoteState)
 {
     if (!present.empty())
     {
         currentPresentation = std::min(currentPresentation, int(present.size()) - 1);
-        currentPresentation += present[currentPresentation].DrawSetOfAnimation(hollowCircle, solidCircle, arrowEdge, fontValue, fontText, isLightMode, speed, list, position, width, height, numberOfPresentation) == true;
-
+        currentPresentation += present[currentPresentation].DrawSetOfAnimation(hollowCircle, solidCircle, arrowEdge, fontValue, fontText, isLightMode, speed, list, position, width, height, numberOfPresentation, curRemoteState) == true;
     }
 }
 
@@ -269,6 +268,304 @@ void Presentation::SetAllhighlightLines(int startPresentation, int endPresentati
             for (NewAnimation &curAnimation: curGroup)
             {
                 curAnimation.listHighlights = listHighlights;
+            }
+        }
+    }
+}
+
+void Presentation::SetCurToStartAnimation(int startPresentation, int endPresentation)
+{
+    if (startPresentation == -1) 
+    {
+        startPresentation = int(present.size()) - 1;
+        if (startPresentation < 0)
+        {
+            return;
+        }
+    }
+    if (endPresentation == -1) 
+    {
+        endPresentation = int(present.size()) - 1;
+        if (endPresentation < 0)
+        {
+            return;
+        }
+    }
+    for (int i = startPresentation; i <= endPresentation; ++i)  
+    {
+        for (std::vector<NewAnimation> &curGroup: present[i].setOfAnimation)
+        {
+            for (NewAnimation &curAnimation: curGroup)
+            {
+                curAnimation.curAnimation = curAnimation.startAnimation;
+            }
+        }
+    }
+}
+
+void Presentation::SetCurAnimation(int startPresentation, int endPresentation, int curr)
+{
+    if (startPresentation == -1) 
+    {
+        startPresentation = int(present.size()) - 1;
+        if (startPresentation < 0)
+        {
+            return;
+        }
+    }
+    if (endPresentation == -1) 
+    {
+        endPresentation = int(present.size()) - 1;
+        if (endPresentation < 0)
+        {
+            return;
+        }
+    }
+    for (int i = startPresentation; i <= endPresentation; ++i)  
+    {
+        for (std::vector<NewAnimation> &curGroup: present[i].setOfAnimation)
+        {
+            for (NewAnimation &curAnimation: curGroup)
+            {
+                curAnimation.curAnimation = curr;
+            }
+        }
+    }
+}
+
+void Presentation::UnFillCurPresentation()
+{
+    if (int(present.size()) != 0)
+    {
+        auto checkIsInProcessing = [&](int currentPresentation, int positionSet)
+        {   
+            bool flagAnimation = false, isInProcessing = true;
+            for (NewAnimation &curAnimation: present[currentPresentation].setOfAnimation[positionSet])
+            {
+                if (curAnimation.type > 1 && curAnimation.type != 4 && curAnimation.startAnimation == 0)
+                {
+                    flagAnimation = true;
+                    isInProcessing &= curAnimation.curAnimation != 0.0f && curAnimation.curAnimation != 1.0f;
+                }
+            }
+            return (!flagAnimation ? false : isInProcessing);
+        };
+        auto checkIsAnimationDone = [&](int currentPresentation, int positionSet)
+        {   
+            bool isDone = true, isAnimation = false;
+            for (NewAnimation &curAnimation: present[currentPresentation].setOfAnimation[positionSet])
+            {
+                if (curAnimation.type > 1 && curAnimation.type != 4 && curAnimation.startAnimation == 0)
+                {
+                    isDone &= curAnimation.curAnimation == 1.0f;
+                    isAnimation = true;
+                }
+            }
+            return isDone && isAnimation;
+        };
+        auto unFill = [&](int currentPresentation, int positionSet)
+        {
+            for (NewAnimation &curAnimation: present[currentPresentation].setOfAnimation[positionSet])
+            {
+                curAnimation.curAnimation = 0;
+            }
+            return;
+        };
+        for (int k = int(present.size()) - 1; k >= 0; --k)
+        {
+            currentPresentation = k;
+            for (int i = int(present[k].setOfAnimation.size()) - 1; i >= 0; --i) 
+            {
+                if (checkIsInProcessing(k, i) == true || checkIsAnimationDone(k, i) == true)
+                {
+                    numberOfPresentation -= checkIsAnimationDone(k, i) == true;
+                    
+                    unFill(k, i);
+                    if (i == 0)
+                    {
+                        if (currentPresentation > 0)
+                            --currentPresentation;
+                    }
+                    return;
+                }
+            }
+        }
+    }
+}
+
+void Presentation::FillCurPresentation()
+{
+    if (int(present.size()) != 0)
+    {
+        auto checkIsInProcessing = [&](int currentPresentation, int positionSet)
+        {   
+            bool flagAnimation = false, isInProcessing = true;
+            for (NewAnimation &curAnimation: present[currentPresentation].setOfAnimation[positionSet])
+            {
+                if (curAnimation.type > 1 && curAnimation.type != 4 && curAnimation.startAnimation == 0)
+                {
+                    flagAnimation = true;
+                    isInProcessing &= curAnimation.curAnimation != 0.0f && curAnimation.curAnimation != 1.0f;
+                }
+            }
+            return (!flagAnimation ? false : isInProcessing);
+        };
+        auto checkIsAnimation = [&](int currentPresentation, int positionSet)
+        {   
+            for (NewAnimation &curAnimation: present[currentPresentation].setOfAnimation[positionSet])
+            {
+                if (curAnimation.type > 1 && curAnimation.type != 4 && curAnimation.startAnimation == 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        };
+        auto checkIsAnimationDone = [&](int currentPresentation, int positionSet)
+        {   
+            bool isDone = true, isAnimation = false;
+            for (NewAnimation &curAnimation: present[currentPresentation].setOfAnimation[positionSet])
+            {
+                if (curAnimation.type > 1 && curAnimation.type != 4 && curAnimation.startAnimation == 0)
+                {
+                    isDone &= curAnimation.curAnimation == 1.0f;
+                    isAnimation = true;
+                }
+            }
+            return isDone && isAnimation;
+        };
+        auto fill = [&](int currentPresentation, int positionSet)
+        {
+            for (NewAnimation &curAnimation: present[currentPresentation].setOfAnimation[positionSet])
+            {
+                curAnimation.curAnimation = 1;
+            }
+            return;
+        };
+        for (int k = 0; k < int(present.size()); ++k)
+        {
+            currentPresentation = k;
+            for (int i = 0; i < int(present[k].setOfAnimation.size()); ++i) 
+            {
+                if (checkIsInProcessing(k, i) == true || (!checkIsAnimationDone(k, i) && checkIsAnimation(k, i)))
+                {
+                    ++numberOfPresentation;
+                    if (numberOfPresentation > CountNumberOfAnimation())
+                    {
+                        numberOfPresentation = CountNumberOfAnimation();
+                    }
+                    fill(k, i);
+                    return;
+                }
+            }
+        }
+    }
+}
+
+void Presentation::FindPosition(int frame, int &currentPosition, int &positionSet)
+{
+    int frameCount = 0;
+
+    if (frame == 0) 
+    {
+        currentPosition = 0;
+        positionSet = -1;
+        return;
+    }
+
+    auto checkIsAnimation = [&](int i, int j)
+    {
+        for (NewAnimation &curAnimation : present[i].setOfAnimation[j])
+        {
+            if (curAnimation.type > 1 && curAnimation.type != 4 && curAnimation.startAnimation == 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    };
+    int lastI, lastJ;
+    for (int i = 0; i < present.size(); ++i)
+    {
+        for (int j = 0; j < present[i].setOfAnimation.size(); ++j)
+        {
+            if (checkIsAnimation(i, j))
+            {
+                lastI = i;
+                lastJ = j;
+                if (frame == ++frameCount)
+                {
+                    currentPosition = i;
+                    positionSet = j;
+                    return;
+                }
+            }
+        }
+    }
+
+    // Nếu frame vượt quá tổng số animation thì trả về vị trí cuối cùng
+    currentPosition = lastI;
+    positionSet = lastJ;
+}
+
+void Presentation::SetCurToStartAnimationInOnePresentation(int i, int j)
+{
+    if (i < int(present.size()))
+    {
+        if (j < 0)
+        {
+            j = 0;
+        }
+        for (int k = j; k < int(present[i].setOfAnimation.size()); ++k)
+        {
+            for (NewAnimation &curAnimation: present[i].setOfAnimation[k])
+            {
+                curAnimation.curAnimation = curAnimation.startAnimation;
+            }
+        }
+    }
+}
+
+void Presentation::NormPresentation(int curRemoteState)
+{
+    if (currentPresentation > 0 && curRemoteState == 1)
+    {
+        bool flag = false;
+        for (std::vector<NewAnimation> &curSet: present[currentPresentation].setOfAnimation)
+        {
+            auto checkIsAnimation = [&]()
+            {
+                for (NewAnimation &curAnimation : curSet)
+                {
+                    if (curAnimation.type > 1 && curAnimation.type != 4 && curAnimation.startAnimation == 0)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            };
+            auto checkIsStart = [&]()
+            {
+                for (NewAnimation &curAnimation : curSet)
+                {
+                    if (curAnimation.type > 1 && curAnimation.type != 4 && curAnimation.startAnimation == 0)
+                    {
+                        if (curAnimation.curAnimation == 0.0f) return true;
+                    }
+                }
+                return false;
+            };
+            if (checkIsAnimation() == true)
+            {
+                if (checkIsStart() == true)
+                {
+                    if (flag == false)
+                    {
+                        --currentPresentation;
+                    }
+                    return;
+                }
+                flag = true;
             }
         }
     }

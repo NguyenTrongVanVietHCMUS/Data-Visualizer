@@ -818,5 +818,5 @@ void Trie::ResetNodesPosition(TrieNode* root)
 void Trie::Draw() 
 {  
     ResetNodesPosition(root) ;
-    myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, fontNumber, GetFontDefault(), isLightMode, speed);
+    myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, fontNumber, GetFontDefault(), isLightMode, speed, curRemoteState);
 }

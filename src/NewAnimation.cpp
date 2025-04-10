@@ -41,23 +41,23 @@ void NewAnimation::DrawSolidNode(const Texture2D &solidCircle, const Font &fontN
     nodes[0].DrawTextNode(fontNumber, curColor, isLightMode);
 }
 
-bool NewAnimation::DrawInsertNodeAnimation(const Texture2D &textureNode, const Font &fontNumber, const bool &isLightMode, float &curAnimation, const float &speed)
+bool NewAnimation::DrawInsertNodeAnimation(const Texture2D &textureNode, const Font &fontNumber, const bool &isLightMode, float &curAnimation, const float &speed, int curRemoteState)
 {
     if (curAnimation < startAnimation) curAnimation = startAnimation;
-    return nodes[0].DrawInsertNodeAnimation(textureNode, fontNumber, color, isLightMode, curAnimation, speed);
+    return nodes[0].DrawInsertNodeAnimation(textureNode, fontNumber, color, isLightMode, curAnimation, speed, curRemoteState);
 }
 
-bool NewAnimation::DrawDeleteNodeAnimation(const Texture2D &textureNode, const Font &fontNumber, const bool &isLightMode, float &curAnimation, const float &speed)
+bool NewAnimation::DrawDeleteNodeAnimation(const Texture2D &textureNode, const Font &fontNumber, const bool &isLightMode, float &curAnimation, const float &speed, int curRemoteState)
 {
     if (curAnimation < startAnimation) curAnimation = startAnimation;
-    return nodes[0].DrawDeleteNodeAnimation(textureNode, fontNumber, color, isLightMode, curAnimation, speed);
+    return nodes[0].DrawDeleteNodeAnimation(textureNode, fontNumber, color, isLightMode, curAnimation, speed, curRemoteState);
 }
 
-bool NewAnimation::DrawMoveNodeAnimation(const Texture2D &textureNode, const Font &fontNumber, const bool &isLightMode, float &curAnimation, const float &speed)
+bool NewAnimation::DrawMoveNodeAnimation(const Texture2D &textureNode, const Font &fontNumber, const bool &isLightMode, float &curAnimation, const float &speed, int curRemoteState)
 {
     if (curAnimation < startAnimation) curAnimation = startAnimation;
     bool flag = false;
-    curAnimation += speed;
+    curAnimation += (!curRemoteState) * speed;
     if (curAnimation >= 1) 
     {
         curAnimation = 1;
@@ -76,12 +76,12 @@ bool NewAnimation::DrawMoveNodeAnimation(const Texture2D &textureNode, const Fon
     return flag;
 }
 
-bool NewAnimation::DrawInsertEdgeAnimation(const Texture &arrowEdge, const Color &color, const bool &isLightMode, float &curAnimation, const float &speed)
+bool NewAnimation::DrawInsertEdgeAnimation(const Texture &arrowEdge, const Color &color, const bool &isLightMode, float &curAnimation, const float &speed, int curRemoteState)
 {  
     Color curColor = (ColorIsEqual(color, BLACK) ? (isLightMode ? BLACK : WHITE) : color);
     if (curAnimation < startAnimation) curAnimation = startAnimation;
     bool flag = false;
-    curAnimation += speed;
+    curAnimation += (!curRemoteState) * speed;
     if (curAnimation >= 1) 
     {
         curAnimation = 1;
@@ -110,11 +110,11 @@ bool NewAnimation::DrawInsertEdgeAnimation(const Texture &arrowEdge, const Color
     return flag;
 }
 
-bool NewAnimation::DrawDeleteEdgeAnimation(const Texture2D &arrowEdge, const Color &color, const bool &isLightMode, float &curAnimation, const float &speed)
+bool NewAnimation::DrawDeleteEdgeAnimation(const Texture2D &arrowEdge, const Color &color, const bool &isLightMode, float &curAnimation, const float &speed, int curRemoteState)
 {
     if (curAnimation < startAnimation) curAnimation = startAnimation;
     bool flag = false;
-    curAnimation += speed;
+    curAnimation += (!curRemoteState) * speed;
     if (curAnimation >= 1) 
     {
         curAnimation = 1;
@@ -143,11 +143,11 @@ bool NewAnimation::DrawDeleteEdgeAnimation(const Texture2D &arrowEdge, const Col
     return flag;
 }
 
-bool NewAnimation::DrawMoveEdgeAnimation(const Texture2D &arrowEdge, const Color &color, const bool &isLightMode, float &curAnimation, const float &speed)
+bool NewAnimation::DrawMoveEdgeAnimation(const Texture2D &arrowEdge, const Color &color, const bool &isLightMode, float &curAnimation, const float &speed, int curRemoteState)
 {
     if (curAnimation < startAnimation) curAnimation = startAnimation;
     bool flag = false;
-    curAnimation += speed;
+    curAnimation += (!curRemoteState) * speed;
     if (curAnimation >= 1) 
     {
         curAnimation = 1;
@@ -183,14 +183,14 @@ bool NewAnimation::DrawMoveEdgeAnimation(const Texture2D &arrowEdge, const Color
     return flag;
 }
 
-bool NewAnimation::DrawNormalGraphEdge(const Font &fontNumber, const bool &isLightMode, float &curAnimation, const float &speed) {
+bool NewAnimation::DrawNormalGraphEdge(const Font &fontNumber, const bool &isLightMode, float &curAnimation, const float &speed, int curRemoteState) {
     if (nodes.size() < 2) return false;
 
     Color curColor = (ColorIsEqual(color, BLACK) ? (isLightMode ? BLACK : WHITE) : color);
     
     if (curAnimation < startAnimation) curAnimation = startAnimation;
     bool flag = false;
-    curAnimation += speed;
+    curAnimation += (!curRemoteState) * speed;
 
     if (curAnimation >= 1) {
         curAnimation = 1;
@@ -219,14 +219,14 @@ bool NewAnimation::DrawNormalGraphEdge(const Font &fontNumber, const bool &isLig
     return flag;
 }
 
-bool NewAnimation::DrawInsertGraphEdgeAnimation(const Color &color, const Font &fontNumber, const bool &isLightMode, float &curAnimation, const float &speed) {  
+bool NewAnimation::DrawInsertGraphEdgeAnimation(const Color &color, const Font &fontNumber, const bool &isLightMode, float &curAnimation, const float &speed, int curRemoteState) {  
     if (nodes.size() < 2) return false;
 
     Color curColor = (ColorIsEqual(color, BLACK) ? (isLightMode ? BLACK : WHITE) : color);
 
     if (curAnimation < startAnimation) curAnimation = startAnimation;
     bool flag = false;
-    curAnimation += speed;
+    curAnimation += (!curRemoteState) * speed;
 
     if (curAnimation >= 1) {
         curAnimation = 1;
@@ -264,7 +264,7 @@ bool NewAnimation::DrawInsertGraphEdgeAnimation(const Color &color, const Font &
     return flag;
 }
 
-bool NewAnimation::DrawInsertGraphDirectedEdgeAnimation(const Texture2D &arrowEdge, const Color &color, const Font &fontNumber, const bool &isLightMode, float &curAnimation, const float &speed)
+bool NewAnimation::DrawInsertGraphDirectedEdgeAnimation(const Texture2D &arrowEdge, const Color &color, const Font &fontNumber, const bool &isLightMode, float &curAnimation, const float &speed, int curRemoteState)
 {
     if (nodes.size() < 2) return false;
 
@@ -272,7 +272,7 @@ bool NewAnimation::DrawInsertGraphDirectedEdgeAnimation(const Texture2D &arrowEd
 
     if (curAnimation < startAnimation) curAnimation = startAnimation;
     bool flag = false;
-    curAnimation += speed;
+    curAnimation += (!curRemoteState) * speed;
 
     if (curAnimation >= 1) {
         curAnimation = 1;
@@ -329,7 +329,7 @@ void NewAnimation::Init(int _type, const std::vector<Node> &_nodes)
     nodes = _nodes;
 }
 
-bool NewAnimation::DrawAnimation(const Texture2D &hollowCircle, const Texture2D &solidCircle, const Texture2D &arrowEdge, const Font &fontNumber, const Font &fontText, const bool &isLightMode, const float &speed)
+bool NewAnimation::DrawAnimation(const Texture2D &hollowCircle, const Texture2D &solidCircle, const Texture2D &arrowEdge, const Font &fontNumber, const Font &fontText, const bool &isLightMode, const float &speed, int curRemoteState)
 {
     if (type == 0)
     {
@@ -343,11 +343,11 @@ bool NewAnimation::DrawAnimation(const Texture2D &hollowCircle, const Texture2D 
     }
     if (type == 2)
     {
-        return DrawInsertNodeAnimation(solidCircle, fontNumber, isLightMode, curAnimation, speed);
+        return DrawInsertNodeAnimation(solidCircle, fontNumber, isLightMode, curAnimation, speed, curRemoteState);
     }
     if (type == 3)
     {
-        return DrawDeleteNodeAnimation(solidCircle, fontNumber, isLightMode, curAnimation, speed);
+        return DrawDeleteNodeAnimation(solidCircle, fontNumber, isLightMode, curAnimation, speed, curRemoteState);
     }
     if (type == 4)
     {
@@ -356,31 +356,31 @@ bool NewAnimation::DrawAnimation(const Texture2D &hollowCircle, const Texture2D 
     }   
     if (type == 5)
     {
-        return DrawInsertEdgeAnimation(arrowEdge, color, isLightMode, curAnimation, speed);
+        return DrawInsertEdgeAnimation(arrowEdge, color, isLightMode, curAnimation, speed, curRemoteState);
     }
     if (type == 6)
     {
-        return DrawDeleteEdgeAnimation(arrowEdge, color, isLightMode, curAnimation, speed);
+        return DrawDeleteEdgeAnimation(arrowEdge, color, isLightMode, curAnimation, speed, curRemoteState);
     }
     if (type == 7)
     {
-        return DrawMoveEdgeAnimation(arrowEdge, color, isLightMode, curAnimation, speed);
+        return DrawMoveEdgeAnimation(arrowEdge, color, isLightMode, curAnimation, speed, curRemoteState);
     }
     if (type == 8)
     {
-        return DrawMoveNodeAnimation(hollowCircle, fontNumber, isLightMode, curAnimation, speed);
+        return DrawMoveNodeAnimation(hollowCircle, fontNumber, isLightMode, curAnimation, speed, curRemoteState);
     }
     if (type == 9)
     {
-        return DrawNormalGraphEdge(fontNumber, isLightMode, curAnimation, speed);
+        return DrawNormalGraphEdge(fontNumber, isLightMode, curAnimation, speed, curRemoteState);
     }
     if (type == 10)
     {
-        return DrawInsertGraphEdgeAnimation(color, fontNumber, isLightMode, curAnimation, speed);
+        return DrawInsertGraphEdgeAnimation(color, fontNumber, isLightMode, curAnimation, speed, curRemoteState);
     }
     if (type == 11)
     {
-        return DrawInsertGraphDirectedEdgeAnimation(arrowEdge, color, fontNumber, isLightMode, curAnimation, speed);
+        return DrawInsertGraphDirectedEdgeAnimation(arrowEdge, color, fontNumber, isLightMode, curAnimation, speed, curRemoteState);
     }
     return false;
 }

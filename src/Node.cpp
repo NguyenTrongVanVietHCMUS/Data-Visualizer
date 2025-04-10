@@ -27,10 +27,10 @@ void Node::DrawSolidNode(const Texture2D &textureNode, const Color &color, const
     DrawTextureEx(textureNode, Vector2{position.x - radius, position.y - radius}, 0, 1, curColor);
 }
 
-bool Node::DrawInsertNodeAnimation(const Texture2D &textureNode, const Font &fontValue, const Color &color, const bool &isLightMode, float &curAnimation, const float &speed)
+bool Node::DrawInsertNodeAnimation(const Texture2D &textureNode, const Font &fontValue, const Color &color, const bool &isLightMode, float &curAnimation, const float &speed, int curRemoteState)
 {
     bool flag = false;
-    curAnimation += speed;
+    curAnimation += (!curRemoteState) * speed;
     if (curAnimation >= 1) {
         flag = true;
         curAnimation = 1;
@@ -43,10 +43,10 @@ bool Node::DrawInsertNodeAnimation(const Texture2D &textureNode, const Font &fon
     return flag;
 }
 
-bool Node::DrawDeleteNodeAnimation(const Texture2D &textureNode, const Font &fontValue, const Color &color, const bool &isLightMode, float &curAnimation, const float &speed)
+bool Node::DrawDeleteNodeAnimation(const Texture2D &textureNode, const Font &fontValue, const Color &color, const bool &isLightMode, float &curAnimation, const float &speed, int curRemoteState)
 {
     bool flag = false;
-    curAnimation += speed;
+    curAnimation += (!curRemoteState) * speed;
     if (curAnimation >= 1) {
         flag = true;
         curAnimation = 1;

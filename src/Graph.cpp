@@ -751,7 +751,7 @@ void Graph::Draw()
         ApplyForces();
         UpdateGraph();
     }
-    myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, fontNumber, GetFontDefault(), isLightMode, speed);
+    myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, fontNumber, GetFontDefault(), isLightMode, speed, curRemoteState);
 }
 
 Vector2 Graph::f_rep(const Node& u, const Node& v) {
