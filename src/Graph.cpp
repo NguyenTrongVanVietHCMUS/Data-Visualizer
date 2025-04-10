@@ -601,6 +601,13 @@ void Graph::InputDataFromKeyboard(std::vector<int> values )
     }
     sort(dinh.begin(),dinh.end()) ; 
     dinh.resize(unique(dinh.begin(),dinh.end())-dinh.begin()) ; 
+    std::cout<<dinh.size()<<std::endl; 
+    for(auto x : dinh)std::cout<<x<<" "; 
+    std::cout<<std::endl; 
+    for(auto x : values)std::cout<<x<<" " ;
+    std::cout<<std::endl; 
+    // return ; 
+    // return ; 
     int n = dinh.size() ; 
     nodes.reserve(n); 
     for(auto u : dinh)
@@ -611,9 +618,10 @@ void Graph::InputDataFromKeyboard(std::vector<int> values )
     }
     std::map<std::pair<int, int>,int> edgeMap;
     edges.clear();
-    for (int i = 0; i < values.size(); i+=3)
+    for (int i = 0; i+2 < values.size(); i+=3)
     {
-        edgeMap[{values[i], values[i + 1]}]=values[i+2];
+        auto key = std::make_pair(std::min(values[i], values[i+1]), std::max(values[i], values[i+1]));
+        edgeMap[key]=values[i+2];
     }
     for (std::pair<std::pair<int, int>, int> tmp: edgeMap) {
         edges.push_back({tmp.first.first, tmp.first.second, tmp.second});
