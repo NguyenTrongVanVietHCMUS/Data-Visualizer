@@ -568,5 +568,7 @@ void Presentation::NormPresentation(int curRemoteState)
                 flag = true;
             }
         }
+        currentPresentation = std::min(int(present.size()) - 1, currentPresentation);
+        currentPresentation = std::max(0, currentPresentation);
     }
 }

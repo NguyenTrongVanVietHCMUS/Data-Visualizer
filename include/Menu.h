@@ -6,6 +6,7 @@
 #include "SinglyLinkedList.h"
 #include "AVL.h" 
 #include "Heap.h"
+#include "MaxHeap.h"
 #include "Trie.h"
 #include "Graph.h"
 class Menu
@@ -21,6 +22,7 @@ class Menu
         SinglyLinkedList myList;
         Graph myGraph;
         Heap myHeap;
+        MaxHeap myMaxHeap;
         Trie myTrie;
         AVL myAVL;
         Color GetColorBackground();

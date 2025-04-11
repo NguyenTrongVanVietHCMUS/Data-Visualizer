@@ -7,12 +7,12 @@ class Graph : public DataStructure
 {
     public:
         const float NODE_RADIUS = 20.0f;     
-        const float DESIRED_DISTANCE = 120.0f; 
-        const float ATTRACTION_STRENGTH = 0.01f;
-        const float REPULSION_STRENGTH = 10000.0f; 
-        const float CENTER_PULL = 0.002f;      
-        const float MAX_FORCE = 10.0f;        
-        const float DAMPING = 0.85f;          
+        const float DESIRED_DISTANCE = 150.0f; 
+        const float ATTRACTION_STRENGTH = 0.05f;
+        const float REPULSION_STRENGTH = 5000.0f; 
+        const float CENTER_PULL = 0.001f;      
+        const float MAX_FORCE = 5.0f;        
+        const float DAMPING = 0.9f;          
 
         struct Edge 
         {
@@ -38,14 +38,11 @@ class Graph : public DataStructure
         std::vector<int> values;
       
         void ClearAllData();
+        Vector2 GenerateNodePositionSpread(int i, int n);
         void RandomNewData();
         void InputDataFromFile();
         void InputDataFromKeyboard(std::vector<int> values);
         void UpdateGraph();
-        void Insert(int pos, int val);
-        void Delete(int val);
-        void Search(int val);
-        void Update(int pos, int val);
         void FixGraph();
         void UnFixGraph();
         void MinimumSpanningTree(int source);
@@ -54,10 +51,6 @@ class Graph : public DataStructure
         std::vector<int> StringToVector(std::string listChar);
 
         SetOfAnimation BasicStructure(const std::vector<Node> &nodes);
-        Presentation InsertAnimation(int pos, int val);
-        Presentation UpdateAnimation(int pos, int val);
-        Presentation DeleteAnimation(int val);
-        Presentation SearchAnimation(int val, Color color);
         Presentation ShortestPathFromSourceAnimation(int source);
         Presentation ShortestPathAnimation(int start, int _end);
         Presentation MinimumSpanningTreeAnimation(int source);
@@ -76,12 +69,17 @@ class Graph : public DataStructure
         void HandleDragging();
                 
         
+        void Draw();
+        void DrawRemote();
+        void HandleRemote();
         void DrawToolBar();
         void HandleToolBar();
-        
-        
-        
-        
 
-        void Draw();
+
+        std::vector<std::string> createList;
+        std::vector<std::string> sourceList;
+        std::vector<std::string> PathList;
+        std::vector<std::string> MSTList;
+        Vector2 positionBoard;
+        float width, height;
 };

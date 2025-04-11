@@ -9,23 +9,21 @@ void NewAnimation::DrawNormalEdge(const Texture &arrowEdge, const bool &isLightM
     float radius = nodes[0].radius;
     Vector2 startPos = nodes[0].position, endPos = nodes[1].position;
     Vector2 direction = {endPos.x - startPos.x, endPos.y - startPos.y};
-    float length = sqrt(direction.x * direction.x + direction.y * direction.y);
+    float length = sqrtf(direction.x * direction.x + direction.y * direction.y);
 
-    if (length < radius * 2) {
-        return;
-    }
+    if (length < radius * 2) return;
 
     Vector2 unitDir = {direction.x / length, direction.y / length};
     Vector2 newStart = {startPos.x + unitDir.x * radius, startPos.y + unitDir.y * radius};
-    Vector2 newEnd = {endPos.x - unitDir.x * radius, endPos.y - unitDir.y * radius}; // Adjusted to stop at node boundary
+    Vector2 newEnd = {endPos.x - unitDir.x * (radius + 5), endPos.y - unitDir.y * (radius + 5)}; // 5 = khoảng cách arrow head
+
     DrawLineEx(newStart, newEnd, 3.0f, curColor);
 
-    // Calculate angle and arrow position
     float angle = atan2f(direction.y, direction.x) * RAD2DEG;
-    // Position the arrow so its tip is at newEnd
-    Vector2 arrowPos = {newEnd.x - unitDir.x * 8, newEnd.y - unitDir.y * 8}; // Offset by half texture width (8) to align tip
+    Vector2 arrowPos = {newEnd.x - unitDir.x * 4, newEnd.y - unitDir.y * 4}; // offset nhẹ để mũi tên nằm gọn
     DrawTexturePro(arrowEdge, {0, 0, 16, 12}, {arrowPos.x, arrowPos.y, 16, 12}, {8, 6}, angle, curColor);
 }
+
 
 void NewAnimation::DrawHollowNode(const Texture2D &hollowCircle, const Font &fontNumber, const bool &isLightMode)
 {
@@ -77,13 +75,13 @@ bool NewAnimation::DrawMoveNodeAnimation(const Texture2D &textureNode, const Fon
 }
 
 bool NewAnimation::DrawInsertEdgeAnimation(const Texture &arrowEdge, const Color &color, const bool &isLightMode, float &curAnimation, const float &speed, int curRemoteState)
-{  
+{
     Color curColor = (ColorIsEqual(color, BLACK) ? (isLightMode ? BLACK : WHITE) : color);
     if (curAnimation < startAnimation) curAnimation = startAnimation;
     bool flag = false;
+
     curAnimation += (!curRemoteState) * speed;
-    if (curAnimation >= 1) 
-    {
+    if (curAnimation >= 1) {
         curAnimation = 1;
         flag = true;
     }
@@ -91,21 +89,23 @@ bool NewAnimation::DrawInsertEdgeAnimation(const Texture &arrowEdge, const Color
     float radius = nodes[0].radius;
     Vector2 startPos = nodes[0].position, endPos = nodes[1].position;
     Vector2 direction = {endPos.x - startPos.x, endPos.y - startPos.y};
-    float length = sqrt(direction.x * direction.x + direction.y * direction.y);
+    float length = sqrtf(direction.x * direction.x + direction.y * direction.y);
 
-    if (length < radius * 2) {
-        return flag;
-    }
+    if (length < radius * 2) return flag;
 
     Vector2 unitDir = {direction.x / length, direction.y / length};
     Vector2 newStart = {startPos.x + unitDir.x * radius, startPos.y + unitDir.y * radius};
     Vector2 newEnd = {endPos.x - unitDir.x * (radius + 5), endPos.y - unitDir.y * (radius + 5)};
-    Vector2 newCur = {newStart.x + (newEnd.x - newStart.x) * curAnimation, newStart.y + (newEnd.y - newStart.y) * curAnimation};
-    DrawLineEx(newStart, newCur, 3.0f, curColor);
+    Vector2 newCur = {
+        newStart.x + (newEnd.x - newStart.x) * curAnimation,
+        newStart.y + (newEnd.y - newStart.y) * curAnimation
+    };
+
+    DrawLineEx(newStart, newCur, 3.0f, Fade(curColor, curAnimation));
 
     float angle = atan2f(direction.y, direction.x) * RAD2DEG;
     Vector2 arrowPos = {newCur.x - unitDir.x * 4, newCur.y - unitDir.y * 4};
-    DrawTexturePro(arrowEdge, {0, 0, 16, 12}, {arrowPos.x, arrowPos.y, 16, 12}, {8, 6}, angle, curColor);
+    DrawTexturePro(arrowEdge, {0, 0, 16, 12}, {arrowPos.x, arrowPos.y, 16, 12}, {8, 6}, angle, Fade(curColor, curAnimation));
 
     return flag;
 }
@@ -115,30 +115,30 @@ bool NewAnimation::DrawDeleteEdgeAnimation(const Texture2D &arrowEdge, const Col
     if (curAnimation < startAnimation) curAnimation = startAnimation;
     bool flag = false;
     curAnimation += (!curRemoteState) * speed;
-    if (curAnimation >= 1) 
-    {
+
+    if (curAnimation >= 1) {
         curAnimation = 1;
         flag = true;
     }
 
+    Color curColor = (ColorIsEqual(color, BLACK) ? (isLightMode ? BLACK : WHITE) : color);
+
     float radius = nodes[0].radius;
     Vector2 startPos = nodes[0].position, endPos = nodes[1].position;
     Vector2 direction = {endPos.x - startPos.x, endPos.y - startPos.y};
-    float length = sqrt(direction.x * direction.x + direction.y * direction.y);
+    float length = sqrtf(direction.x * direction.x + direction.y * direction.y);
 
-    if (length < radius * 2) {
-        return flag;
-    }
+    if (length < radius * 2) return flag;
 
     Vector2 unitDir = {direction.x / length, direction.y / length};
     Vector2 newStart = {startPos.x + unitDir.x * radius, startPos.y + unitDir.y * radius};
-    Vector2 newEnd = {float(endPos.x - unitDir.x * (radius + 17.6)), float(endPos.y - unitDir.y * (radius + 17.6))};
-    DrawLineEx(newStart, newEnd, 3.0f, Fade(color, 1 - curAnimation));
+    Vector2 newEnd = {endPos.x - unitDir.x * (radius + 5), endPos.y - unitDir.y * (radius + 5)};
+    
+    DrawLineEx(newStart, newEnd, 3.0f, Fade(curColor, 1 - curAnimation));
 
-    newEnd = {endPos.x - unitDir.x * (radius + 5), endPos.y - unitDir.y * (radius + 5)};
     float angle = atan2f(direction.y, direction.x) * RAD2DEG;
     Vector2 arrowPos = {newEnd.x - unitDir.x * 4, newEnd.y - unitDir.y * 4};
-    DrawTexturePro(arrowEdge, {0, 0, 16, 12}, {arrowPos.x, arrowPos.y, 16, 12}, {8, 6}, angle, Fade(color, 1 - curAnimation));
+    DrawTexturePro(arrowEdge, {0, 0, 16, 12}, {arrowPos.x, arrowPos.y, 16, 12}, {8, 6}, angle, Fade(curColor, 1 - curAnimation));
 
     return flag;
 }
@@ -148,36 +148,38 @@ bool NewAnimation::DrawMoveEdgeAnimation(const Texture2D &arrowEdge, const Color
     if (curAnimation < startAnimation) curAnimation = startAnimation;
     bool flag = false;
     curAnimation += (!curRemoteState) * speed;
-    if (curAnimation >= 1) 
-    {
+
+    if (curAnimation >= 1) {
         curAnimation = 1;
         flag = true;
     }
+
     Color curColor = (ColorIsEqual(color, BLACK) ? (isLightMode ? BLACK : WHITE) : color);
-
     float radius = nodes[0].radius;
-    Vector2 startPos = Vector2  {   
-                                    nodes[0].position.x + (nodes[1].position.x - nodes[0].position.x) * curAnimation,
-                                    nodes[0].position.y + (nodes[1].position.y - nodes[0].position.y) * curAnimation
-                                };
-    Vector2 endPos = Vector2  {   
-                                    nodes[2].position.x + (nodes[3].position.x - nodes[2].position.x) * curAnimation,
-                                    nodes[2].position.y + (nodes[3].position.y - nodes[2].position.y) * curAnimation
-                                };
-    Vector2 direction = {endPos.x - startPos.x, endPos.y - startPos.y};
-    float length = sqrt(direction.x * direction.x + direction.y * direction.y);
 
-    if (length < radius * 2) {
-        return flag;
-    }
+    // Lấy vị trí start và end tạm thời theo animation
+    Vector2 startPos = {
+        nodes[0].position.x + (nodes[1].position.x - nodes[0].position.x) * curAnimation,
+        nodes[0].position.y + (nodes[1].position.y - nodes[0].position.y) * curAnimation
+    };
+    Vector2 endPos = {
+        nodes[2].position.x + (nodes[3].position.x - nodes[2].position.x) * curAnimation,
+        nodes[2].position.y + (nodes[3].position.y - nodes[2].position.y) * curAnimation
+    };
+
+    Vector2 direction = {endPos.x - startPos.x, endPos.y - startPos.y};
+    float length = sqrtf(direction.x * direction.x + direction.y * direction.y);
+
+    if (length < radius * 2) return flag;
 
     Vector2 unitDir = {direction.x / length, direction.y / length};
     Vector2 newStart = {startPos.x + unitDir.x * radius, startPos.y + unitDir.y * radius};
-    Vector2 newEnd = {float(endPos.x - unitDir.x * (radius + 5)), float(endPos.y - unitDir.y * (radius + 5))};
+    Vector2 newEnd = {endPos.x - unitDir.x * (radius + 5), endPos.y - unitDir.y * (radius + 5)};
+
     DrawLineEx(newStart, newEnd, 3.0f, curColor);
 
     float angle = atan2f(direction.y, direction.x) * RAD2DEG;
-    Vector2 arrowPos = {newEnd.x - unitDir.x * 4, newEnd.y - unitDir.y * 4};
+    Vector2 arrowPos = {newEnd.x - unitDir.x * 4, newEnd.y - unitDir.y * 4}; // đồng bộ offset mũi tên
     DrawTexturePro(arrowEdge, {0, 0, 16, 12}, {arrowPos.x, arrowPos.y, 16, 12}, {8, 6}, angle, curColor);
 
     return flag;
