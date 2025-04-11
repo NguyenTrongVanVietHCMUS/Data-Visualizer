@@ -47,6 +47,7 @@ class DataStructure
         int isLightMode;
 
         float speed;
+        Button changeSpeed;
         Presentation myPresentation;
         
 

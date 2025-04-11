@@ -16,7 +16,7 @@ class SinglyLinkedList : public DataStructure
         void InputDataFromFile();
         void BuildCreateAnimation();
         void Insert(int pos, std::string val);
-        void Delete(std::string val);
+        void Delete(std::string pos);
         void Search(std::string val);
         void Update(int pos, std::string val);
 
@@ -24,7 +24,7 @@ class SinglyLinkedList : public DataStructure
         SetOfAnimation BasicStructure(const std::vector<Node> &nodes);
         Presentation InsertAnimation(int pos, std::string val);
         Presentation UpdateAnimation(int pos, std::string val);
-        Presentation DeleteAnimation(int pos );
+        Presentation DeleteAnimation(int pos);
         Presentation SearchAnimation(int val, Color color);
         Presentation CreateAnimation(const std::vector<Node> &nodes);
 

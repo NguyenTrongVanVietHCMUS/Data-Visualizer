@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 abcd 
 eadfafd
 afdadfadf 
 af
 dafafasfdasdfas
+=======
+1 5 7 23 845 12 32 5
+>>>>>>> ca7207ee64ac7a990650337ac5f7fcf9b57a99d8
