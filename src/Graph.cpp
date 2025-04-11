@@ -174,30 +174,33 @@ void Graph::InputDataFromFile()
 
     TextCopy(filePath, droppedFiles.paths[0]);
     UnloadDroppedFiles(droppedFiles);
-
     std::ifstream fin(filePath);
     std::string s;
-    getline(fin, s);
-
-    int curValue = -1;
-    for (char &c: s)
+    values.clear() ; 
+    while(getline(fin, s))
     {
-        if ('0' <= c && c <= '9')
+        int curValue = -1;
+        for (char &c: s)
         {
-            if (curValue == -1) curValue = (c - '0'); else curValue = 10 * curValue + (c - '0');
-            continue;
+            if ('0' <= c && c <= '9')
+            {
+                if (curValue == -1) curValue = (c - '0'); else curValue = 10 * curValue + (c - '0');
+                continue;
+            }
+            if (curValue != -1)
+            {
+                values.push_back(curValue);
+                curValue = -1;
+            }
         }
         if (curValue != -1)
         {
             values.push_back(curValue);
-            curValue = -1;
         }
     }
-    if (curValue != -1)
-    {
-        values.push_back(curValue);
-    }
+
     fin.close();
+    InputDataFromKeyboard(values) ; 
     // BuildBasicStructure();
 }
 
@@ -624,7 +627,7 @@ void Graph::InputDataFromKeyboard(std::vector<int> values )
         edgeMap[key]=values[i+2];
     }
     for (std::pair<std::pair<int, int>, int> tmp: edgeMap) {
-        edges.push_back({tmp.first.first, tmp.first.second, tmp.second});
+        edges.push_back({tmp.first.first-1, tmp.first.second-1, tmp.second});
     }
     UpdateGraph();
 }

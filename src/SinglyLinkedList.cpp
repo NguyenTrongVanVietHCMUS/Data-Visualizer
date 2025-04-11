@@ -228,6 +228,8 @@ void SinglyLinkedList::InputDataFromFile()
     char *filePath = new char[2448];
 
     TextCopy(filePath, droppedFiles.paths[0]);
+    std::cout<<filePath<<std::endl; 
+    // abort(); 
     UnloadDroppedFiles(droppedFiles);
 
     std::ifstream fin(filePath);

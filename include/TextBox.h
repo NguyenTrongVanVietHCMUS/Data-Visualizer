@@ -6,7 +6,8 @@ class TextBox
 {
     public:
         Font font = LoadFont("../Fonts/Roboto_Condensed-SemiBold.ttf");
-        float oldWidth;
+        float oldWidth = 80 ; 
+        float oldHeight = 35;  
         Button textBox;
         Button confirm;
         bool isSelected;

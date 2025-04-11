@@ -25,7 +25,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{A3D5CA32-ECFF-3E87-B34E-235677A48BEA}</ProjectGuid>
+    <ProjectGuid>{79CF7EEC-925F-3A63-96D2-CA88E0EF4E13}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
     <Platform>x64</Platform>
@@ -69,7 +69,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib.h;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raygui\src;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>V:\Data-Visualizer\include\raylib.h;V:\Data-Visualizer\include\raygui\src;V:\Data-Visualizer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -79,7 +79,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib.h;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raygui\src;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>V:\Data-Visualizer\include\raylib.h;V:\Data-Visualizer\include\raygui\src;V:\Data-Visualizer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -89,7 +89,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib.h;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raygui\src;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>V:\Data-Visualizer\include\raylib.h;V:\Data-Visualizer\include\raygui\src;V:\Data-Visualizer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -99,7 +99,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib.h;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raygui\src;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>V:\Data-Visualizer\include\raylib.h;V:\Data-Visualizer\include\raygui\src;V:\Data-Visualizer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -108,11 +108,11 @@
     </Midl>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\CMakeLists.txt">
+    <CustomBuild Include="V:\Data-Visualizer\include\raylib\CMakeLists.txt">
       <UseUtf8Encoding>Always</UseUtf8Encoding>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/include/raylib/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule V:/Data-Visualizer/include/raylib/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer -BC:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/build --check-stamp-file C:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/build/include/raylib/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SV:/Data-Visualizer -BV:/Data-Visualizer/build --check-stamp-file V:/Data-Visualizer/build/include/raylib/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -120,12 +120,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CheckCCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CheckCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CheckFlagCommonConfig.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CheckSourceCompiles.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\CMakeOptions.txt;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\AddIfFlagCompiles.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\CompilerFlags.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\EnumOption.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\ParseConfigHeader.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\Uninstall.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CheckCCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CheckCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CheckFlagCommonConfig.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CheckSourceCompiles.cmake;V:\Data-Visualizer\include\raylib\CMakeOptions.txt;V:\Data-Visualizer\include\raylib\cmake\AddIfFlagCompiles.cmake;V:\Data-Visualizer\include\raylib\cmake\CompilerFlags.cmake;V:\Data-Visualizer\include\raylib\cmake\EnumOption.cmake;V:\Data-Visualizer\include\raylib\cmake\ParseConfigHeader.cmake;V:\Data-Visualizer\include\raylib\cmake\Uninstall.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">V:\Data-Visualizer\build\include\raylib\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/include/raylib/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule V:/Data-Visualizer/include/raylib/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer -BC:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/build --check-stamp-file C:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/build/include/raylib/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SV:/Data-Visualizer -BV:/Data-Visualizer/build --check-stamp-file V:/Data-Visualizer/build/include/raylib/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -133,12 +133,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CheckCCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CheckCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CheckFlagCommonConfig.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CheckSourceCompiles.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\CMakeOptions.txt;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\AddIfFlagCompiles.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\CompilerFlags.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\EnumOption.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\ParseConfigHeader.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\Uninstall.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CheckCCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CheckCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CheckFlagCommonConfig.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CheckSourceCompiles.cmake;V:\Data-Visualizer\include\raylib\CMakeOptions.txt;V:\Data-Visualizer\include\raylib\cmake\AddIfFlagCompiles.cmake;V:\Data-Visualizer\include\raylib\cmake\CompilerFlags.cmake;V:\Data-Visualizer\include\raylib\cmake\EnumOption.cmake;V:\Data-Visualizer\include\raylib\cmake\ParseConfigHeader.cmake;V:\Data-Visualizer\include\raylib\cmake\Uninstall.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">V:\Data-Visualizer\build\include\raylib\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/include/raylib/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule V:/Data-Visualizer/include/raylib/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer -BC:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/build --check-stamp-file C:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/build/include/raylib/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SV:/Data-Visualizer -BV:/Data-Visualizer/build --check-stamp-file V:/Data-Visualizer/build/include/raylib/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -146,12 +146,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CheckCCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CheckCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CheckFlagCommonConfig.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CheckSourceCompiles.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\CMakeOptions.txt;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\AddIfFlagCompiles.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\CompilerFlags.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\EnumOption.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\ParseConfigHeader.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\Uninstall.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CheckCCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CheckCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CheckFlagCommonConfig.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CheckSourceCompiles.cmake;V:\Data-Visualizer\include\raylib\CMakeOptions.txt;V:\Data-Visualizer\include\raylib\cmake\AddIfFlagCompiles.cmake;V:\Data-Visualizer\include\raylib\cmake\CompilerFlags.cmake;V:\Data-Visualizer\include\raylib\cmake\EnumOption.cmake;V:\Data-Visualizer\include\raylib\cmake\ParseConfigHeader.cmake;V:\Data-Visualizer\include\raylib\cmake\Uninstall.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">V:\Data-Visualizer\build\include\raylib\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/include/raylib/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule V:/Data-Visualizer/include/raylib/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer -BC:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/build --check-stamp-file C:/Users/chanh/OneDrive/Desktop/Project/CS163/Chuong/Data-Visualizer/build/include/raylib/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SV:/Data-Visualizer -BV:/Data-Visualizer/build --check-stamp-file V:/Data-Visualizer/build/include/raylib/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -159,8 +159,8 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CheckCCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CheckCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CheckFlagCommonConfig.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CheckSourceCompiles.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\CMakeOptions.txt;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\AddIfFlagCompiles.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\CompilerFlags.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\EnumOption.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\ParseConfigHeader.cmake;C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\include\raylib\cmake\Uninstall.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CheckCCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CheckCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CheckFlagCommonConfig.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CheckSourceCompiles.cmake;V:\Data-Visualizer\include\raylib\CMakeOptions.txt;V:\Data-Visualizer\include\raylib\cmake\AddIfFlagCompiles.cmake;V:\Data-Visualizer\include\raylib\cmake\CompilerFlags.cmake;V:\Data-Visualizer\include\raylib\cmake\EnumOption.cmake;V:\Data-Visualizer\include\raylib\cmake\ParseConfigHeader.cmake;V:\Data-Visualizer\include\raylib\cmake\Uninstall.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">V:\Data-Visualizer\build\include\raylib\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
@@ -168,20 +168,20 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\ZERO_CHECK.vcxproj">
-      <Project>{3982F94C-E275-3CD0-85CC-904941D1E0B0}</Project>
+    <ProjectReference Include="V:\Data-Visualizer\build\ZERO_CHECK.vcxproj">
+      <Project>{6DBFC80C-24B6-39B9-AFB3-06E5B171C855}</Project>
       <Name>ZERO_CHECK</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.vcxproj">
-      <Project>{8E7B6B00-F989-3097-8951-4ADEC4996792}</Project>
+    <ProjectReference Include="V:\Data-Visualizer\build\include\raylib\raylib\external\glfw\src\glfw.vcxproj">
+      <Project>{0325E3F5-E506-311C-863C-0097A969A904}</Project>
       <Name>glfw</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\chanh\OneDrive\Desktop\Project\CS163\Chuong\Data-Visualizer\build\include\raylib\raylib\raylib.vcxproj">
-      <Project>{3154FFA9-98C9-3780-9A42-2C5E2A22FECD}</Project>
+    <ProjectReference Include="V:\Data-Visualizer\build\include\raylib\raylib\raylib.vcxproj">
+      <Project>{9AD9868A-C935-38DC-AD73-CA75B0D20C21}</Project>
       <Name>raylib</Name>
     </ProjectReference>
   </ItemGroup>

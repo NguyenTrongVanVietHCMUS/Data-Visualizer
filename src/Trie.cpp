@@ -266,37 +266,41 @@ void Trie::InputDataFromFile()
     UnloadDroppedFiles(droppedFiles);
 
     std::ifstream fin(filePath);
-    std::string s;
-    getline(fin, s);
+    std::string s; 
 
-    std::string curValue = "" ;
-    for (char &c: s)
+    while(getline(fin, s))
     {
-        bool flag = 0 ;  
-        if (('A' <= c && c <= 'Z'))
+
+        std::string curValue = "" ;
+        for (char &c: s)
         {
-            curValue+=c ; 
-            flag = 1 ; 
+            bool flag = 0 ;  
+            if (('A' <= c && c <= 'Z'))
+            {
+                curValue+=c ; 
+                flag = 1 ; 
+            }
+            else if('a' <= c && c <= 'z')
+            {
+                curValue+=c-'a'+'A' ; 
+                flag = 1 ; 
+            }
+            if(!flag)
+            {
+                str.push_back(curValue);
+                curValue = "" ;  
+            }
         }
-        else if('a' <= c && c <= 'z')
-        {
-            curValue+=c-'a'+'A' ; 
-            flag = 1 ; 
-        }
-        if(!flag)
+        if (curValue != "") ; 
         {
             str.push_back(curValue);
-            curValue = "" ;  
         }
     }
-    if (curValue != "") ; 
-    {
-        str.push_back(curValue);
-    }
     fin.close();
+    BuildNodeFromValue(str);
     BuildCreateAnimation();
 }
-
+    
 SetOfAnimation Trie::BasicStructure(TrieNode* root )
 {
     SetOfAnimation basicStructure;
