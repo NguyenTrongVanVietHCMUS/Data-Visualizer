@@ -25,6 +25,7 @@ add_executable(
      src/DataStructure.cpp 
      src/SinglyLinkedList.cpp
      src/Heap.cpp
+     src/MaxHeap.cpp
      src/Trie.cpp 
      src/Graph.cpp
      src/AVL.cpp

@@ -27,8 +27,8 @@ class Heap : public DataStructure
 
         std::vector<Node> BuildNodeFromValue(const std::vector<std::string> &values);
         
-        void HeapifyDown(Presentation &myPresentation);
-        void HeapifyUp(Presentation &myPresentation);
+        void HeapifyDown(Presentation &myPresentation, std::vector<int> highlightLines);
+        void HeapifyUp(Presentation &myPresentation, std::vector<int> highlightLines);
 
 
 
@@ -45,14 +45,20 @@ class Heap : public DataStructure
         
         
 
+        void Draw();
+        void DrawRemote();
+        void HandleRemote();
         void DrawToolBar();
         void HandleToolBar();
-        
-        
-        
-        
+    
         
 
-        void Draw();
+
+        std::vector<std::string> createList;
+        std::vector<std::string> topList;
+        std::vector<std::string> pushList;
+        std::vector<std::string> popList;
+        Vector2 positionBoard;
+        float width, height;
         
 };

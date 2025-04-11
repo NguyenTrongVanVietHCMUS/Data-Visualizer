@@ -6,12 +6,12 @@ void Menu::Init()
 {   
 
     buttons = new Button[8];
-    buttons[0] = {Vector2{250, 250}, 300, 180, (char *)"LINK LIST "};
-    buttons[1] = {Vector2{650, 250}, 300, 180, (char *)"HEAP"};
-    buttons[2] = {Vector2{1050, 250}, 300, 180, (char *)"TRIE"};
-    buttons[3] = {Vector2{250, 500}, 300, 180, (char *)"AVL"};
-    buttons[4] = {Vector2{650, 500}, 300, 180, (char *)"GRAPH"};   
-    buttons[5] = {Vector2{1050, 500}, 300, 180, (char *)"Six"};
+    buttons[0] = {Vector2{250, 250}, 300, 180, (char *)"Linked List"};
+    buttons[1] = {Vector2{650, 250}, 300, 180, (char *)"Min Heap"};
+    buttons[2] = {Vector2{1050, 250}, 300, 180, (char *)"Trie"};
+    buttons[3] = {Vector2{250, 500}, 300, 180, (char *)"Avl Tree"};
+    buttons[4] = {Vector2{650, 500}, 300, 180, (char *)"Graph"};   
+    buttons[5] = {Vector2{1050, 500}, 300, 180, (char *)"Max Heap"};
     buttons[6] = {Vector2{1532, 12}, 48, 48, (char *)"Seven"};
     buttons[7] = {Vector2{20, 12}, 48, 48, (char *)"Eight"};
 
@@ -26,6 +26,7 @@ void Menu::Init()
 
     myList.Init();
     myHeap.Init();
+    myMaxHeap.Init();
     myTrie.Init();
     myAVL.Init() ; 
     myGraph.Init();
@@ -52,6 +53,11 @@ void Menu::HandleMenu() {
     if (buttons[7].CheckMouseClickInRectangle()) {
         isLightMode = !isLightMode;
         myList.isLightMode = isLightMode;
+        myHeap.isLightMode = isLightMode;
+        myMaxHeap.isLightMode = isLightMode;
+        myTrie.isLightMode = isLightMode;
+        myAVL.isLightMode = isLightMode;
+        myGraph.isLightMode = isLightMode;
     }
     if (dataStructure == 0) 
     {
@@ -96,7 +102,7 @@ void Menu::Run() {
             myGraph.Run();
         }
         if (dataStructure == 6) {   
-
+            myMaxHeap.Run();
         }
     }
     Texture2D modeIcon = isLightMode ? toDarkMode : toLightMode;
