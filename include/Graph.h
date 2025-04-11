@@ -41,6 +41,7 @@ class Graph : public DataStructure
         Vector2 GenerateNodePositionSpread(int i, int n);
         void RandomNewData();
         void InputDataFromFile();
+        void InputDataFromKeyboard(std::vector<int> values);
         void UpdateGraph();
         void FixGraph();
         void UnFixGraph();

@@ -83,6 +83,7 @@
 		"xutility": "cpp",
 		"xtree": "cpp",
 		"cassert": "cpp",
+		"queue": "cpp",
 		"any": "cpp",
 		"barrier": "cpp",
 		"bitset": "cpp",

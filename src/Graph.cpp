@@ -776,7 +776,51 @@ std::vector<int> Graph::StringToVector(std::string listChar)
     }
     return values;
 }
-                     
+void Graph::InputDataFromKeyboard(std::vector<int> values )
+{
+    ClearAllData();
+    UnFixGraph();  
+    while(values.size()%3!=0)
+    {
+        values.pop_back() ; 
+    }
+    std::vector<int>dinh ; 
+    for(int i= 0;i<values.size();i++)
+    {
+        if(i%3!=2)
+        {
+            dinh.push_back(values[i]) ; 
+        }   
+    }
+    sort(dinh.begin(),dinh.end()) ; 
+    dinh.resize(unique(dinh.begin(),dinh.end())-dinh.begin()) ; 
+    std::cout<<dinh.size()<<std::endl; 
+    for(auto x : dinh)std::cout<<x<<" "; 
+    std::cout<<std::endl; 
+    for(auto x : values)std::cout<<x<<" " ;
+    std::cout<<std::endl; 
+    // return ; 
+    // return ; 
+    int n = dinh.size() ; 
+    nodes.reserve(n); 
+    for(auto u : dinh)
+    {
+        float x = GetRandomValue(100, GetScreenWidth() - 100);
+        float y = GetRandomValue(100, GetScreenHeight() - 100);
+        nodes.emplace_back(Vector2{x, y}, NODE_RADIUS, std::to_string(u)); 
+    }
+    std::map<std::pair<int, int>,int> edgeMap;
+    edges.clear();
+    for (int i = 0; i+2 < values.size(); i+=3)
+    {
+        auto key = std::make_pair(std::min(values[i], values[i+1]), std::max(values[i], values[i+1]));
+        edgeMap[key]=values[i+2];
+    }
+    for (std::pair<std::pair<int, int>, int> tmp: edgeMap) {
+        edges.push_back({tmp.first.first, tmp.first.second, tmp.second});
+    }
+    UpdateGraph();
+}
 void Graph::HandleToolBar()
 {
     if (toolBarButtons[0][0].CheckMouseClickInRectangle()) // Open_Close Bar
@@ -864,6 +908,7 @@ void Graph::HandleToolBar()
             {
                 flagToolBarButtons[1][4] = false;
                 values = StringToVector(listChar);
+                InputDataFromKeyboard(values);
             }
             return;
         }
