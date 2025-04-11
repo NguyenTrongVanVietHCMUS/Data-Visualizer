@@ -689,7 +689,7 @@ void Heap::HandleToolBar()
 
 void Heap::Draw() 
 {  
-    myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, fontNumber, GetFontDefault(), isLightMode, speed);
+    myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, fontNumber, GetFontDefault(), isLightMode, speed, curRemoteState);
 }
 
 std::vector<int> Heap::StringToVector(std::string listChar)

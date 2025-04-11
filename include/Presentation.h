@@ -40,12 +40,20 @@ class Presentation
 
         NewAnimation GetAnimation(int positionPresentation, int positionSet, int i);
 
-        void DrawPresentation(const Texture2D &hollowCircle, const Texture2D &solidCircle, const Texture2D &arrowEdge, const Font &fontValue, const Font &fontText, const bool &isLightMode, const float &speed);
+        void DrawPresentation(const Texture2D &hollowCircle, const Texture2D &solidCircle, const Texture2D &arrowEdge, const Font &fontValue, const Font &fontText, const bool &isLightMode, const float &speed, int curRemoteState);
 
         int CountNumberOfAnimation();
         void InitBoardText(const std::vector<std::string> &_list, Vector2 _postition, float _width, float _height);
         void DrawCodeBoxMultiHighlight(const std::vector<std::string>& list, Vector2 position, float width, float height, const std::vector<int>& highlightLines, const Font& fontText);
 
         void SetAllhighlightLines(int startPresentation, int endPresentation, std::vector<int> listHighlights);
+        void SetCurToStartAnimation(int startPresentation, int endPresentation);
+        void SetCurAnimation(int startPresentation, int endPresentation, int curr);
+        void UnFillCurPresentation();
+        void FillCurPresentation();
+        void FindPosition(int newFrame, int &currentPresentation, int &positionSet);
+        void SetCurToStartAnimationInOnePresentation(int i, int j);
+        void NormPresentation(int curRemoteState);
 
+ 
 };

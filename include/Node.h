@@ -22,8 +22,8 @@ class Node
         void DrawTextNode(const Font &fontValue, const Color &color, const bool &isLightMode);
         void DrawSolidNode(const Texture2D &textureNode, const Color &color, const bool &isLightMode);
         void DrawHollowNode(const Texture2D &textureNode, const Color &color, const bool &isLightMode);
-        bool DrawInsertNodeAnimation(const Texture2D &textureNode, const Font &fontValue, const Color &color, const bool &isLightMode, float &curAnimation, const float &speed);
-        bool DrawDeleteNodeAnimation(const Texture2D &textureNode, const Font &fontValue, const Color &color, const bool &isLightMode, float &curAnimation, const float &speed);
+        bool DrawInsertNodeAnimation(const Texture2D &textureNode, const Font &fontValue, const Color &color, const bool &isLightMode, float &curAnimation, const float &speed, int curRemoteState);
+        bool DrawDeleteNodeAnimation(const Texture2D &textureNode, const Font &fontValue, const Color &color, const bool &isLightMode, float &curAnimation, const float &speed, int curRemoteState);
         bool operator== (const Node &other) const 
         { 
             return abs(position.x - other.position.x) <= eps && abs(position.y - other.position.y) <= eps && value == other.value; 
