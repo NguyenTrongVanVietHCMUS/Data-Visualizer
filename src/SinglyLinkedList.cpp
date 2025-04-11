@@ -66,7 +66,11 @@ void SinglyLinkedList::Init()
     values.clear();
     isLightMode = 1;
 
-    speed = 0.03;
+    speed = 0.01;
+    changeSpeed.position = Vector2{0, 750};
+    changeSpeed.width = 45;
+    changeSpeed.height = 45;
+    changeSpeed.text = "x1";
 
 
     remoteButtons.resize(7);
@@ -118,6 +122,20 @@ void SinglyLinkedList::Init()
         "   cur = cur->pNext;",
         "}",
         "prev->pNext = new Node(value, cur);",
+        "return pHead;"
+    };
+    deleteList = {
+        "if (k == 0)",
+        "   Node *nHead = pHead->pNext;",
+        "   delete pHead;",
+        "   return nHead;",
+        "Node *cur = pHead, prev = nullptr;",
+        "while (!cur && k > 0)",
+        "   k -= 1;",
+        "   prev = cur",
+        "   cur = cur->pNext;",
+        "prev->pNext = cur->pNext",
+        "delete cur;",
         "return pHead;"
     };
     positionBoard = Vector2{1600 - 400, 800 - 300};
@@ -186,6 +204,8 @@ void SinglyLinkedList::BuildCreateAnimation()
     myPresentation.currentPresentation = 0;
     myPresentation = CreateAnimation(nodes);
     myPresentation.InitBoardText(createList, positionBoard, width, height);
+    myPresentation.numberOfPresentation = 0;
+    myPresentation.currentPresentation = 0;
     curRemoteState = 0;
 }
 
@@ -339,6 +359,8 @@ void SinglyLinkedList::Search(std::string val)
     int pos = FindPosition(val);
     myPresentation = SearchAnimation(pos, BLUE);
     myPresentation.InitBoardText(searchList, positionBoard, width, height);
+    myPresentation.numberOfPresentation = 0;
+    myPresentation.currentPresentation = 0;
     curRemoteState = 0;
 }
 
@@ -409,7 +431,7 @@ void SinglyLinkedList::Update(int pos, std::string val)
 {
     nodes = BuildNodeFromValue(values);
     myPresentation.currentPresentation = 0;
-    if (pos >= int(nodes.size())) 
+    if (pos < 0 || pos >= int(nodes.size())) 
     {
         myPresentation.present = {BasicStructure(nodes)};
         myPresentation.CopySetToLast(-1);
@@ -418,12 +440,17 @@ void SinglyLinkedList::Update(int pos, std::string val)
             "The position is out side of range!!"  
         };
         myPresentation.InitBoardText(outSideRange, positionBoard, width, height);
+        myPresentation.numberOfPresentation = 0;
+        myPresentation.currentPresentation = 0;
+        curRemoteState = 0;
         return;   
     }
     myPresentation = UpdateAnimation(pos, val);
     myPresentation.InitBoardText(updateList, positionBoard, width, height);
     values[pos] = val;
     nodes[pos].value = val;
+    myPresentation.numberOfPresentation = 0;
+    myPresentation.currentPresentation = 0;
     curRemoteState = 0;
 }
 
@@ -574,122 +601,181 @@ void SinglyLinkedList::Insert(int pos, std::string val)
 {
     nodes = BuildNodeFromValue(values);
     pos = std::min(pos, int(nodes.size()));
-    myPresentation.currentPresentation = 0;
     myPresentation = InsertAnimation(pos, val);
     myPresentation.InitBoardText(insertList, positionBoard, width, height);
     values.insert(values.begin() + pos, val);
     nodes = BuildNodeFromValue(values);
+    myPresentation.numberOfPresentation = 0;
+    myPresentation.currentPresentation = 0;
     curRemoteState = 0;
 }
 
 Presentation SinglyLinkedList::DeleteAnimation(int pos)
 {
     Presentation _delete;
-    if (pos != -1)
+    Color color = RED;
+
+    _delete.present = {BasicStructure(nodes)};
+    _delete.CopySetToLast(-1);
+
+    _delete.CreateNewSet(-1);
+    _delete.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {0}));
+
+    if (pos == 0)
     {
-        _delete = SearchAnimation(pos, RED);
-
-        _delete.CopySetToLast(-1);
-        _delete.SetStartAnimation(-1, 1);
-        
-        NewAnimation animation = _delete.GetAnimation(-1, -1, -1);
-        _delete.EraseAnimation(-1, -1, NewAnimation(2, 0, RED, {nodes[pos]}));
-        if (pos > 0) 
-        {
-            _delete.EraseAnimation(-1, -1, NewAnimation(5, 0, ORANGE, {nodes[pos - 1], nodes[pos]}));
-        }
-        
-        SetOfAnimation tmpGroups = _delete.present.back();
-        animation.type = 3;
-        animation.color = RED;
-        animation.curAnimation = 0;
-        _delete.InsertAnimationToSet(-1, -1, animation);
-
-        if (pos < int(nodes.size()) - 1)
-        {   
-            NewAnimation deleteEdge = _delete.GetAnimation(-1, 0, int(nodes.size()) + pos);
-            deleteEdge.type = 6;
-            deleteEdge.color = RED;
-            deleteEdge.curAnimation = 0;
-            _delete.InsertAnimationToSet(-1, -1, animation);
-            _delete.EraseAnimation(-1, 0, _delete.GetAnimation(-1, 0, int(nodes.size()) + pos));
-        }
-        if (pos > 0)
-        {
-            _delete.EraseAnimation(-1, 0, _delete.GetAnimation(-1, 0, int(nodes.size()) + pos - 1));
-        }
-        _delete.EraseAnimation(-1, 0, _delete.GetAnimation(-1, 0, pos));
-
-        _delete.CopySetToLast(-1);
-        _delete.SetStartAnimation(-1, 1);
-        if (pos > 0 && pos < int(nodes.size()) - 1)
-        {
-            _delete.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {nodes[pos - 1], nodes[pos + 1]}));
-        }
-
-        _delete.present.push_back(tmpGroups);
-        if (pos > 0)
-        {
-            for (int i = int(nodes.size()) - 2; i >= pos; --i)
-            {
-                _delete.EraseAnimation(-1, 0, NewAnimation(4, 0, BLACK, {nodes[i], nodes[i + 1]}));
-            }
-            if (pos < int(nodes.size()) - 1)
-            {   
-                _delete.EraseAnimation(-1, 0, NewAnimation(0, 0, BLACK, {nodes[pos]}));
-            }
-            if (pos > 0)
-            {
-                _delete.EraseAnimation(-1, 0, NewAnimation(4, 0, BLACK, {nodes[pos - 1], nodes[pos]}));
-            }
-            for (int i = int(nodes.size()) - 1; i >= pos; --i)
-            {
-                _delete.EraseAnimation(-1, 0, NewAnimation(0, 0, BLACK, {nodes[i]}));
-            }
-        }
-        else 
-        {
-            while (_delete.present.back().setOfAnimation[0].size())
-            {
-                NewAnimation animation = _delete.present.back().setOfAnimation[0].back();
-                _delete.EraseAnimation(-1, 0, animation);
-            }
-        }
-
         _delete.CreateNewSet(-1);
-        if (pos > 0 && pos < int(nodes.size()) - 1)
+        _delete.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {1}));
+
+        _delete.CreateNewPresentation();
+        _delete.CreateNewSet(-1);
+        _delete.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {2}));
+        _delete.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, RED, {nodes[0]}, 0, {2}));
+        if (nodes.size() > 1) 
         {
-            _delete.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, ORANGE, {nodes[pos - 1], nodes[pos - 1], nodes[pos + 1], nodes[pos]}));
+            _delete.InsertAnimationToSet(-1, -1, NewAnimation(6, 0, RED, {nodes[0], nodes[1]}, 0, {2}));
         }
-        for (int i = int(nodes.size()) - 1; i > pos; --i)
+        for (int i = 1; i < int(nodes.size()); ++i) 
         {
-            _delete.InsertAnimationToSet(-1, -1, NewAnimation(8, 0, BLACK, {nodes[i], nodes[i - 1]}));
+            _delete.InsertAnimationToSet(-1, -1, NewAnimation(0, 0, BLACK, {nodes[i]}, 0, {2}));
+            if (i + 1 < int(nodes.size()))
+            {
+                _delete.InsertAnimationToSet(-1, -1, NewAnimation(4, 0, BLACK, {nodes[i], nodes[i + 1]}, 0, {2}));
+            }
         }
-        for (int i = int(nodes.size()) - 2; i > pos; --i)
+
+        _delete.CreateNewPresentation();
+        _delete.CreateNewSet(-1);
+        for (int i = 1; i < int(nodes.size()); ++i) 
         {
-            _delete.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, BLACK, {nodes[i], nodes[i - 1], nodes[i + 1], nodes[i]}));
+            _delete.InsertAnimationToSet(-1, -1, NewAnimation(8, 0, BLACK, {nodes[i], nodes[i - 1]}, 0, {3}));
+            if (i + 1 < int(nodes.size()))
+            {
+                _delete.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, BLACK, {nodes[i], nodes[i - 1], nodes[i + 1], nodes[i]}, 0, {3}));
+            }
         }
+
+        return _delete;
     }
-    else 
+
     {
-        myPresentation = SearchAnimation(-1, RED);
+        for (int i = 0; i < int(nodes.size()); ++i)
+        {
+            _delete.CopySetToLast(-1);
+            _delete.SetStartAnimation(-1, 1);
+            if (i > 0)
+            {
+                _delete.EraseAnimation(-1, NewAnimation(2, 0, ORANGE, {nodes[i - 1]}));
+                _delete.CreateNewSet(-1);
+                _delete.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {5}));
+                _delete.InsertAnimationToSet(-1, -1, NewAnimation(0, 0, ORANGE, {nodes[i - 1]}, 0, {5}));
+                _delete.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, ORANGE, {nodes[i - 1]}, 0, {5}));
+                _delete.CreateNewSet(-1);
+                _delete.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {6}));
+                _delete.CreateNewSet(-1);
+                _delete.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {7}));
+                _delete.CreateNewSet(-1);
+                _delete.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, (i == pos ? color : ORANGE), {nodes[i - 1], nodes[i]}, 0, {8}));
+                _delete.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, (i == pos ? color : ORANGE), {nodes[i]}, 0, {8}));
+            }
+            else 
+            {
+                _delete.CreateNewSet(-1);
+                _delete.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {4}));
+                _delete.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, (i == pos ? color : ORANGE), {nodes[i]}, 0, {4}));
+            }
+            if (i == pos) 
+            {
+                _delete.CreateNewSet(-1);
+                _delete.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {5}));
+
+                if (i == int(nodes.size() - 1))
+                {
+                    _delete.CreateNewSet(-1);
+                    _delete.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {9}));
+                    
+                    _delete.CopySetToLast(-1);
+                    _delete.SetStartAnimation(-1, 1);
+                    _delete.EraseAnimation(-1, NewAnimation(0, 0, BLACK, {nodes[pos]}, 0, {10}));
+                    _delete.EraseAnimation(-1, NewAnimation(2, 0, RED, {nodes[pos]}, 0, {10}));
+                    if (pos > 0)
+                    {
+                        _delete.EraseAnimation(-1, NewAnimation(4, 0, BLACK, {nodes[pos - 1], nodes[pos]}, 0, {10}));
+                        _delete.EraseAnimation(-1, NewAnimation(5, 0, RED, {nodes[pos - 1], nodes[pos]}, 0, {10}));
+                    }
+                    _delete.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, RED, {nodes[pos]}, 0, {10}));
+                    if (pos > 0)
+                    {
+                        _delete.InsertAnimationToSet(-1, -1, NewAnimation(6, 0, RED, {nodes[pos - 1], nodes[pos]}, 0, {10}));
+                    }
+                }
+                else
+                {
+                    _delete.CreateNewPresentation();
+                    _delete.CreateNewSet(-1);
+                    for (int i = 0; i < int(nodes.size()); ++i)
+                    {
+                        if (i != pos) 
+                        {
+                            _delete.InsertAnimationToSet(-1, -1, NewAnimation(0, 0, BLACK, {nodes[i]}, 0, {9}));
+                        }
+                        if (i != pos && i + 1 != pos && i + 1 < int(nodes.size()))
+                        {
+                            _delete.InsertAnimationToSet(-1, -1, NewAnimation(4, 0, BLACK, {nodes[i], nodes[i + 1]}, 0, {9}));
+                        }
+                    }
+                    Node newNode = Node(Vector2{nodes[i].position.x, nodes[i].position.y + 80.0f}, 20, nodes[i].value);
+                    _delete.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {nodes[i - 1], nodes[i + 1]}, 0, {9}));
+                    _delete.InsertAnimationToSet(-1, -1, NewAnimation(8, 0, RED, {nodes[i], newNode}, 0, {9}));
+                    _delete.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, RED, {nodes[i], newNode, nodes[i + 1], nodes[i + 1]}, 0, {9}));
+
+                    _delete.CopySetToLast(-1);
+                    _delete.SetStartAnimation(-1, 1);
+                    _delete.EraseAnimation(-1, NewAnimation(8, 0, RED, {nodes[i], newNode}));
+                    _delete.EraseAnimation(-1, NewAnimation(7, 0, RED, {nodes[i], newNode, nodes[i + 1], nodes[i + 1]}));
+                    _delete.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, RED, {newNode}, 0, {10}));
+                    _delete.InsertAnimationToSet(-1, -1, NewAnimation(6, 0, RED, {newNode, nodes[i + 1]}, 0, {10}));
+                }   
+                _delete.CreateNewSet(-1);
+                _delete.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {11}));
+                return _delete;
+            }
+        }
     }
 
     return _delete;
 }
 
-void SinglyLinkedList::Delete(std::string val)
+void SinglyLinkedList::Delete(std::string _pos)
 {
     nodes = BuildNodeFromValue(values);
-    int pos = FindPosition(val);
-    myPresentation.currentPresentation = 0;
+    int pos = StringToVector(_pos)[0];
+    pos = std::min(pos, int(nodes.size()) - 1);
+    std::cerr << _pos << ' ' << pos << '\n';
+    if (pos < 0) 
+    {
+        myPresentation.present = {BasicStructure(nodes)};
+        myPresentation.CopySetToLast(-1);
+        myPresentation.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {0}));
+        std::vector<std::string> outSideRange = {
+            "The position is out side of range!!"  
+        };
+        myPresentation.InitBoardText(outSideRange, positionBoard, width, height);
+        myPresentation.numberOfPresentation = 0;
+        myPresentation.currentPresentation = 0;
+        curRemoteState = 0;
+        return;   
+    }
     myPresentation = DeleteAnimation(pos);
+    myPresentation.currentPresentation = 0;
+    myPresentation.InitBoardText(deleteList, positionBoard, width, height);
     if (pos != -1)
     {
         values.erase(values.begin() + pos);
         nodes.erase(nodes.begin() + pos);
         nodes = BuildNodeFromValue(values);
     }
+    myPresentation.numberOfPresentation = 0;
+    myPresentation.currentPresentation = 0;
     curRemoteState = 0;
 }
 
@@ -718,9 +804,9 @@ void SinglyLinkedList::DrawToolBar()
         }
         if (flagToolBarButtons[3][0] == true) // Delete
         {
-            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2 - 50}, 40, 35, (char *)"v ="};
-            v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
-            insertV.DrawTextBox();
+            Button i = {Vector2{17 + 160 + 2, 607 + 35 + 2 - 50}, 40, 35, (char *)"i ="};
+            i.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
+            insertI.DrawTextBox();
         }
         if (flagToolBarButtons[4][0] == true) // Update
         {
@@ -786,9 +872,9 @@ void SinglyLinkedList::HandleToolBar()
                     }
                     if (i == 3 && j == 0)
                     {
-                        insertV.oldWidth = 60;
-                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 - 50}, 60, 35};
-                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 - 50}, 60, 35, (char *)"Confirm"};
+                        insertI.oldWidth = 60;
+                        insertI.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 - 50}, 60, 35};
+                        insertI.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 - 50}, 60, 35, (char *)"Confirm"};
                     }
                     if (i == 4 && j == 0)
                     {
@@ -871,15 +957,15 @@ void SinglyLinkedList::HandleToolBar()
         }
         if (flagToolBarButtons[3][0] == true) // Delete
         {
-            std::string v = insertV.HandleTextBox();
-            if (v.empty() == true) 
+            std::string i = insertI.HandleTextBox();
+            if (i.empty() == true) 
             {
                 return;
             }
             flagToolBarButtons[3][0] = false;
-            std::string vValue = std::to_string(StringToVector(v)[0]);
+            std::string iValue = std::to_string(StringToVector(i)[0]);
 
-            Delete(vValue);
+            Delete(iValue);
     
             return;
         }
@@ -985,7 +1071,7 @@ void SinglyLinkedList::HandleRemote()
         int i, j;
         myPresentation.numberOfPresentation = newFrame;
         myPresentation.FindPosition(newFrame, i, j);
-        std::cerr << newFrame << ' ' << i << ' ' << j << '\n';
+        // std::cerr << newFrame << ' ' << i << ' ' << j << '\n';
         myPresentation.currentPresentation = i;
         myPresentation.SetCurToStartAnimation(i + 1, -1);
         myPresentation.SetCurToStartAnimationInOnePresentation(i, j + 1);
@@ -1016,9 +1102,12 @@ void SinglyLinkedList::HandleRemote()
     }
     if (remoteButtons[3].CheckMouseClickInRectangle() == true)
     {
-        curRemoteState = 1;
-        myPresentation.SetCurAnimation(0, -1, 1);
-        myPresentation.numberOfPresentation = myPresentation.CountNumberOfAnimation();
+        if (myPresentation.numberOfPresentation != myPresentation.CountNumberOfAnimation())
+        {
+            curRemoteState = 1;
+            myPresentation.SetCurAnimation(0, -1, 1);
+            myPresentation.numberOfPresentation = myPresentation.CountNumberOfAnimation();
+        }
     }
     if (remoteButtons[1].CheckMouseClickInRectangle() == true)
     {
@@ -1026,7 +1115,7 @@ void SinglyLinkedList::HandleRemote()
         int newFrame = std::max(0, myPresentation.numberOfPresentation - 1);
         myPresentation.numberOfPresentation = newFrame;
         myPresentation.FindPosition(newFrame, i, j);
-        std::cerr << newFrame << ' ' << i << ' ' << j << '\n';
+        // std::cerr << newFrame << ' ' << i << ' ' << j << '\n';
         myPresentation.currentPresentation = i;
         myPresentation.SetCurToStartAnimation(i + 1, -1);
         myPresentation.SetCurToStartAnimationInOnePresentation(i, j + 1);
@@ -1040,7 +1129,7 @@ void SinglyLinkedList::HandleRemote()
         int newFrame = std::min(myPresentation.CountNumberOfAnimation(), myPresentation.numberOfPresentation + 1);
         myPresentation.numberOfPresentation = newFrame;
         myPresentation.FindPosition(newFrame, i, j);
-        std::cerr << newFrame << ' ' << i << ' ' << j << '\n';
+        // std::cerr << newFrame << ' ' << i << ' ' << j << '\n';
         myPresentation.currentPresentation = i;
         myPresentation.SetCurToStartAnimation(i + 1, -1);
         myPresentation.SetCurToStartAnimationInOnePresentation(i, j + 1);
@@ -1048,9 +1137,33 @@ void SinglyLinkedList::HandleRemote()
         _SetCurAnimation(i, j + 0, 1);
         curRemoteState = 1;
     }
-    std::cerr << myPresentation.numberOfPresentation << '\n';
+    // std::cerr << myPresentation.numberOfPresentation << '\n';
 
     myPresentation.NormPresentation(curRemoteState);
+
+    if (changeSpeed.CheckMouseClickInRectangle() == true)
+    {
+        if (speed == 0.01f)
+        {
+            changeSpeed.text = "x2";
+            speed = 0.02f;
+        }
+        else if (speed == 0.02f)
+        {
+            changeSpeed.text = "x4";
+            speed = 0.04f;
+        } 
+        else if (speed == 0.04f)
+        {
+            changeSpeed.text = "x8";
+            speed = 0.08f;
+        }
+        else if (speed == 0.08f)
+        {
+            changeSpeed.text = "x1";
+            speed = 0.01f;
+        }
+    }
 }
 
 void SinglyLinkedList::DrawRemote()
@@ -1087,6 +1200,8 @@ void SinglyLinkedList::DrawRemote()
     int handleX = sliderX + (int)(sliderWidth * progress);
     int handleY = sliderY + sliderHeight / 2;
     DrawCircle(handleX, handleY, handleRadius, SKYBLUE);
+
+    changeSpeed.DrawButtonAndText(0.3, changeSpeed.CheckMouseInRectangle() ? 1 : 0.2f, SKYBLUE, true, robotoFont, 20, RAYWHITE);
 }
 
 std::vector<int> SinglyLinkedList::StringToVector(std::string listChar)

@@ -10,7 +10,7 @@ void Node::DrawTextNode(const Font &fontValue, const Color &color, const bool &i
     }
     text[value.size()] = '\0' ;
     // snprintf(text, sizeof(text), "%s", value);
-    Vector2 textSize = MeasureTextEx(GetFontDefault(), text, 20, 1);
+    Vector2 textSize = MeasureTextEx(fontValue, text, 18, 1);
     Color curColor = (ColorIsEqual(BLACK, color) ? (isLightMode ? BLACK : WHITE) : color);
     DrawTextEx(fontValue, text, Vector2{position.x - textSize.x / 2, position.y - textSize.y / 2}, 18, 1, curColor);
 }
