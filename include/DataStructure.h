@@ -4,6 +4,7 @@
 #include "raylib.h"
 #include "Button.h"
 #include "TextBox.h"
+#include "ExtendedTextBox.h"
 #include "NewAnimation.h"
 #include "Presentation.h"
 

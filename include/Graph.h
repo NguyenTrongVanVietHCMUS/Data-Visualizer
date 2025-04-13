@@ -31,7 +31,7 @@ class Graph : public DataStructure
         bool isFixed = false;
 
         Font fontRoboto = LoadFont("../Fonts/Roboto_Condensed-SemiBold.ttf");
-        TextBox enterList;
+        ExtendedTextBox enterList;
         TextBox insertI;
         TextBox insertV;
 

@@ -25,7 +25,7 @@ class Trie : public DataStructure
 {
     public:
         Font fontRoboto = LoadFont("../Fonts/Roboto_Condensed-SemiBold.ttf");
-        TextBox enterList;
+        ExtendedTextBox enterList;
         TextBox insertI;
         TextBox insertV;
         float xOFFSET = 75;
@@ -51,21 +51,25 @@ class Trie : public DataStructure
         Presentation CreateAnimation(TrieNode* root);
 
         std::vector<std::string> StringToVector(std::string listChar);
+        void ResetNodesPosition(TrieNode* root ) ; 
         void Run();
         void Init();
         void Clear();
-        void ResetNodesPosition(TrieNode* root ) ; 
         
         
-
+        void Draw();
+        void DrawRemote();
+        void HandleRemote();
         void DrawToolBar();
         void HandleToolBar();
         
-        
-        
-        
-        
-
-        void Draw();
+        std::vector<std::string> createList;
+        std::vector<std::string> searchList;
+        std::vector<std::string> updateList;
+        std::vector<std::string> insertList;
+        std::vector<std::string> deleteList;
+        std::vector<std::string> notFound;
+        Vector2 positionBoard;
+        float width, height;
         
 };

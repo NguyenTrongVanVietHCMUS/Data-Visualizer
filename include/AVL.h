@@ -9,7 +9,7 @@ class AVL : public DataStructure
 {
     public:
         Font fontRoboto = LoadFont("../Fonts/Roboto_Condensed-SemiBold.ttf");
-        TextBox enterList;
+        ExtendedTextBox enterList;
         TextBox insertI;
         TextBox insertV;
         float xOFFSET = 75;
@@ -23,7 +23,7 @@ class AVL : public DataStructure
         void InputDataFromFile();
         void BuildCreateAnimation();
         std::vector<AVLNode*> AVL::getNodes(AVLNode *root) ; 
-        int height(AVLNode *N) ;  
+        int HEIGHT(AVLNode *N) ;  
         int getBalance(AVLNode *N) ; 
 
 
@@ -48,14 +48,19 @@ class AVL : public DataStructure
         void ResetNodesPosition(AVLNode* root ) ; 
         
 
+        void Draw();
+        void DrawRemote();
+        void HandleRemote();
         void DrawToolBar();
         void HandleToolBar();
         
-        
-        
-        
-        
-
-        void Draw();
+        std::vector<std::string> createList;
+        std::vector<std::string> searchList;
+        std::vector<std::string> updateList;
+        std::vector<std::string> insertList;
+        std::vector<std::string> deleteList;
+        std::vector<std::string> notFound;
+        Vector2 positionBoard;
+        float width, height;
         
 };

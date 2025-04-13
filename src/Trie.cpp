@@ -9,7 +9,11 @@ void Trie::Run()
 {
     HandleToolBar();
     DrawToolBar();
+
     Draw();
+    
+    HandleRemote();
+    DrawRemote();
 }
 
 void Trie::Init()
@@ -17,7 +21,7 @@ void Trie::Init()
     toolBarButtons.resize(6);
     toolBarButtons[0] = 
     {
-        {Vector2{0, 570}, 15, 183, (char *)"Open_Close"}
+        {Vector2{0, 570}, 15, 183 - 35 - 2, (char *)"Open_Close"}
     };
     toolBarButtons[1] = 
     {
@@ -37,7 +41,7 @@ void Trie::Init()
     };
     toolBarButtons[4] = 
     {
-        {Vector2{17, 681}, 160, 35, (char *)"Update"}
+        {Vector2{17, 681}, 160, 35, (char *)"Search"}
     };
     toolBarButtons[5] = 
     {
@@ -57,7 +61,62 @@ void Trie::Init()
     root = new TrieNode({(float)GetScreenWidth() / 2, 50.0 }, "");
     isLightMode = 1;
 
-    speed = 0.05;
+
+    speed = 0.01;
+    changeSpeed.position = Vector2{0, 750};
+    changeSpeed.width = 45;
+    changeSpeed.height = 45;
+    changeSpeed.text = "x1";
+
+
+    remoteButtons.resize(7);
+    remoteButtons[0] = {{71, 754}, 31, 34, (char*)"undo"};
+    remoteButtons[1] = {{132, 757}, 43, 31, (char*)"pre"};
+    remoteButtons[2] = {{272, 757}, 44, 32, (char*)"next"};
+    remoteButtons[3] = {{350, 754}, 31, 34, (char*)"redo"};
+    remoteButtons[4] = {{202, 747}, 44, 50, (char*)"pause"};
+    remoteButtons[5] = {{205, 750}, 37, 47, (char*)"continue"};
+    remoteButtons[6] = {{198, 743}, 52, 54, (char*)"repeat"};
+
+    flagRemote.assign(7, true);
+    flagRemote[5] = false;
+    flagRemote[6] = false;
+    for (int i = 0; i < 7; ++i)
+    {
+        remoteButtons[i].texture = remoteTextures[i];
+    }
+
+    createList = {
+        "Create new Trie!"
+    };
+    searchList = {
+        "cur = root",
+        "for(auto x : s)",
+        "   if cur->children[x] exist  : cur = cur->children[x]" ,
+        "   else : return 0 ;", 
+        "return 1" 
+    };
+    updateList = {
+        
+    };
+    insertList = {
+        "cur = root",
+        "for(auto x : s)",
+        "   if cur->children[x]  doesn't exist : create cur->children[x]", 
+        "   cur = cur->pNext,cur->sl++",
+    };
+    deleteList = {
+        "cur = root",
+        "for(auto x : s)",
+        "   cur = cur->children[x]" ,
+        "   cur->sl--",  
+        "   if cur->sl==0 : delete cur",
+    };
+    positionBoard = Vector2{1600 - 400, 800 - 300};
+    width = 400;
+    height = 300;
+
+
 }
 
 Vector2 Trie::calcPosition(TrieNode *root) {
@@ -106,7 +165,7 @@ Presentation Trie::CreateAnimation(TrieNode* root)
             if (!node) return;
             cur+=node->TargetedPosition ;
             // draw the node first 
-            create.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {Node(cur,20,node->c)}));
+            create.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {Node(cur,20,node->c)},0,{0}));
             for (auto& child : node->children) 
             {
                 AddNode_ref(child, AddNode_ref,cur);
@@ -124,7 +183,7 @@ Presentation Trie::CreateAnimation(TrieNode* root)
             cur+=node->TargetedPosition ;
             for (auto& child : node->children) 
             {
-                create.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, GREEN, {Node(cur,20,node->c),Node(cur+child->TargetedPosition,20,node->c)}));
+                create.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, GREEN, {Node(cur,20,node->c),Node(cur+child->TargetedPosition,20,node->c)},0,{0}));
                 AddEdge_ref(child, AddEdge_ref,cur);
             }
         };
@@ -138,7 +197,7 @@ Presentation Trie::CreateAnimation(TrieNode* root)
             if (!node) return;
             cur+=node->TargetedPosition ;
             // draw the node first 
-            create.InsertAnimationToSet(-1, -1, NewAnimation(0, 0, BLACK, {Node(cur,20,node->c)}));
+            create.InsertAnimationToSet(-1, -1, NewAnimation(0, 0, BLACK, {Node(cur,20,node->c)},0,{0}));
             for (auto& child : node->children) 
             {
                 AddNode_ref(child, AddNode_ref,cur);
@@ -151,7 +210,7 @@ Presentation Trie::CreateAnimation(TrieNode* root)
             cur+=node->TargetedPosition ;
             for (auto& child : node->children) 
             {
-                create.InsertAnimationToSet(-1, -1, NewAnimation(4, 0, BLACK, {Node(cur,20,node->c),Node(cur+child->TargetedPosition,20,node->c)}));
+                create.InsertAnimationToSet(-1, -1, NewAnimation(4, 0, BLACK, {Node(cur,20,node->c),Node(cur+child->TargetedPosition,20,node->c)},0,{0}));
                 AddEdge_ref(child, AddEdge_ref,cur);
             }
         };
@@ -161,7 +220,7 @@ Presentation Trie::CreateAnimation(TrieNode* root)
             if (!node) return;
             cur+=node->TargetedPosition ;
             // draw the node first 
-            create.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, GREEN, {Node(cur,20,node->c)}));
+            create.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, GREEN, {Node(cur,20,node->c)},0,{0}));
             for (auto& child : node->children) 
             {
                 DelNode_ref(child, DelNode_ref,cur);
@@ -174,7 +233,7 @@ Presentation Trie::CreateAnimation(TrieNode* root)
             cur+=node->TargetedPosition ;
             for (auto& child : node->children) 
             {
-                create.InsertAnimationToSet(-1, -1, NewAnimation(6, 0, GREEN, {Node(cur,20,node->c),Node(cur+child->TargetedPosition,20,node->c)}));
+                create.InsertAnimationToSet(-1, -1, NewAnimation(6, 0, GREEN, {Node(cur,20,node->c),Node(cur+child->TargetedPosition,20,node->c)},0,{0}));
                 DelEdge_ref(child, DelEdge_ref,cur);
             }
         };
@@ -185,8 +244,11 @@ Presentation Trie::CreateAnimation(TrieNode* root)
 
 void Trie::BuildCreateAnimation()
 {
-    myPresentation.currentPresentation = 0;
     myPresentation = CreateAnimation(root);
+    myPresentation.InitBoardText(createList, positionBoard, width, height);
+    myPresentation.currentPresentation = 0;
+    myPresentation.numberOfPresentation = 0;
+    curRemoteState = 0;
 }
 
 void Trie::ClearAllData()
@@ -348,14 +410,18 @@ Presentation Trie::SearchAnimation( std::string s , Color color)
             if(cur==root)
             {
                 search.CreateNewSet(-1);
-                search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, color, {Node(curPos,20,cur->c)}));
+                search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, color, {Node(curPos,20,cur->c)},0,{0}));
             }
             bool ok = 0  ;
             for(auto x : cur->children)
             {
+                search.CreateNewSet(-1) ; 
+                search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {1}));
                 if(x->c[0]==c)
                 {
-                    search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, color, {Node(curPos+x->CurrentPosition,20,x->c)}));
+                    search.CreateNewSet(-1);
+
+                    search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, color, {Node(curPos+x->CurrentPosition,20,x->c)},0,{2}));
                     ok = 1 ; 
                     cur = x ; 
                     break ; 
@@ -363,6 +429,8 @@ Presentation Trie::SearchAnimation( std::string s , Color color)
             }
             if(ok==0)
             {
+                search.CreateNewSet(-1);
+                search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {3}));
                 break;  
             }
         }
@@ -373,11 +441,52 @@ Presentation Trie::SearchAnimation( std::string s , Color color)
 void Trie::Search(std::string s )
 {
     myPresentation = SearchAnimation(s, BLUE);
+    myPresentation.InitBoardText(searchList, positionBoard, width, height);
+    myPresentation.numberOfPresentation = 0;
+    myPresentation.currentPresentation = 0;
+    curRemoteState = 0;
 }
 // #include <char>
 Presentation Trie::InsertAnimation( std::string s )
 {
     Presentation insert ;
+    auto SearchAnimation = [&]( std::string s , Color color)->Presentation
+    {
+        Presentation search;
+        search.present = {BasicStructure(root)};
+        {
+            TrieNode* cur = root ;
+            
+            Vector2 curPos = {0,0} ;
+            for(auto c  : s)
+            {   
+                curPos+=cur->CurrentPosition ;
+                search.CopySetToLast(-1);
+                search.SetStartAnimation(-1, 1);
+                if(cur==root)
+                {
+                    search.CreateNewSet(-1);
+                    search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, color, {Node(curPos,20,cur->c)},0,{0}));
+                    if(cur->children.empty())return search;    
+                }
+                bool ok = 0  ;
+                for(auto x : cur->children)
+                {
+                    search.CreateNewSet(-1) ; 
+                    search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {1}));
+                    if(x->c[0]==c)
+                    {
+                        search.CreateNewSet(-1);
+                        search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, color, {Node(curPos+x->CurrentPosition,20,x->c)},0,{3}));
+                        ok = 1 ; 
+                        cur = x ; 
+                        break ; 
+                    }
+                }
+            }
+        }
+        return search;
+    };
     insert =  SearchAnimation(s,ORANGE) ;  
     {
         TrieNode* cur = root ;
@@ -451,8 +560,11 @@ Presentation Trie::InsertAnimation( std::string s )
             {
                 if(x->c[0] == s[i])
                 {
-                    insert.InsertAnimationToSet(-1,-1, NewAnimation(2, 0, ORANGE, {Node(curPos+x->TargetedPosition,20,x->c)}));
-                    insert.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {Node(curPos,20,cur->c),Node(curPos+x->TargetedPosition,20,x->c)}));
+                    insert.CreateNewSet(-1) ; 
+                    insert.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {1}));
+                    insert.CreateNewSet(-1) ; 
+                    insert.InsertAnimationToSet(-1, -1, NewAnimation(5, 0, ORANGE, {Node(curPos,20,cur->c),Node(curPos+x->TargetedPosition,20,x->c)},0,{2}));
+                    insert.InsertAnimationToSet(-1,-1, NewAnimation(2, 0, ORANGE, {Node(curPos+x->TargetedPosition,20,x->c)},0,{2}));
                     x->running = 0 ;                                          
                     cur = x ;
                     break ;
@@ -467,13 +579,62 @@ Presentation Trie::InsertAnimation( std::string s )
 void Trie::Insert(std::string s )
 {
     if(find(str.begin(),str.end(),s)==str.end())str.push_back(s) ;  
-    myPresentation.currentPresentation = 0 ; 
     myPresentation = InsertAnimation(s) ; 
+    myPresentation.InitBoardText(insertList, positionBoard, width, height);
+    myPresentation.numberOfPresentation = 0;
+    myPresentation.currentPresentation = 0;
+    curRemoteState = 0;
 
 }
 Presentation Trie::DeleteAnimation(std::string s , Color color)
 {
-    Presentation _delete = SearchAnimation(s,color) ;
+    Presentation _delete  ; 
+    auto SearchAnimation = [&]( std::string s , Color color)->Presentation
+    {
+        Presentation search;
+        search.present = {BasicStructure(root)};
+        {
+            TrieNode* cur = root ;
+            
+            Vector2 curPos = {0,0} ;
+            for(auto c  : s)
+            {   
+                curPos+=cur->CurrentPosition ;
+                search.CopySetToLast(-1);
+                search.SetStartAnimation(-1, 1);
+                if(cur==root)
+                {
+                    search.CreateNewSet(-1);
+                    search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, color, {Node(curPos,20,cur->c)},0,{0}));
+                    if(cur->children.empty())return search;    
+                }
+                if(cur->sl==1)
+                {
+                    search.CreateNewSet(-1) ;
+                    search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {4}));
+                    return search;
+                }
+                bool ok = 0  ;
+                for(auto x : cur->children)
+                {
+                    if(x->c[0]==c)
+                    {
+                        search.CreateNewSet(-1) ; 
+                        search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {1}));
+                        search.CreateNewSet(-1);
+                        search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, color, {Node(curPos+x->CurrentPosition,20,x->c)},0,{2}));
+                        search.CreateNewSet(-1);
+                        search.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {3}));
+                        ok = 1 ; 
+                        cur = x ; 
+                        break ; 
+                    }
+                }
+            }
+        }
+        return search;
+    };
+    _delete = SearchAnimation(s,ORANGE) ;
     ResetNodesPosition(root) ; 
     {
         root->sl = 971419248;
@@ -482,12 +643,16 @@ Presentation Trie::DeleteAnimation(std::string s , Color color)
             if(!node)return ; 
             cur+=node->CurrentPosition ; 
             node->sl-- ; 
+            _delete.CreateNewSet(-1) ; 
+            _delete.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, color, {Node(cur,20,node->c)})); 
             if(node->sl==0)
             {
                 _delete.CopySetToLast(-1) ; 
-                _delete.SetStartAnimation(-1,1); 
+                _delete.SetStartAnimation(-1,1);
+                _delete.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, color, {Node(cur,20,node->c)})); 
                 _delete.EraseAnimation(-1,-1,NewAnimation(2,0,color,{Node(cur,20,node->c)})) ;
                 _delete.EraseAnimation(-1,0,NewAnimation(0,0,BLACK,{Node(cur,20,node->c)})) ;
+                return ; 
             }
             if(pos==s.size())return ;  
             for(auto child:node->children)
@@ -495,6 +660,7 @@ Presentation Trie::DeleteAnimation(std::string s , Color color)
                 if(child->c[0]==s[pos])
                 {
                     DelNode_ref(child,cur,DelNode_ref,s,pos+1) ; 
+
                     if(child->sl==0)
                     {
                         _delete.CopySetToLast(-1) ; 
@@ -502,6 +668,7 @@ Presentation Trie::DeleteAnimation(std::string s , Color color)
                         _delete.EraseAnimation(-1,0,NewAnimation(4,0,BLACK,{Node(cur,20,node->c),Node(cur+child->CurrentPosition,20,child->c)})) ;
                     }
                     break ; 
+
                 }
             }
         };
@@ -584,6 +751,10 @@ void Trie::Delete(std::string s )
     }
     str.erase(std::find(str.begin(),str.end(),s)) ;
     myPresentation = DeleteAnimation(s,RED) ; 
+    myPresentation.InitBoardText(deleteList, positionBoard, width, height);
+    myPresentation.numberOfPresentation = 0;
+    myPresentation.currentPresentation = 0;
+    curRemoteState = 0;
 }
 
 void Trie::DrawToolBar()
@@ -615,23 +786,23 @@ void Trie::DrawToolBar()
             v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
             insertV.DrawTextBox();
         }
-        if (flagToolBarButtons[4][0] == true) // Update
+        if (flagToolBarButtons[4][0] == true) // search
         {
-            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 40, 35, (char *)"v ="};
-            Button i = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2}, 40, 35, (char *)"i ="};
-            i.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
+            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2 }, 40, 35, (char *)"v ="};
+            // Button i = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2}, 40, 35, (char *)"i ="};
+            // i.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
             v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
-            insertI.DrawTextBox();
+            // insertI.DrawTextBox();
             insertV.DrawTextBox();
         }
-        if (flagToolBarButtons[5][0] == true) // Search
-        {
-            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 40, 35, (char *)"v ="};
-            v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
-            insertV.DrawTextBox();
-        }
+        // if (flagToolBarButtons[5][0] == true) // Search
+        // {
+        //     Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 40, 35, (char *)"v ="};
+        //     v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
+        //     insertV.DrawTextBox();
+        // }
 
-        for (int i = 1; i < 6; ++i) 
+        for (int i = 1; i < 5; ++i) 
         {
             for (int j = 0; j < (int)toolBarButtons[i].size(); ++j) 
             {
@@ -684,20 +855,20 @@ void Trie::HandleToolBar()
                     }
                     if (i == 4 && j == 0)
                     {
-                        insertI.oldWidth = 60;
-                        insertI.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2}, 60, 35};
-                        insertI.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
+                        // insertI.oldWidth = 60;
+                        // insertI.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2}, 60, 35};
+                        // insertI.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
 
                         insertV.oldWidth = 60;
-                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35};
-                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
+                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2}, 60, 35};
+                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
                     }
-                    if (i == 5 && j == 0)
-                    {
-                        insertV.oldWidth = 60;
-                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35};
-                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
-                    }
+                    // if (i == 5 && j == 0)
+                    // {
+                    //     insertV.oldWidth = 60;
+                    //     insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35};
+                    //     insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
+                    // }
                 }
             }
         }
@@ -765,14 +936,14 @@ void Trie::HandleToolBar()
     
             return;
         }
-        if (flagToolBarButtons[5][0] == true) // Search
+        if (flagToolBarButtons[4][0] == true) // Search
         {
             std::string v = insertV.HandleTextBox();
             if (v.empty() == true) 
             {
                 return;
             }
-            flagToolBarButtons[5][0] = false;
+            flagToolBarButtons[4][0] = false;
             std::string vValue = StringToVector(v)[0];
             Search(vValue);
     
@@ -823,4 +994,198 @@ void Trie::Draw()
 {  
     ResetNodesPosition(root) ;
     myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, fontNumber, GetFontDefault(), isLightMode, speed, curRemoteState);
+}
+
+void Trie::HandleRemote()
+{
+    auto SetCurAnimation = [&](int _start, int _end, int _cur)
+    {
+        for (int k = _start; k <= _end; ++k)
+        {
+            for (int i = 0; i < int(myPresentation.present[k].setOfAnimation.size()); ++i)
+            {
+                for (NewAnimation &curAnimation: myPresentation.present[k].setOfAnimation[i])
+                {
+                    curAnimation.curAnimation = _cur;
+                }
+            }
+        }
+        return;
+    };
+    auto _SetCurAnimation = [&](int currentPresentation, int _end, int _cur)
+    {
+        for (int i = 0; i <= _end; ++i)
+        {
+            for (NewAnimation &curAnimation: myPresentation.present[currentPresentation].setOfAnimation[i])
+            {
+                curAnimation.curAnimation = _cur;
+            }
+        }
+        return;
+    };
+    Vector2 mousePos = GetMousePosition();
+    const int screenWidth = 1600;
+    const int screenHeight = 800;
+
+    // Vị trí và kích thước thanh slider giống như trong DrawRemote
+    int sliderX = 450;
+    int sliderY = screenHeight - 30;
+    int sliderWidth = screenWidth - 450 - 450;
+    int sliderHeight = 8;
+
+    // Bán kính nút trượt
+    int handleRadius = 10;
+
+    // Kiểm tra nếu chuột nằm trong vùng thanh slider
+    Rectangle sliderRect = { (float)sliderX, (float)(sliderY - handleRadius), 
+                             (float)sliderWidth, (float)(sliderHeight + 2 * handleRadius) };
+
+    // Kéo thanh tua
+    if (CheckCollisionPointRec(mousePos, sliderRect) && IsMouseButtonDown(MOUSE_LEFT_BUTTON))
+    {
+        float relativeX = mousePos.x - sliderX;
+
+        // Giới hạn giá trị nằm trong khoảng cho phép
+        if (relativeX < 0) relativeX = 0;
+        if (relativeX > sliderWidth) relativeX = (float)sliderWidth;
+
+        float progress = relativeX / sliderWidth;
+        int totalFrames = myPresentation.CountNumberOfAnimation();
+        int newFrame = (int)(progress * totalFrames + 0.5f);
+
+        // Cập nhật trạng thái trình chiếu
+        int i, j;
+        myPresentation.numberOfPresentation = newFrame;
+        myPresentation.FindPosition(newFrame, i, j);
+        // std::cerr << newFrame << ' ' << i << ' ' << j << '\n';
+        myPresentation.currentPresentation = i;
+        myPresentation.SetCurToStartAnimation(i + 1, -1);
+        myPresentation.SetCurToStartAnimationInOnePresentation(i, j + 1);
+        SetCurAnimation(0, i - 1, 1);
+        _SetCurAnimation(i, j + 0, 1);
+        
+        
+        curRemoteState = 1; // Chuyển về trạng thái play nếu đang pause
+    }
+
+    // Các xử lý nút điều khiển khác giữ nguyên
+    if (remoteButtons[4 + curRemoteState].CheckMouseClickInRectangle() == true)
+    {
+        if (curRemoteState == 2)
+        {
+            myPresentation.SetCurToStartAnimation(0, -1);
+            myPresentation.currentPresentation = 0;
+            myPresentation.numberOfPresentation = 0;
+        }
+        curRemoteState = !curRemoteState;
+    }
+    if (remoteButtons[0].CheckMouseClickInRectangle() == true)
+    {
+        curRemoteState = 1;
+        myPresentation.SetCurToStartAnimation(0, -1);
+        myPresentation.currentPresentation = 0;
+        myPresentation.numberOfPresentation = 0;
+    }
+    if (remoteButtons[3].CheckMouseClickInRectangle() == true)
+    {
+        if (myPresentation.numberOfPresentation != myPresentation.CountNumberOfAnimation())
+        {
+            curRemoteState = 1;
+            myPresentation.SetCurAnimation(0, -1, 1);
+            myPresentation.numberOfPresentation = myPresentation.CountNumberOfAnimation();
+        }
+    }
+    if (remoteButtons[1].CheckMouseClickInRectangle() == true)
+    {
+        int i, j;
+        int newFrame = std::max(0, myPresentation.numberOfPresentation - 1);
+        myPresentation.numberOfPresentation = newFrame;
+        myPresentation.FindPosition(newFrame, i, j);
+        // std::cerr << newFrame << ' ' << i << ' ' << j << '\n';
+        myPresentation.currentPresentation = i;
+        myPresentation.SetCurToStartAnimation(i + 1, -1);
+        myPresentation.SetCurToStartAnimationInOnePresentation(i, j + 1);
+        SetCurAnimation(0, i - 1, 1);
+        _SetCurAnimation(i, j + 0, 1);
+        curRemoteState = 1;
+    }
+    if (remoteButtons[2].CheckMouseClickInRectangle() == true)
+    {
+        int i, j;
+        int newFrame = std::min(myPresentation.CountNumberOfAnimation(), myPresentation.numberOfPresentation + 1);
+        myPresentation.numberOfPresentation = newFrame;
+        myPresentation.FindPosition(newFrame, i, j);
+        // std::cerr << newFrame << ' ' << i << ' ' << j << '\n';
+        myPresentation.currentPresentation = i;
+        myPresentation.SetCurToStartAnimation(i + 1, -1);
+        myPresentation.SetCurToStartAnimationInOnePresentation(i, j + 1);
+        SetCurAnimation(0, i - 1, 1);
+        _SetCurAnimation(i, j + 0, 1);
+        curRemoteState = 1;
+    }
+    // std::cerr << myPresentation.numberOfPresentation << '\n';
+
+    myPresentation.NormPresentation(curRemoteState);
+
+    if (changeSpeed.CheckMouseClickInRectangle() == true)
+    {
+        if (speed == 0.01f)
+        {
+            changeSpeed.text = "x2";
+            speed = 0.02f;
+        }
+        else if (speed == 0.02f)
+        {
+            changeSpeed.text = "x4";
+            speed = 0.04f;
+        } 
+        else if (speed == 0.04f)
+        {
+            changeSpeed.text = "x8";
+            speed = 0.08f;
+        }
+        else if (speed == 0.08f)
+        {
+            changeSpeed.text = "x1";
+            speed = 0.01f;
+        }
+    }
+}
+
+void Trie::DrawRemote()
+{
+    for (int i = 0; i < 4; ++i)
+    {
+        if (flagRemote[i] == true) 
+        {
+            remoteButtons[i].DrawButtonTexture();
+        }
+    }
+    if (myPresentation.numberOfPresentation == myPresentation.CountNumberOfAnimation()) {
+        curRemoteState = 2;
+    }
+    remoteButtons[4 + curRemoteState].DrawButtonTexture();
+
+    const int screenWidth = 1600;
+    const int screenHeight = 800;
+
+    // Toạ độ & kích thước thanh slider
+    int sliderX = 450;                 // Cách trái xa hơn để né trọn bộ điều khiển
+    int sliderY = screenHeight - 30;   // Gần đáy
+    int sliderWidth = screenWidth - 450 - 450; // Ngắn bên phải lại (100px)
+    int sliderHeight = 8;
+
+    float progress = myPresentation.numberOfPresentation / (float)myPresentation.CountNumberOfAnimation();
+
+    // Vẽ thanh slider
+    DrawRectangle(sliderX, sliderY, sliderWidth, sliderHeight, DARKGRAY);
+    DrawRectangle(sliderX, sliderY, sliderWidth * progress, sliderHeight, SKYBLUE);
+
+    // Vẽ nút trượt
+    int handleRadius = 10;
+    int handleX = sliderX + (int)(sliderWidth * progress);
+    int handleY = sliderY + sliderHeight / 2;
+    DrawCircle(handleX, handleY, handleRadius, SKYBLUE);
+
+    changeSpeed.DrawButtonAndText(0.3, changeSpeed.CheckMouseInRectangle() ? 1 : 0.2f, SKYBLUE, true, robotoFont, 20, RAYWHITE);
 }

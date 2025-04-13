@@ -30,6 +30,7 @@ add_executable(
      src/Graph.cpp
      src/AVL.cpp
      src/AVLNode.cpp 
+     src/ExtendedTextbox.cpp
      )
 
 add_subdirectory("include/raylib")

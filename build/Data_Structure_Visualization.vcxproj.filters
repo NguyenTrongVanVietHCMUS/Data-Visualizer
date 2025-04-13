@@ -16,7 +16,7 @@
     <ClCompile Include="V:\Data-Visualizer\src\Node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="V:\Data-Visualizer\src\TextBox.cpp">
+    <ClCompile Include="V:\Data-Visualizer\src\textbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="V:\Data-Visualizer\src\SetOfAnimation.cpp">
@@ -34,6 +34,9 @@
     <ClCompile Include="V:\Data-Visualizer\src\Heap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="V:\Data-Visualizer\src\MaxHeap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="V:\Data-Visualizer\src\Trie.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -44,6 +47,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="V:\Data-Visualizer\src\AVLNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="V:\Data-Visualizer\src\ExtendedTextBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
