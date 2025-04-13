@@ -255,28 +255,30 @@ void SinglyLinkedList::InputDataFromFile()
 
     std::ifstream fin(filePath);
     std::string s;
-    getline(fin, s);
-
-    std::string curValue;
-    for (char &c: s)
+    while(getline(fin,s))
     {
-        if ('0' <= c && c <= '9')
+        std::string curValue;
+        for (char &c: s)
         {
-            curValue += c;
-        }
-        else
-        {
-            if (!curValue.empty())
+            if ('0' <= c && c <= '9')
             {
-                values.push_back(curValue);
-                curValue.clear();
+                curValue += c;
+            }
+            else
+            {
+                if (!curValue.empty())
+                {
+                    values.push_back(curValue);
+                    curValue.clear();
+                }
             }
         }
+        if (!curValue.empty())
+        {
+            values.push_back(curValue);
+        }
     }
-    if (!curValue.empty())
-    {
-        values.push_back(curValue);
-    }
+
     fin.close();
     BuildCreateAnimation();
 }
@@ -924,6 +926,7 @@ void SinglyLinkedList::HandleToolBar()
         if (flagToolBarButtons[1][4] == true)  // Input data from keyboard
         {
             std::string listChar = enterList.HandleTextBox();
+
             if (listChar.empty() == false)
             {
                 flagToolBarButtons[1][4] = false;
@@ -1213,7 +1216,7 @@ std::vector<int> SinglyLinkedList::StringToVector(std::string listChar)
     int cur = -1;
     for (int i = 0; i < int(listChar.size()); ++i) 
     {
-        if (listChar[i] == ' ' || listChar[i] == ',')
+        if (listChar[i] == ' ' || listChar[i] == ','||listChar[i] == '\n')
         {
             if (cur > -1) values.push_back(cur);
             cur = -1;

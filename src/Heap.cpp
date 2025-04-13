@@ -54,6 +54,7 @@ void Heap::Init()
 
     // enterList.Init();
     enterList.oldWidth = 80;
+    enterList.oldHeight = 35 ; 
     enterList.textBox = {Vector2{425 + 80 + 2, 570}, 80, 35};
     enterList.confirm = {Vector2{425 + 80 + 2, 570 + 35 + 2}, 80, 35, (char *)"Confirm"};
 
@@ -346,27 +347,28 @@ void Heap::InputDataFromFile()
 
     std::ifstream fin(filePath);
     std::string s;
-    getline(fin, s);
-
-    std::string curValue;
-    for (char &c: s)
+    while(getline(fin, s))
     {
-        if ('0' <= c && c <= '9')
+        std::string curValue;
+        for (char &c: s)
         {
-            curValue += c;
-        }
-        else
-        {
-            if (!curValue.empty())
+            if ('0' <= c && c <= '9')
             {
-                AddValueToHeap(curValue);
-                curValue.clear();
+                curValue += c;
+            }
+            else
+            {
+                if (!curValue.empty())
+                {
+                    AddValueToHeap(curValue);
+                    curValue.clear();
+                }
             }
         }
-    }
-    if (!curValue.empty())
-    {
-        AddValueToHeap(curValue);
+        if (!curValue.empty())
+        {
+            AddValueToHeap(curValue);
+        }
     }
     fin.close();
     BuildCreateAnimation();
@@ -908,7 +910,7 @@ std::vector<int> Heap::StringToVector(std::string listChar)
     int cur = -1;
     for (int i = 0; i < int(listChar.size()); ++i) 
     {
-        if (listChar[i] == ' ' || listChar[i] == ',')
+        if (listChar[i] == ' ' || listChar[i] == ','||listChar[i]=='\n')
         {
             if (cur > -1) values.push_back(cur);
             cur = -1;

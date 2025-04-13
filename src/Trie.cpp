@@ -54,6 +54,7 @@ void Trie::Init()
     flagToolBarButtons[0][0] = true ; 
     // enterList.Init();
     enterList.oldWidth = 80;
+    enterList.oldHeight = 35 ;
     enterList.textBox = {Vector2{425 + 80 + 2, 570}, 80, 35};
     enterList.confirm = {Vector2{425 + 80 + 2, 570 + 35 + 2}, 80, 35, (char *)"Confirm"};
 
@@ -773,11 +774,11 @@ void Trie::DrawToolBar()
         }
         if (flagToolBarButtons[2][0] == true) // Insert
         {
-            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2}, 40, 35, (char *)"v ="};
-            Button i = {Vector2{17 + 160 + 2, 607}, 40, 35, (char *)"i ="};
-            i.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
+            Button v = {Vector2{17 + 160 + 2, 607 }, 40, 35, (char *)"v ="};
+            // Button i = {Vector2{17 + 160 + 2, 607}, 40, 35, (char *)"i ="};
+            // i.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
             v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
-            insertI.DrawTextBox();
+            // insertI.DrawTextBox();
             insertV.DrawTextBox();
         }
         if (flagToolBarButtons[3][0] == true) // Delete
@@ -839,13 +840,13 @@ void Trie::HandleToolBar()
                     flagToolBarButtons[i][j] = true;
                     if (i == 2 && j == 0)
                     {
-                        insertI.oldWidth = 60;
-                        insertI.textBox = {Vector2{17 + 160 + 2 + 35, 607}, 60, 35};
-                        insertI.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
-
                         insertV.oldWidth = 60;
-                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2}, 60, 35};
-                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
+                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607}, 60, 35};
+                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2}, 60, 35, (char *)"Confirm"};
+
+                        // insertV.oldWidth = 60;
+                        // insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2}, 60, 35};
+                        // insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
                     }
                     if (i == 3 && j == 0)
                     {
@@ -910,7 +911,7 @@ void Trie::HandleToolBar()
         }
         if (flagToolBarButtons[2][0] == true) // Insert
         {
-            std::string i = insertI.HandleTextBox();
+            // std::string i = insertI.HandleTextBox();
             std::string v = insertV.HandleTextBox();
             if (v.empty() == true) 
             {
@@ -993,7 +994,7 @@ void Trie::ResetNodesPosition(TrieNode* root)
 void Trie::Draw() 
 {  
     ResetNodesPosition(root) ;
-    myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, fontNumber, GetFontDefault(), isLightMode, speed, curRemoteState);
+    myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, fontNumber,robotoFont, isLightMode, speed, curRemoteState);
 }
 
 void Trie::HandleRemote()

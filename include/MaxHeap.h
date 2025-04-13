@@ -10,7 +10,7 @@ class MaxHeap : public DataStructure
 
         std::vector<int> StringToVector(std::string listChar);
         Font fontRoboto = LoadFont("../Fonts/Roboto_Condensed-SemiBold.ttf");
-        TextBox enterList;
+        ExtendedTextBox enterList;
         TextBox insertI;
         TextBox insertV;
         std::vector<std::string>values ; 

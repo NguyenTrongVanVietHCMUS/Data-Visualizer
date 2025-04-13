@@ -1077,7 +1077,7 @@ void AVL::ResetNodesPosition(AVLNode* root)
 void AVL::Draw() 
 {  
     ResetNodesPosition(root) ;
-    myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, fontNumber, GetFontDefault(), isLightMode, speed, curRemoteState);
+    myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, fontNumber, robotoFont, isLightMode, speed, curRemoteState);
 }
 
 void AVL::HandleRemote()

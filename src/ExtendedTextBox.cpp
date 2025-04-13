@@ -124,13 +124,16 @@ std::string ExtendedTextBox::HandleTextBox()
         }
         if(IsKeyPressed(KEY_ENTER))
         {
-            if(!value.empty())
+            if(count(value.begin(),value.end(),'\n')!=7)
             {
-                if(value.back()==' '||value.back()=='\n')
+                if(!value.empty())
                 {
-                    value.pop_back() ; 
+                    if(value.back()==' '||value.back()=='\n')
+                    {
+                        value.pop_back() ; 
+                    }
+                    value+='\n';
                 }
-                value+='\n';
             }
         }
     }
