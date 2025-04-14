@@ -1048,17 +1048,15 @@ std::vector<std::string> AVL::StringToVector(std::string listChar)
     std::string curValue = "";
     for (char &c: listChar)
     {
-        bool flag = 0 ;  
-        if('0'<=c&&c<='9')
+        if(c==' '||c=='\n')
         {
-            curValue+=c ; 
-            flag = 1 ;
+            if(curValue != "") 
+            {
+                res.push_back(curValue);
+                curValue = "";
+            }
         }
-        if(!flag)
-        {
-            res.push_back(curValue);
-            curValue = "" ;  
-        }
+        else curValue+=c ;
     }
     if (curValue != "") ; 
     {

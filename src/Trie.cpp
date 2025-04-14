@@ -727,14 +727,13 @@ Presentation Trie::DeleteAnimation(std::string s , Color color)
         MoveEdge(root,{0,0},{0,0},MoveEdge) ; 
         auto RemoveNode = [&](TrieNode*&node,auto&& RemoveNode_ref)->void
         {
-            if(node->sl==0)
-            {
-                node=nullptr ; 
-                return ; 
-            }
             for(auto&child:node->children)
             {
-                RemoveNode_ref,(child,RemoveNode_ref) ; 
+                if(child->sl==0)
+                {
+                    node->children.erase(std::find(node->children.begin(),node->children.end(),child)) ;
+                }
+                RemoveNode_ref(child,RemoveNode_ref) ; 
             }
         };
         RemoveNode(root,RemoveNode) ;
@@ -959,22 +958,15 @@ std::vector<std::string> Trie::StringToVector(std::string listChar)
     std::string curValue = "";
     for (char &c: listChar)
     {
-        bool flag = 0 ;  
-        if (('A' <= c && c <= 'Z'))
+        if(c==' '||c=='\n')
         {
-            curValue+=c ; 
-            flag = 1 ; 
+            if(curValue!="")
+            {
+                res.push_back(curValue);
+                curValue = "" ; 
+            }
         }
-        else if('a' <= c && c <= 'z')
-        {
-            curValue+=c-'a'+'A' ; 
-            flag = 1 ; 
-        }
-        if(!flag)
-        {
-            res.push_back(curValue);
-            curValue = "" ;  
-        }
+        else curValue+=c ; 
     }
     if (curValue != "") ; 
     {
