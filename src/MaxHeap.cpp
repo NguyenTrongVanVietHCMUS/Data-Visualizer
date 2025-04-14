@@ -909,7 +909,7 @@ std::vector<int> MaxHeap::StringToVector(std::string listChar)
     int cur = -1;
     for (int i = 0; i < int(listChar.size()); ++i) 
     {
-        if (listChar[i] == ' ' || listChar[i] == ',')
+        if (listChar[i] == ' ' || listChar[i] == ','|| listChar[i]=='\n')
         {
             if (cur > -1) values.push_back(cur);
             cur = -1;
