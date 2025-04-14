@@ -789,15 +789,18 @@ void Graph::InputDataFromKeyboard(std::vector<int> values )
         values.pop_back() ; 
     }
     std::vector<int>dinh ; 
+    int ma = 0 ; 
     for(int i= 0;i<values.size();i++)
     {
         if(i%3!=2)
         {
-            dinh.push_back(values[i]) ; 
+            ma = std::max(ma,values[i]) ;  
         }   
     }
-    sort(dinh.begin(),dinh.end()) ; 
-    dinh.resize(unique(dinh.begin(),dinh.end())-dinh.begin()) ; 
+    for(int i= 0;i<ma;i++)
+    {
+        dinh.push_back(i+1) ; 
+    }
     std::cout<<dinh.size()<<std::endl; 
     for(auto x : dinh)std::cout<<x<<" "; 
     std::cout<<std::endl; 
