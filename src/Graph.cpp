@@ -39,7 +39,9 @@ void Graph::Init()
     };
     toolBarButtons[2] = 
     {
-        {Vector2{17, 607 - 50}, 160, 35, (char *)"Settings"}
+        {Vector2{17, 607 - 50}, 160, 35, (char *)"Settings"},
+        {Vector2{179, 607 - 50}, 80, 35, (char *)"Fix"},
+        {Vector2{261, 607 - 50}, 80, 35, (char *)"UnFix"}
     };
     toolBarButtons[3] = 
     {
@@ -104,7 +106,8 @@ void Graph::Init()
         "   if (du == dist[u])",
         "       Fix shortestPath to u",
         "       for (each neighbor v of u)",
-        "           relax(u, v, w(u, v)) + update PQ"
+        "           relax(u, v, w(u, v)) + update PQ",
+        "return dist[]"
     };
     PathList = {
         "dist[] = INF",
@@ -319,12 +322,12 @@ void Graph::DrawToolBar()
         }
         if (flagToolBarButtons[2][0] == true) // Insert
         {
-            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2 - 50}, 40, 35, (char *)"v ="};
-            Button i = {Vector2{17 + 160 + 2, 607 - 50}, 40, 35, (char *)"i ="};
-            i.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
-            v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
-            insertI.DrawTextBox();
-            insertV.DrawTextBox();
+            // Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2 - 50}, 40, 35, (char *)"v ="};
+            // Button i = {Vector2{17 + 160 + 2, 607 - 50}, 40, 35, (char *)"i ="};
+            // i.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
+            // v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
+            // insertI.DrawTextBox();
+            // insertV.DrawTextBox();
         }
         if (flagToolBarButtons[3][0] == true) // Source
         {
@@ -502,6 +505,14 @@ Presentation Graph::ShortestPathFromSourceAnimation(int source)
             std::swap(from, to);
         }
     }
+
+    shortestPath.CopySetToLast(-1);
+    shortestPath.CreateNewSet(-1);
+    shortestPath.SetStartAnimation(-1, 1);
+    shortestPath.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {2}));
+
+    shortestPath.CreateNewSet(-1);
+    shortestPath.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {8}));
 
     return shortestPath;
 }
@@ -844,22 +855,12 @@ void Graph::HandleToolBar()
         {
             for (int j = 0; j < int(toolBarButtons[i].size()); ++j) 
             {
-                if (toolBarButtons[i][j].CheckMouseClickInRectangle()) {
+                if ((j == 0 || flagToolBarButtons[i][0] == true) && toolBarButtons[i][j].CheckMouseClickInRectangle()) {
                     for (int i = 1; i < 6; ++i) 
                     {
                         std::fill(flagToolBarButtons[i].begin() + (j > 0), flagToolBarButtons[i].end(), false);
                     }
                     flagToolBarButtons[i][j] = true;
-                    if (i == 2 && j == 0)
-                    {
-                        insertI.oldWidth = 60;
-                        insertI.textBox = {Vector2{17 + 160 + 2 + 35, 607 - 50}, 60, 35};
-                        insertI.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 - 50}, 60, 35, (char *)"Confirm"};
-
-                        insertV.oldWidth = 60;
-                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 - 50}, 60, 35};
-                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 - 50}, 60, 35, (char *)"Confirm"};
-                    }
                     if (i == 3 && j == 0)
                     {
                         insertV.oldWidth = 60;
@@ -919,23 +920,18 @@ void Graph::HandleToolBar()
             }
             return;
         }
-        if (flagToolBarButtons[2][0] == true) // Insert
+        if (flagToolBarButtons[2][1] == true) 
         {
-            std::string i = insertI.HandleTextBox();
-            std::string v = insertV.HandleTextBox();
-            if (i.empty() == true) 
-            {
-                return;
-            }
-            if (v.empty() == true) 
-            {
-                return;
-            }
+            flagToolBarButtons[2][1] = false;
             flagToolBarButtons[2][0] = false;
-            int iValue = StringToVector(i)[0];
-            int vValue = StringToVector(v)[0];
-            // Insert(iValue, vValue);
-    
+            FixGraph();
+            return;
+        }
+        if (flagToolBarButtons[2][2] == true) 
+        {
+            flagToolBarButtons[2][2] = false;
+            flagToolBarButtons[2][0] = false;
+            UnFixGraph();
             return;
         }
         if (flagToolBarButtons[3][0] == true) // Source
@@ -991,82 +987,41 @@ void Graph::Draw()
 {  
     if (isFixed == false)
     {
-        ApplyForces();
+        ApplyForces(0.1, DESIRED_DISTANCE);
         UpdateGraph();
     }
     myPresentation.DrawPresentation(hollowCircle, solidCircle, arrowEdge, fontNumber, robotoFont, isLightMode, speed, curRemoteState);
 }
 
-Vector2 Graph::f_rep(const Node& u, const Node& v) {
-    Vector2 diff = Vector2Subtract(u.position, v.position);
-    float dist = Vector2Length(diff);
-    if (dist < NODE_RADIUS) dist = NODE_RADIUS;
+// void Graph::ApplyForces() {
+//     std::vector<Vector2> forces(nodes.size(), {0, 0});
 
-    float forceMagnitude;
-    if (dist > 2.5f * DESIRED_DISTANCE) {
-        forceMagnitude = 0.0f; 
-    } else {
-        forceMagnitude = REPULSION_STRENGTH / (dist * dist);
-    }
+//     for (size_t i = 0; i < nodes.size(); i++) {
+//         for (size_t j = i + 1; j < nodes.size(); j++) {
+//             Vector2 repulsion = f_rep(nodes[i], nodes[j]);
+//             forces[i] = Vector2Add(forces[i], repulsion);
+//             forces[j] = Vector2Subtract(forces[j], repulsion);
+//         }
+//     }
 
-    return Vector2Scale(Vector2Normalize(diff), forceMagnitude);
-}
+//     for (const Edge& edge : edges) {
+//         Vector2 attraction = f_attr(nodes[edge.u], nodes[edge.v]);
+//         forces[edge.u] = Vector2Add(forces[edge.u], attraction);
+//         forces[edge.v] = Vector2Subtract(forces[edge.v], attraction);
+//     }
 
-Vector2 Graph::f_attr(const Node& u, const Node& v) {
-    Vector2 diff = Vector2Subtract(v.position, u.position);
-    float dist = Vector2Length(diff);
+//     for (size_t i = 0; i < nodes.size(); i++) {
+//         forces[i] = Vector2Add(forces[i], f_center(nodes[i]));
+//         forces[i] = LimitForce(forces[i], MAX_FORCE);
+//         nodes[i].velocity = Vector2Scale(Vector2Add(nodes[i].velocity, forces[i]), DAMPING);
+//         nodes[i].position = Vector2Add(nodes[i].position, nodes[i].velocity);
 
-    float forceMagnitude = 0.0f;
-    if (dist > DESIRED_DISTANCE) {
-        forceMagnitude = ATTRACTION_STRENGTH * (dist - DESIRED_DISTANCE);
-    }
-
-    return Vector2Scale(Vector2Normalize(diff), forceMagnitude);
-}
-
-Vector2 Graph::f_center(const Node& node) {
-    Vector2 center = { GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f };
-    Vector2 diff = Vector2Subtract(center, node.position);
-    return Vector2Scale(diff, CENTER_PULL);
-}
-
-Vector2 Graph::LimitForce(Vector2 force, float maxForce) {
-    float length = Vector2Length(force);
-    if (length > maxForce) {
-        return Vector2Scale(force, maxForce / length);
-    }
-    return force;
-}
-
-void Graph::ApplyForces() {
-    std::vector<Vector2> forces(nodes.size(), {0, 0});
-
-    for (size_t i = 0; i < nodes.size(); i++) {
-        for (size_t j = i + 1; j < nodes.size(); j++) {
-            Vector2 repulsion = f_rep(nodes[i], nodes[j]);
-            forces[i] = Vector2Add(forces[i], repulsion);
-            forces[j] = Vector2Subtract(forces[j], repulsion);
-        }
-    }
-
-    for (const Edge& edge : edges) {
-        Vector2 attraction = f_attr(nodes[edge.u], nodes[edge.v]);
-        forces[edge.u] = Vector2Add(forces[edge.u], attraction);
-        forces[edge.v] = Vector2Subtract(forces[edge.v], attraction);
-    }
-
-    for (size_t i = 0; i < nodes.size(); i++) {
-        forces[i] = Vector2Add(forces[i], f_center(nodes[i]));
-        forces[i] = LimitForce(forces[i], MAX_FORCE);
-        nodes[i].velocity = Vector2Scale(Vector2Add(nodes[i].velocity, forces[i]), DAMPING);
-        nodes[i].position = Vector2Add(nodes[i].position, nodes[i].velocity);
-
-        // Clamp vị trí node trong màn hình
-        float radius = nodes[i].radius;
-        nodes[i].position.x = Clamp(nodes[i].position.x, radius, (float)1600 - radius);
-        nodes[i].position.y = Clamp(nodes[i].position.y, radius, (float)800 - radius);
-    }
-}
+//         // Clamp vị trí node trong màn hình
+//         float radius = nodes[i].radius;
+//         nodes[i].position.x = Clamp(nodes[i].position.x, radius, (float)1600 - radius);
+//         nodes[i].position.y = Clamp(nodes[i].position.y, radius, (float)800 - radius);
+//     }
+// }
 
 
 void Graph::HandleDragging()
@@ -1280,4 +1235,80 @@ void Graph::DrawRemote()
     DrawCircle(handleX, handleY, handleRadius, SKYBLUE);
 
     changeSpeed.DrawButtonAndText(0.3, changeSpeed.CheckMouseInRectangle() ? 1 : 0.2f, SKYBLUE, true, robotoFont, 20, RAYWHITE);
+}
+
+Vector2 Graph::f_center(const Node& node) {
+    Vector2 center = { GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f };
+    Vector2 diff = Vector2Subtract(center, node.position);
+    return Vector2Scale(diff, CENTER_PULL);
+}
+
+void Graph::ApplyForces(float dt, float optimalEdgeLength)
+{
+    const float area = GetScreenWidth() * (600 - 90);
+    const float k = optimalEdgeLength; // optimal distance between nodes
+    const float damping = 0.85f; // damping factor
+    const float repulsionStrength = 0.1f; // reduced repulsion strength
+    const float attractionStrength = 0.1f; // increased attraction strength
+    const float velocityThreshold = 2.5f; // threshold for stopping nodes
+ 
+    // calculate repulsive forces
+    for (int i = 0; i < int(nodes.size()); i++) {
+        nodes[i].velocity = {0, 0};
+ 
+        for (int j = 0; j < int(nodes.size()); j++) {
+            if (i == j) continue;
+ 
+            Vector2 diff = nodes[i].position - nodes[j].position;
+            float distance = static_cast<float>(std::sqrt(diff.x * diff.x + diff.y * diff.y)) + 1e-6f;
+            if (distance < 0.01f) distance = 0.01f; // prevent division by zero
+ 
+            Vector2 repulsiveForce = (diff / distance) * (repulsionStrength * k * k / distance);
+            nodes[i].velocity += repulsiveForce;
+        }
+    }
+ 
+    // calculate attractive forces
+    for (int i = 0; i < int(edges.size()); i++) {
+        Vector2 diff = nodes[edges[i].v].position - nodes[edges[i].u].position;
+        float distance = static_cast<float>(std::sqrt(diff.x * diff.x + diff.y * diff.y)) + 1e-6f;
+        if (distance < 0.01f) distance = 0.01f; // prevent division by zero
+ 
+        Vector2 attractiveForce = (diff / distance) * (attractionStrength * distance * distance / k);
+        nodes[edges[i].u].velocity += attractiveForce;
+        nodes[edges[i].v].velocity -= attractiveForce;
+    }
+ 
+    // update positions
+    for (int i = 0; i < int(nodes.size()); i++) {
+        // nodes[i].velocity -= f_center(nodes[i]);
+        nodes[i].velocity *= damping;
+        nodes[i].position += nodes[i].velocity * dt;
+
+        if (nodes[i].position.x < 0) {
+            nodes[i].position.x = 0;
+            nodes[i].velocity.x = 0;
+        }
+        if (nodes[i].position.y < 90) {
+            nodes[i].position.y = 90;
+            nodes[i].velocity.y = 0;
+        }
+        if (nodes[i].position.x > GetScreenWidth()) {
+            nodes[i].position.x = GetScreenWidth();
+            nodes[i].velocity.x = 0;
+        }
+        if (nodes[i].position.y > 600) {
+            nodes[i].position.y = 600;
+            nodes[i].velocity.y = 0;
+        }
+
+        // stop nodes if velocity is below threshold
+        if (std::abs(nodes[i].velocity.x) < velocityThreshold && std::abs(nodes[i].velocity.y) < velocityThreshold) {
+            nodes[i].velocity = {0, 0};
+        }
+ 
+        if (nodes[i].dragging) {
+            nodes[i].velocity = {0, 0};
+        }
+    }
 }

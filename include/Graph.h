@@ -6,14 +6,9 @@
 class Graph : public DataStructure
 {
     public:
+        const float CENTER_PULL = 0.001f;
         const float NODE_RADIUS = 20.0f;     
         const float DESIRED_DISTANCE = 150.0f; 
-        const float ATTRACTION_STRENGTH = 0.05f;
-        const float REPULSION_STRENGTH = 5000.0f; 
-        const float CENTER_PULL = 0.001f;      
-        const float MAX_FORCE = 5.0f;        
-        const float DAMPING = 0.9f;          
-
         struct Edge 
         {
             int u, v, w;
@@ -59,13 +54,8 @@ class Graph : public DataStructure
         void Init();
         void Clear();
 
-        Vector2 f_rep(const Node& u, const Node& v);
-        Vector2 f_attr(const Node& u, const Node& v);
         Vector2 f_center(const Node& node);
-        Vector2 LimitForce(Vector2 force, float maxForce);
-
-        void ApplyForces();
-
+        void ApplyForces(float dt, float optimalEdgeLength);
         void HandleDragging();
                 
         
