@@ -21,33 +21,33 @@ void Heap::Init()
     toolBarButtons.resize(6);
     toolBarButtons[0] = 
     {
-        {Vector2{0, 570}, 15, 183 - 35 - 2, (char *)"Open_Close"}
+        {Vector2{0, 570 - 80}, 15, 183, (char *)"Open_Close"}
     };
     toolBarButtons[1] = 
     {
-        {Vector2{17, 570}, 160, 35, (char *)"Create"},
-        {Vector2{179, 570}, 80, 35, (char *)"Empty"},
-        {Vector2{261, 570}, 80, 35, (char *)"Random"},
-        {Vector2{343, 570}, 80, 35, (char *)"File"},
-        {Vector2{425, 570}, 80, 35, (char *)"Enter"},
+        {Vector2{17, 570 - 80}, 160, 35, (char *)"Create"},
+        {Vector2{179, 570 - 80}, 80, 35, (char *)"Empty"},
+        {Vector2{261, 570 - 80}, 80, 35, (char *)"Random"},
+        {Vector2{343, 570 - 80}, 80, 35, (char *)"File"},
+        {Vector2{425, 570 - 80}, 80, 35, (char *)"Enter"},
     };
     toolBarButtons[2] = 
     {
-        {Vector2{17, 607}, 160, 35, (char *)"Push"}
+        {Vector2{17, 607 - 80}, 160, 35, (char *)"Push"}
     };
     toolBarButtons[3] = 
     {
-        {Vector2{17, 644}, 160, 35, (char *)"Pop"}
+        {Vector2{17, 644 - 80}, 160, 35, (char *)"Pop"}
     };
     toolBarButtons[4] = 
     {
-        {Vector2{17, 681}, 160, 35, (char *)"Top"}
+        {Vector2{17, 681 - 80}, 160, 35, (char *)"Top"}
     };
     toolBarButtons[5] = 
     {
-        {Vector2{17, 718}, 160, 35, (char *)"Search"}
+        {Vector2{17, 718 - 80}, 160, 35, (char *)"Update"}
     };
-    flagToolBarButtons.resize(6);
+    flagToolBarButtons.resize(7);
     for (int i = 0; i < 6; ++i) {
         flagToolBarButtons[i].assign(toolBarButtons[i].size(), false);
     }
@@ -104,6 +104,11 @@ void Heap::Init()
     popList = {
         "Heap[0] = Heap[--size]",
         "HeapifyDown()"
+    };
+    updateList = {
+        "Heap[pos] = newv",
+        "shiftup(i); // if newv < oldv",
+        "shiftdown(i); // if newv > oldv"
     };
     positionBoard = Vector2{1600 - 400, 800 - 300};
     width = 400;
@@ -265,6 +270,81 @@ Presentation Heap::CreateAnimation(const std::vector<Node> &nodes)
     return create;
 }
 
+void Heap::ShiftDown(Presentation &myPresentation, std::vector<int> highlightLines, int curID)
+{
+    myPresentation.CopySetToLast(-1);
+    myPresentation.SetStartAnimation(-1, 1);
+    Node from, to;
+    while (2 * curID + 1 < size) 
+    {
+        int nextID = 2 * curID + 1;
+        if (nextID + 1 < size)
+        {
+            if (StringToVector(values[itemID[nextID]])[0] > StringToVector(values[itemID[nextID + 1]])[0])
+            {
+                ++nextID;
+            }
+        }
+        if (StringToVector(values[itemID[curID]])[0] < StringToVector(values[itemID[nextID]])[0]) 
+        {
+            break;
+        }
+
+        myPresentation.CopySetToLast(-1);
+        myPresentation.SetStartAnimation(-1, 1);
+        myPresentation.EraseAnimation(-1, NewAnimation(0, 0, BLACK, {nodes[itemID[curID]]}));
+        myPresentation.EraseAnimation(-1, NewAnimation(0, 0, BLACK, {nodes[itemID[nextID]]}));
+        if (curID != size - 1)
+        {
+            myPresentation.EraseAnimation(-1, -1, NewAnimation(8, 0, BLACK, {from, to}));
+        }
+        myPresentation.CreateNewSet(-1);
+        myPresentation.SetStartAnimation(-1, 1);
+        myPresentation.InsertAnimationToSet(-1, -1, NewAnimation(8, 0, BLACK, {nodes[itemID[curID]], nodes[itemID[nextID]]}, 0, highlightLines));
+        myPresentation.InsertAnimationToSet(-1, -1, NewAnimation(8, 0, BLACK, {nodes[itemID[nextID]], nodes[itemID[curID]]}, 0, highlightLines));
+
+        from = nodes[itemID[curID]];
+        to = nodes[itemID[nextID]];
+        std::swap(itemID[curID], itemID[nextID]);
+        CalcPosition(nodes);
+        curID = nextID;
+    }
+}
+
+void Heap::ShiftUp(Presentation &myPresentation, std::vector<int> highlightLines, int curID)
+{
+    myPresentation.CopySetToLast(-1);
+    myPresentation.SetStartAnimation(-1, 1);
+    Node from, to;
+    while (curID > 0 && (curID - 1) / 2 >= 0) 
+    {
+        int nextID = (curID - 1) / 2;
+        if (StringToVector(values[itemID[curID]])[0] >= StringToVector(values[itemID[nextID]])[0]) 
+        {
+            break;
+        }
+
+        myPresentation.CopySetToLast(-1);
+        myPresentation.SetStartAnimation(-1, 1);
+        myPresentation.EraseAnimation(-1, NewAnimation(0, 0, BLACK, {nodes[itemID[curID]]}));
+        myPresentation.EraseAnimation(-1, NewAnimation(0, 0, BLACK, {nodes[itemID[nextID]]}));
+        if (curID != size - 1)
+        {
+            myPresentation.EraseAnimation(-1, -1, NewAnimation(8, 0, BLACK, {from, to}));
+        }
+        myPresentation.CreateNewSet(-1);
+        myPresentation.SetStartAnimation(-1, 1);
+        myPresentation.InsertAnimationToSet(-1, -1, NewAnimation(8, 0, BLACK, {nodes[itemID[curID]], nodes[itemID[nextID]]}, 0, highlightLines));
+        myPresentation.InsertAnimationToSet(-1, -1, NewAnimation(8, 0, BLACK, {nodes[itemID[nextID]], nodes[itemID[curID]]}, 0, highlightLines));
+
+        from = nodes[itemID[curID]];
+        to = nodes[itemID[nextID]];
+        std::swap(itemID[curID], itemID[nextID]);
+        CalcPosition(nodes);
+        curID = nextID;
+    }
+}
+
 void Heap::BuildCreateAnimation()
 {
     nodes = BuildNodeFromValue(values);
@@ -420,6 +500,8 @@ void Heap::Top()
     }
 }
 
+
+
 void Heap::CalcPosition(std::vector<Node> &nodes, int curID, int height, float x, float y)
 {
     if (curID >= size) return;
@@ -520,7 +602,7 @@ void Heap::Pop()
 void Heap::DrawToolBar()
 {
     toolBarButtons[0][0].DrawButton(0.3, 0.1, LIME, true); 
-    DrawTextureEx(flagToolBarButtons[0][0] == false ? toolBarRightArrow : toolBarLeftArrow, Vector2{2.5, 570 + (183.0 - 35 -2) / 2 - 16.0 / 2}, 0, 1, WHITE);
+    DrawTextureEx(flagToolBarButtons[0][0] == false ? toolBarRightArrow : toolBarLeftArrow, Vector2{2.5, 570 + (183.0) / 2 - 16.0 / 2 - 80}, 0, 1, WHITE);
     if (flagToolBarButtons[1][3] == true) 
     {
         DrawTextureEx(dropFile, Vector2{float(GetScreenWidth() / 2.0 - 354.25), float(GetScreenHeight() / 2.0 - 200)}, 0, 0.5, Fade(LIME, 0.8));
@@ -533,18 +615,28 @@ void Heap::DrawToolBar()
         }
         if (flagToolBarButtons[2][0] == true) // Push
         {
-            Button v = {Vector2{17 + 160 + 2, 607}, 40, 35, (char *)"v ="};
+            Button v = {Vector2{17 + 160 + 2, 607 - 80}, 40, 35, (char *)"v ="};
             v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
             insertV.DrawTextBox();
         }
-        if (flagToolBarButtons[3][0] == true) // Delete
+        if (flagToolBarButtons[3][0] == true) // Pop
         {
             Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2}, 40, 35, (char *)"v ="};
             v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
             insertV.DrawTextBox();
         }
+        if (flagToolBarButtons[5][0] == true) // Update
+        {
+            Button v = {Vector2{17 + 160 + 2, 718 - 80 + 35 + 2}, 40, 35, (char *)"v ="};
+            v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
+            insertV.DrawTextBox();
 
-        for (int i = 1; i < 5; ++i) 
+            Button i = {Vector2{17 + 160 + 2, 718 - 80}, 40, 35, (char *)"i ="};
+            i.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
+            insertI.DrawTextBox();
+        }
+
+        for (int i = 1; i < 6; ++i) 
         {
             for (int j = 0; j < (int)toolBarButtons[i].size(); ++j) 
             {
@@ -569,7 +661,7 @@ void Heap::HandleToolBar()
     }
     if (flagToolBarButtons[0][0] == true) 
     {
-        for (int i = 1; i < 5; ++i) 
+        for (int i = 1; i < 6; ++i) 
         {
             for (int j = 0; j < int(toolBarButtons[i].size()); ++j) 
             {
@@ -582,8 +674,8 @@ void Heap::HandleToolBar()
                     if (i == 2 && j == 0)
                     {
                         insertV.oldWidth = 60;
-                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607}, 60, 35};
-                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2}, 60, 35, (char *)"Confirm"};
+                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 - 80}, 60, 35};
+                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 - 80}, 60, 35, (char *)"Confirm"};
                     }
                     if (i == 3 && j == 0)
                     {
@@ -594,18 +686,22 @@ void Heap::HandleToolBar()
                     if (i == 4 && j == 0)
                     {
                         insertI.oldWidth = 60;
-                        insertI.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2}, 60, 35};
-                        insertI.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
+                        insertI.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 - 80}, 60, 35};
+                        insertI.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2 - 80}, 60, 35, (char *)"Confirm"};
 
                         insertV.oldWidth = 60;
-                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35};
-                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
+                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 - 80}, 60, 35};
+                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2 - 80}, 60, 35, (char *)"Confirm"};
                     }
                     if (i == 5 && j == 0)
                     {
+                        insertI.oldWidth = 60;
+                        insertI.textBox = {Vector2{17 + 160 + 2 + 35, 718 - 80}, 60, 35};
+                        insertI.confirm = {Vector2{17 + 160 + 2 + 35, 718 - 80 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
+
                         insertV.oldWidth = 60;
-                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35};
-                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
+                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 718 - 80 + 35 + 2}, 60, 35};
+                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 718 - 80 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
                     }
                 }
             }
@@ -700,6 +796,19 @@ void Heap::HandleToolBar()
             flagToolBarButtons[4][0] = false;
             Top();
             return;
+        }
+        if (flagToolBarButtons[5][0] == true) // Top
+        {
+            std::string v = insertV.HandleTextBox();
+            std::string i = insertI.HandleTextBox();
+            if (v.empty() == true || i.empty() == true) 
+            {
+                return;
+            }
+            flagToolBarButtons[5][0] = false;
+            std::string vValue = std::to_string(StringToVector(v)[0]);
+            int iValue = StringToVector(i)[0];
+            Update(iValue, vValue);
         }
     }
 }
@@ -924,4 +1033,37 @@ std::vector<int> Heap::StringToVector(std::string listChar)
     }
     return values;
 }
-                     
+
+void Heap::Update(int pos, std::string val)
+{
+    if (size > 0)
+    {
+        pos = std::min(pos, size - 1);
+        myPresentation.present = {BasicStructure(nodes)};
+        auto UpdateHeap = [&](int pos, std::string value) -> void 
+        {
+            myPresentation.CopySetToLast(-1);
+            myPresentation.CreateNewSet(-1);
+            myPresentation.EraseAnimation(-1, 0, NewAnimation(0, 0, BLACK, {nodes[itemID[pos]]}, 0, {0}));
+            myPresentation.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, RED, {nodes[itemID[pos]]}, 0, {0}));
+
+            values[itemID[pos]] = value;
+            nodes[itemID[pos]].value = value;
+            myPresentation.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {nodes[itemID[pos]]}, 0, {0}));
+
+            CalcPosition(nodes);
+            myPresentation.CopySetToLast(-1);
+            myPresentation.SetStartAnimation(-1, 1);
+            myPresentation.EraseAnimation(-1, -1, NewAnimation(2, 0, GREEN, {nodes[itemID[pos]]}, 0, {0}));
+            myPresentation.InsertAnimationToSet(-1, 0, NewAnimation(0, 0, BLACK, {nodes[itemID[pos]]}, 0, {0}));
+            
+            ShiftUp(myPresentation, {1}, pos);
+            ShiftDown(myPresentation, {2}, pos);
+        }; 
+        UpdateHeap(pos, val);
+        myPresentation.InitBoardText(updateList, positionBoard, width, height);
+        myPresentation.numberOfPresentation = 0;
+        myPresentation.currentPresentation = 0;
+        curRemoteState = 0;
+    }
+}
