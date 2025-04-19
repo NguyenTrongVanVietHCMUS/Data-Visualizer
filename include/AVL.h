@@ -34,13 +34,13 @@ class AVL : public DataStructure
         void Insert(std::string s);
         void Search(std::string s );
         void Delete(std::string s );
-
+        void Update(std::string s , std::string i );
         SetOfAnimation BasicStructure(AVLNode* root);
         Presentation InsertAnimation( std::string s );
         Presentation DeleteAnimation(std::string s ,Color color);
         Presentation SearchAnimation(std::string s ,  Color color);
         Presentation CreateAnimation(AVLNode* root);
-
+        Presentation UpdateAnimation(std::string s , std::string i );
         std::vector<std::string> StringToVector(std::string listChar);
         void Run();
         void Init();

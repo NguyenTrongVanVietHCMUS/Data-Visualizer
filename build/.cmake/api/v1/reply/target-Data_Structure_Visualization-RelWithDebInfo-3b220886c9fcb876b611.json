@@ -2,10 +2,10 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "MinSizeRel/Data_Structure_Visualization.exe"
+			"path" : "RelWithDebInfo/Data_Structure_Visualization.exe"
 		},
 		{
-			"path" : "MinSizeRel/Data_Structure_Visualization.pdb"
+			"path" : "RelWithDebInfo/Data_Structure_Visualization.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -74,7 +74,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "/DWIN32 /D_WINDOWS /GR /EHsc /O1 /Ob1 /DNDEBUG -MD"
+					"fragment" : "/DWIN32 /D_WINDOWS /GR /EHsc /Zi /O2 /Ob1 /DNDEBUG -MD"
 				}
 			],
 			"defines" : 
@@ -138,11 +138,11 @@
 	[
 		{
 			"backtrace" : 2,
-			"id" : "glfw::@7c2bc65cfa90d9fbb0a8"
+			"id" : "raylib::@e4891b6c0c6e0340b882"
 		},
 		{
 			"backtrace" : 2,
-			"id" : "raylib::@e4891b6c0c6e0340b882"
+			"id" : "glfw::@7c2bc65cfa90d9fbb0a8"
 		},
 		{
 			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
@@ -154,16 +154,16 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "/DWIN32 /D_WINDOWS /GR /EHsc /O1 /Ob1 /DNDEBUG -MD",
+				"fragment" : "/DWIN32 /D_WINDOWS /GR /EHsc /Zi /O2 /Ob1 /DNDEBUG -MD",
 				"role" : "flags"
 			},
 			{
-				"fragment" : "/machine:x64 /INCREMENTAL:NO /subsystem:console",
+				"fragment" : "/machine:x64 /debug /INCREMENTAL /subsystem:console",
 				"role" : "flags"
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "include\\raylib\\raylib\\MinSizeRel\\raylib.lib",
+				"fragment" : "include\\raylib\\raylib\\RelWithDebInfo\\raylib.lib",
 				"role" : "libraries"
 			},
 			{

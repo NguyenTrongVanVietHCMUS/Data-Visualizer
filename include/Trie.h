@@ -43,13 +43,13 @@ class Trie : public DataStructure
         void Insert(std::string s);
         void Search(std::string s );
         void Delete(std::string s );
-
+        void Update(std::string s , std::string i );
         SetOfAnimation BasicStructure(TrieNode* root);
         Presentation InsertAnimation( std::string s );
         Presentation DeleteAnimation(std::string s ,Color color);
         Presentation SearchAnimation(std::string s ,  Color color);
         Presentation CreateAnimation(TrieNode* root);
-
+        Presentation UpdateAnimation( std::string s , std::string i );
         std::vector<std::string> StringToVector(std::string listChar);
         void ResetNodesPosition(TrieNode* root ) ; 
         void Run();

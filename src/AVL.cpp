@@ -22,49 +22,50 @@ void AVL::Init()
     toolBarButtons.resize(6);
     toolBarButtons[0] = 
     {
-        {Vector2{0, 570}, 15, 183 - 35 - 2, (char *)"Open_Close"}
+        {Vector2{0, 570 - 50}, 15, 183, (char *)"Open_Close"}
     };
     toolBarButtons[1] = 
     {
-        {Vector2{17, 570}, 160, 35, (char *)"Create"},
-        {Vector2{179, 570}, 80, 35, (char *)"Empty"},
-        {Vector2{261, 570}, 80, 35, (char *)"Random"},
-        {Vector2{343, 570}, 80, 35, (char *)"File"},
-        {Vector2{425, 570}, 80, 35, (char *)"Enter"},
+        {Vector2{17, 570 - 50}, 160, 35, (char *)"Create"},
+        {Vector2{179, 570 - 50}, 80, 35, (char *)"Empty"},
+        {Vector2{261, 570 - 50}, 80, 35, (char *)"Random"},
+        {Vector2{343, 570 - 50}, 80, 35, (char *)"File"},
+        {Vector2{425, 570 - 50}, 80, 35, (char *)"Enter"},
     };
     toolBarButtons[2] = 
     {
-        {Vector2{17, 607}, 160, 35, (char *)"Insert"}
+        {Vector2{17, 607 - 50}, 160, 35, (char *)"Insert"}
     };
     toolBarButtons[3] = 
     {
-        {Vector2{17, 644}, 160, 35, (char *)"Delete"}
+        {Vector2{17, 644 - 50}, 160, 35, (char *)"Delete"}
     };
     toolBarButtons[4] = 
     {
-        {Vector2{17, 681}, 160, 35, (char *)"Search"}
+        {Vector2{17, 681 - 50}, 160, 35, (char *)"Update"}
     };
     toolBarButtons[5] = 
     {
-        {Vector2{17, 718}, 160, 35, (char *)"Search"}
+        {Vector2{17, 718 - 50}, 160, 35, (char *)"Search"}
     };
     flagToolBarButtons.resize(6);
     for (int i = 0; i < 6; ++i) {
         flagToolBarButtons[i].assign(toolBarButtons[i].size(), false);
     }
     flagToolBarButtons[0][0] = true ; 
-
     // enterList.Init();
     enterList.oldWidth = 80;
-    enterList.oldHeight = 35 ; 
+    enterList.oldHeight = 35 ;
     enterList.textBox = {Vector2{425 + 80 + 2, 570}, 80, 35};
-    enterList.confirm = {Vector2{425 + 80 + 2, 570 + 35 + 2}, 80, 35, (char *)"Confirm"};
+    enterList.confirm = {Vector2{425 + 80 + 2, 570 + 35 + 2-50}, 80, 35, (char *)"Confirm"};
 
     nodes.clear();
-    root = nullptr ; 
+    root = nullptr;
     isLightMode = 1;
 
-    
+
+
+
     speed = 0.01;
     changeSpeed.position = Vector2{0, 750};
     changeSpeed.width = 45;
@@ -100,9 +101,6 @@ void AVL::Init()
         "   else cur = cur->right",
         "return nullptr",
     };
-    updateList = {
-        
-    };
     insertList = {
         "if node == nullptr : return new AVLNode(val)",
         "if val < node->val : Insert(node->left, val)",
@@ -115,6 +113,19 @@ void AVL::Init()
         "if val < node->val : delete(node->left, val)",
         "else if val > node->val : delete(node->right, val)",
         "else if val==node->val : delete node and balance tree ",
+        "balance node",
+    };
+    updateList = 
+    {
+        "if node == nullptr : return ;",
+        "if val < node->val : delete(node->left, val)",
+        "else if val > node->val : delete(node->right, val)",
+        "else if val==node->val : delete node and balance tree ",
+        "balance node",
+        "if node == nullptr : return new AVLNode(val)",
+        "if val < node->val : Insert(node->left, val)",
+        "else if val > node->val : Insert(node->right, val)",
+        "else if val==node->val : return ",
         "balance node",
     };
     positionBoard = Vector2{1600 - 400, 800 - 300};
@@ -846,11 +857,221 @@ void AVL::Delete(std::string s )
     myPresentation.currentPresentation = 0;
     curRemoteState = 0;
 }
+Presentation AVL::UpdateAnimation(std::string s, std::string newValue )
+{
+    Presentation _update;
+    if (!root) 
+    {
+        _update.CreateNewPresentation();
+        _update.CreateNewSet(-1);
+        _update.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, GREEN, {Node()}, 0, {0}));
+        return _update;
+    }
 
+    _update.present = {BasicStructure(root)};
+    auto MoveNode = [&](AVLNode* node, auto&& MoveNode_ref)
+    {
+        if (!node) return;
+        _update.InsertAnimationToSet(-1, -1, NewAnimation(8, 0, BLACK, {Node(node->CurrentPosition, 20, node->c), Node(node->TargetedPosition, 20, node->c)}, 0, {4}));
+        if (node->left)
+        {
+            MoveNode_ref(node->left, MoveNode_ref);
+        }
+        if (node->right)
+        {
+            MoveNode_ref(node->right, MoveNode_ref);
+        }
+    };
+    auto RotateEdge = [&](AVLNode* node, std::set<std::pair<std::string, std::string>>& exist, auto&& RotateEdge_ref)
+    {
+        if (!node) return;
+        if (node->left)
+        {
+            if (exist.find({node->c, node->left->c}) != exist.end())
+                _update.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, BLACK, {Node(node->CurrentPosition, 20, node->c), Node(node->TargetedPosition, 20, node->c), Node(node->left->CurrentPosition, 20, node->left->c), Node(node->left->TargetedPosition, 20, node->left->c)}));
+            RotateEdge_ref(node->left, exist, RotateEdge_ref);
+        }
+        if (node->right)
+        {
+            if (exist.find({node->c, node->right->c}) != exist.end())
+                _update.InsertAnimationToSet(-1, -1, NewAnimation(7, 0, BLACK, {Node(node->CurrentPosition, 20, node->c), Node(node->TargetedPosition, 20, node->c), Node(node->right->CurrentPosition, 20, node->right->c), Node(node->right->TargetedPosition, 20, node->right->c)}, 0, {4}));
+            RotateEdge_ref(node->right, exist, RotateEdge_ref);
+        }
+    };
+    auto DeleteNode = [&](AVLNode*& node, std::string c, auto&& DeleteNode_ref) -> void {
+        if (!node) return;
+
+        // Animation before deleting node
+        _update.CopySetToLast(-1);
+        _update.SetStartAnimation(-1, 1);
+        _update.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, RED, {Node(node->CurrentPosition, 20, node->c)}));
+        _update.CopySetToLast(-1);
+        _update.SetStartAnimation(-1, 1);
+
+        if (stoi(c) < stoi(node->c)) {
+            _update.CreateNewSet(-1);
+            _update.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {1}));
+            DeleteNode_ref(node->left, c, DeleteNode_ref);
+        }
+        else if (stoi(c) > stoi(node->c)) {
+            _update.CreateNewSet(-1);
+            _update.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {2}));
+            DeleteNode_ref(node->right, c, DeleteNode_ref);
+        }
+        else {
+            _update.CreateNewSet(-1);
+            _update.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {3}));
+            // Node to be deleted is found
+
+            // Case 1: Node has one or no child
+            if (!node->left) {
+                AVLNode* temp = node->right;
+                delete node;
+                node = temp;
+            }
+            else if (!node->right) {
+                AVLNode* temp = node->left;
+                delete node;
+                node = temp;
+            }
+            // Case 2: Node has two children
+            else {
+                // Find the in-order successor (smallest node in right subtree)
+                AVLNode* temp = node->right->minNode();
+                node->c = temp->c; // Copy the in-order successor's data
+                // Delete the in-order successor
+                DeleteNode_ref(node->right, temp->c, DeleteNode_ref);
+            }
+        }
+
+        // If the tree has only one node, just return
+        if (!node) return;
+
+        // Update the height of the current node
+        node->height = 1 + std::max(HEIGHT(node->left), HEIGHT(node->right));
+        // Balance the node
+        int balance = getBalance(node);
+        _update.CreateNewPresentation();
+        _update.CreateNewSet(-1);
+        std::set<std::pair<std::string, std::string>> edgeset = root->EdgeSet();
+
+        if (balance > 1 && getBalance(node->left) >= 0) {
+            node = rightRotate(node);
+        }
+        else if (balance < -1 && getBalance(node->right) <= 0) {
+            node = leftRotate(node);
+        }
+        else if (balance > 1 && getBalance(node->left) < 0) {
+            node->left = leftRotate(node->left);
+            node = rightRotate(node);
+        }
+        else if (balance < -1 && getBalance(node->right) > 0) {
+            node->right = rightRotate(node->right);
+            node = leftRotate(node);
+        }
+
+        // Update the position and handle the animation for movement
+
+        calcPosition(root);
+        MoveNode(root, MoveNode);
+        RotateEdge(root, edgeset, RotateEdge);
+        ResetNodesPosition(root);
+        _update.CopySetToLast(-1);
+        _update.SetStartAnimation(-1, 1);
+        _update.present.push_back(BasicStructure(root));
+    };
+
+    DeleteNode(root, s, DeleteNode);
+    auto InsertNode = [&](AVLNode*& node, std::string c, auto&& InsertNode_ref) -> void {
+        if (!node) {
+            node = new AVLNode({30, 30}, c, 1);
+            node->running = 1;
+            _update.CreateNewSet(-1);
+            _update.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {0 + int(deleteList.size())}));
+            return;
+        }
+
+        _update.CopySetToLast(-1);
+        _update.SetStartAnimation(-1, 1);
+        _update.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, ORANGE, {Node(node->CurrentPosition, 20, node->c)}));
+        _update.CopySetToLast(-1);
+        _update.SetStartAnimation(-1, 1);
+        _update.EraseAnimation(-1, -1, NewAnimation(2, 0, ORANGE, {Node(node->CurrentPosition, 20, node->c)}));
+        _update.InsertAnimationToSet(-1, -1, NewAnimation(3, 0, ORANGE, {Node(node->CurrentPosition, 20, node->c)}));
+
+        if (stoi(c) < stoi(node->c)) {
+            if (node->left) {
+                _update.CreateNewSet(-1);
+                _update.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {1 + int(deleteList.size())}));
+                InsertNode_ref(node->left, c, InsertNode_ref);
+            } else {
+                node->left = new AVLNode({30, 30}, c, 1);
+                node->left->running = 1;
+                _update.CreateNewSet(-1);
+                _update.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {0 + int(deleteList.size())}));
+            }
+        } else if (stoi(c) > stoi(node->c)) {
+            if (node->right) {
+                _update.CreateNewSet(-1);
+                _update.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {2 + int(deleteList.size())}));
+                InsertNode_ref(node->right, c, InsertNode_ref);
+            } else {
+                node->right = new AVLNode({30, 30}, c, 1);
+                node->right->running = 1;
+                _update.CreateNewSet(-1);
+                _update.InsertAnimationToSet(-1, -1, NewAnimation(2, 0, Fade(BLACK, 0), {Node()}, 0, {0 + int(deleteList.size())}));
+            }
+        }
+
+        node->height = 1 + std::max(HEIGHT(node->left), HEIGHT(node->right));
+        int balance = getBalance(node);
+
+        _update.CreateNewPresentation();
+        _update.CreateNewSet(-1);
+
+        std::set<std::pair<std::string, std::string>> edgeset = root->EdgeSet();
+
+        if (balance > 1 && stoi(c) < stoi(node->left->c)) {
+            node = rightRotate(node);
+        } else if (balance < -1 && stoi(c) > stoi(node->right->c)) {
+            node = leftRotate(node);
+        } else if (balance > 1 && stoi(c) > stoi(node->left->c)) {
+            node->left = leftRotate(node->left);
+            node = rightRotate(node);
+        } else if (balance < -1 && stoi(c) < stoi(node->right->c)) {
+            node->right = rightRotate(node->right);
+            node = leftRotate(node);
+        }
+
+        calcPosition(root);
+        MoveNode(root, MoveNode);
+        RotateEdge(root, edgeset, RotateEdge);
+        ResetNodesPosition(root);
+        _update.CopySetToLast(-1);
+        _update.SetStartAnimation(-1, 1);
+        _update.present.push_back(BasicStructure(root));
+    };
+
+    InsertNode(root, newValue, InsertNode);
+
+
+    return _update;
+}
+
+void AVL::Update(std::string s, std::string newValue )
+{
+    myPresentation.currentPresentation = 0 ; 
+    if(find(str.begin(),str.end(),s)!=str.end())str.erase(find(str.begin(),str.end(),s)) ; 
+    myPresentation = UpdateAnimation(s,newValue) ; 
+    myPresentation.InitBoardText(updateList, positionBoard, width, height);
+    myPresentation.numberOfPresentation = 0;
+    myPresentation.currentPresentation = 0;
+    curRemoteState = 0;
+}
 void AVL::DrawToolBar()
 {
     toolBarButtons[0][0].DrawButton(0.3, 0.1, LIME, true); 
-    DrawTextureEx(flagToolBarButtons[0][0] == false ? toolBarRightArrow : toolBarLeftArrow, Vector2{2.5, 570 + 183.0 / 2 - 16.0 / 2}, 0, 1, WHITE);
+    DrawTextureEx(flagToolBarButtons[0][0] == false ? toolBarRightArrow : toolBarLeftArrow, Vector2{2.5, 570 - 50 + 183.0 / 2 - 16.0 / 2}, 0, 1, WHITE);
     if (flagToolBarButtons[1][3] == true) 
     {
         DrawTextureEx(dropFile, Vector2{float(GetScreenWidth() / 2.0 - 354.25), float(GetScreenHeight() / 2.0 - 200)}, 0, 0.5, Fade(LIME, 0.8));
@@ -863,36 +1084,33 @@ void AVL::DrawToolBar()
         }
         if (flagToolBarButtons[2][0] == true) // Insert
         {
-            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2}, 40, 35, (char *)"v ="};
-            Button i = {Vector2{17 + 160 + 2, 607}, 40, 35, (char *)"i ="};
+            Button v = {Vector2{17 + 160 + 2, 607  - 50}, 40, 35, (char *)"v ="};
+            v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
+            insertV.DrawTextBox();
+        }
+        if (flagToolBarButtons[3][0] == true) // Delete
+        {
+            Button i = {Vector2{17 + 160 + 2, 607 + 35 + 2 - 50}, 40, 35, (char *)"i ="};
+            i.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
+            insertI.DrawTextBox();
+        }
+        if (flagToolBarButtons[4][0] == true) // Update
+        {
+            Button i = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2 - 50}, 40, 35, (char *)"i ="};
+            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2 + 35 + 2 - 50}, 40, 35, (char *)"v ="};
             i.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
             v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
             insertI.DrawTextBox();
             insertV.DrawTextBox();
         }
-        if (flagToolBarButtons[3][0] == true) // Delete
+        if (flagToolBarButtons[5][0] == true) // Search
         {
-            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2}, 40, 35, (char *)"v ="};
+            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2 + 35 + 2 - 50}, 40, 35, (char *)"v ="};
             v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
             insertV.DrawTextBox();
         }
-        if (flagToolBarButtons[4][0] == true) // search
-        {
-            Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2 }, 40, 35, (char *)"v ="};
-            // Button i = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2}, 40, 35, (char *)"i ="};
-            // i.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
-            v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
-            // insertI.DrawTextBox();
-            insertV.DrawTextBox();
-        }
-        // if (flagToolBarButtons[5][0] == true) // Search
-        // {
-        //     Button v = {Vector2{17 + 160 + 2, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 40, 35, (char *)"v ="};
-        //     v.DrawButtonAndText(0, 0.8, LIME, true, fontRoboto, 20, RAYWHITE);
-        //     insertV.DrawTextBox();
-        // }
 
-        for (int i = 1; i < 5; ++i) 
+        for (int i = 1; i < 6; ++i) 
         {
             for (int j = 0; j < (int)toolBarButtons[i].size(); ++j) 
             {
@@ -922,6 +1140,7 @@ void AVL::HandleToolBar()
             for (int j = 0; j < int(toolBarButtons[i].size()); ++j) 
             {
                 if (toolBarButtons[i][j].CheckMouseClickInRectangle()) {
+                    if (j != 0 && flagToolBarButtons[i][0] == false) continue;
                     for (int i = 1; i < 6; ++i) 
                     {
                         std::fill(flagToolBarButtons[i].begin() + (j > 0), flagToolBarButtons[i].end(), false);
@@ -929,36 +1148,36 @@ void AVL::HandleToolBar()
                     flagToolBarButtons[i][j] = true;
                     if (i == 2 && j == 0)
                     {
-                        insertI.oldWidth = 60;
-                        insertI.textBox = {Vector2{17 + 160 + 2 + 35, 607}, 60, 35};
-                        insertI.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
-
                         insertV.oldWidth = 60;
-                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2}, 60, 35};
-                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
+                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 - 50}, 60, 35};
+                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607  + 35 + 2 - 50}, 60, 35, (char *)"Confirm"};
+
+                        // insertV.oldWidth = 60;
+                        // insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 - 50}, 60, 35};
+                        // insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 - 50}, 60, 35, (char *)"Confirm"};
                     }
                     if (i == 3 && j == 0)
                     {
-                        insertV.oldWidth = 60;
-                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2}, 60, 35};
-                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
+                        insertI.oldWidth = 60;
+                        insertI.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 - 50}, 60, 35};
+                        insertI.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 - 50}, 60, 35, (char *)"Confirm"};
                     }
                     if (i == 4 && j == 0)
                     {
-                        // insertI.oldWidth = 60;
-                        // insertI.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2}, 60, 35};
-                        // insertI.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
+                        insertI.oldWidth = 60;
+                        insertI.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 - 50}, 60, 35};
+                        insertI.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2 - 50}, 60, 35, (char *)"Confirm"};
 
                         insertV.oldWidth = 60;
-                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2}, 60, 35};
-                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
+                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 - 50}, 60, 35};
+                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2 - 50}, 60, 35, (char *)"Confirm"};
                     }
-                    // if (i == 5 && j == 0)
-                    // {
-                    //     insertV.oldWidth = 60;
-                    //     insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35};
-                    //     insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2}, 60, 35, (char *)"Confirm"};
-                    // }
+                    if (i == 5 && j == 0)
+                    {
+                        insertV.oldWidth = 60;
+                        insertV.textBox = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 - 50}, 60, 35};
+                        insertV.confirm = {Vector2{17 + 160 + 2 + 35, 607 + 35 + 2 + 35 + 2 + 35 + 2 + 35 + 2 - 50}, 60, 35, (char *)"Confirm"};
+                    }
                 }
             }
         }
@@ -1000,7 +1219,7 @@ void AVL::HandleToolBar()
         }
         if (flagToolBarButtons[2][0] == true) // Insert
         {
-            std::string i = insertI.HandleTextBox();
+            // std::string i = insertI.HandleTextBox();
             std::string v = insertV.HandleTextBox();
             if (v.empty() == true) 
             {
@@ -1026,14 +1245,29 @@ void AVL::HandleToolBar()
     
             return;
         }
-        if (flagToolBarButtons[4][0] == true) // Search
+        if (flagToolBarButtons[4][0] == true) // Update
+        {
+            std::string i = insertI.HandleTextBox();
+            std::string v = insertV.HandleTextBox();
+            if (v.empty()||i.empty()) 
+            {
+                return;
+            }
+            flagToolBarButtons[4][0] = false;
+            std::string iValue = StringToVector(i)[0];
+            std::string vValue = StringToVector(v)[0];
+            Update(iValue,vValue);
+            return;
+            
+        }
+        if (flagToolBarButtons[5][0] == true) // Seach
         {
             std::string v = insertV.HandleTextBox();
             if (v.empty() == true) 
             {
                 return;
             }
-            flagToolBarButtons[4][0] = false;
+            flagToolBarButtons[5][0] = false;
             std::string vValue = StringToVector(v)[0];
             Search(vValue);
     
