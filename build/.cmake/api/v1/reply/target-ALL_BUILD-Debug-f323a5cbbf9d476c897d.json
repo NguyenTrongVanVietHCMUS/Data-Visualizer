@@ -17,16 +17,16 @@
 	"dependencies" : 
 	[
 		{
-			"id" : "Data_Structure_Visualization::@6890427a1f51a3e7e1df"
+			"id" : "glfw::@7c2bc65cfa90d9fbb0a8"
 		},
 		{
 			"id" : "raylib::@e4891b6c0c6e0340b882"
 		},
 		{
-			"id" : "glfw::@7c2bc65cfa90d9fbb0a8"
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
 		},
 		{
-			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+			"id" : "Data_Structure_Visualization::@6890427a1f51a3e7e1df"
 		}
 	],
 	"folder" : 
