@@ -55,8 +55,8 @@ void Trie::Init()
     // enterList.Init();
     enterList.oldWidth = 80;
     enterList.oldHeight = 35 ;
-    enterList.textBox = {Vector2{425 + 80 + 2, 570}, 80, 35};
-    enterList.confirm = {Vector2{425 + 80 + 2, 570 + 35 + 2-50}, 80, 35, (char *)"Confirm"};
+    enterList.textBox = {Vector2{425 + 80 + 2, 570 - 50}, 80, 35};
+    enterList.confirm = {Vector2{425 + 80 + 2, 570 + 35 + 2 - 50}, 80, 35, (char *)"Confirm"};
 
     nodes.clear();
     root = new TrieNode({(float)GetScreenWidth() / 2, 50.0 }, "");
@@ -1159,7 +1159,7 @@ void Trie::HandleToolBar()
         }
         if (flagToolBarButtons[3][0] == true) // Delete
         {
-            std::string v = insertV.HandleTextBox();
+            std::string v = insertI.HandleTextBox();
             if (v.empty() == true) 
             {
                 return;

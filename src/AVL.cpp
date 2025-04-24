@@ -56,9 +56,8 @@ void AVL::Init()
     // enterList.Init();
     enterList.oldWidth = 80;
     enterList.oldHeight = 35 ;
-    enterList.textBox = {Vector2{425 + 80 + 2, 570}, 80, 35};
-    enterList.confirm = {Vector2{425 + 80 + 2, 570 + 35 + 2-50}, 80, 35, (char *)"Confirm"};
-
+    enterList.textBox = {Vector2{425 + 80 + 2, 570 - 50}, 80, 35};
+    enterList.confirm = {Vector2{425 + 80 + 2, 570 + 35 + 2 - 50}, 80, 35, (char *)"Confirm"};
     nodes.clear();
     root = nullptr;
     isLightMode = 1;
@@ -386,8 +385,9 @@ void AVL::RandomNewData()
     {
         str.push_back(x) ; 
     }
+    // str = {"1"} ; z
     BuildNodeFromValue(str) ; 
-    BuildCreateAnimation() ;
+    BuildCreateAnimation() ; 
 }
 void AVL::InputDataFromFile()
 {
@@ -402,6 +402,7 @@ void AVL::InputDataFromFile()
     std::ifstream fin(filePath);
     std::string s;
     getline(fin, s);
+    std::vector<std::string>str ; 
 
     std::string curValue = "" ;
     for (char &c: s)
@@ -414,15 +415,17 @@ void AVL::InputDataFromFile()
         }
         if(!flag)
         {
-            str.push_back(curValue);
+            if(curValue!="")str.push_back(curValue);
             curValue = "" ;  
         }
     }
-    if (curValue != "") ; 
+    if (curValue != "") 
     {
         str.push_back(curValue);
     }
     fin.close();
+    for(auto x : str)std::cout<<x<<std::endl;
+    BuildNodeFromValue(str) ;
     BuildCreateAnimation();
 }
 
@@ -1196,7 +1199,6 @@ void AVL::HandleToolBar()
         if (flagToolBarButtons[1][3] == true)  // Input data from file
         {
             flagToolBarButtons[1][0] = false;
-            ClearAllData();
             if (IsFileDropped() == true)
             {
                 flagToolBarButtons[1][3] = false;
@@ -1210,8 +1212,7 @@ void AVL::HandleToolBar()
             if (listChar.empty() == false)
             {
                 flagToolBarButtons[1][4] = false;
-                std::vector<std::string> str = StringToVector(listChar);
-                
+                std::vector<std::string>str = StringToVector(listChar);
                 BuildNodeFromValue(str);
                 BuildCreateAnimation();
             }
@@ -1233,7 +1234,7 @@ void AVL::HandleToolBar()
         }
         if (flagToolBarButtons[3][0] == true) // Delete
         {
-            std::string v = insertV.HandleTextBox();
+            std::string v = insertI.HandleTextBox();
             if (v.empty() == true) 
             {
                 return;
@@ -1292,7 +1293,7 @@ std::vector<std::string> AVL::StringToVector(std::string listChar)
         }
         else curValue+=c ;
     }
-    if (curValue != "") ; 
+    if (curValue != "") 
     {
         res.push_back(curValue);
     }

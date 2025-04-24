@@ -55,9 +55,10 @@ void Heap::Init()
     // enterList.Init();
     enterList.oldWidth = 80;
     enterList.oldHeight = 35 ; 
-    enterList.textBox = {Vector2{425 + 80 + 2, 570}, 80, 35};
-    enterList.confirm = {Vector2{425 + 80 + 2, 570 + 35 + 2}, 80, 35, (char *)"Confirm"};
-
+    enterList.textBox = {Vector2{425, 570-80+35+2}, 80, 35};
+    enterList.confirm = {Vector2{425, 570 + 35 + 2}, 80, 35, (char *)"Confirm"};
+    // enterList.textBox = {Vector2{425 + 80 + 2, 570}, 80, 35};
+    // enterList.confirm = {Vector2{425 + 80 + 2, 570 + 35 + 2-50}, 80, 35, (char *)"Confirm"};
     flagToolBarButtons.resize(6);
     for (int i = 0; i < 6; ++i) {
         flagToolBarButtons[i].assign(toolBarButtons[i].size(), false);
